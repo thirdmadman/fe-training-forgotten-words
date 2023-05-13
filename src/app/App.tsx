@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import MainPage from './components/pages/MainPage';
+import 'normalize.css';
 import './scss/style.scss';
 import { GlobalConstants } from '../GlobalConstants';
 
