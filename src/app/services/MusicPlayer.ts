@@ -84,10 +84,13 @@ export class MusicPlayer {
     if (this.isPaused) {
       this.isPlaying = true;
       this.isPaused = false;
-      return this.audio.play().then(() => this.riseVolume(this.currentVolume, 0.001, 5)).catch((e) => {
-        console.error(e);
-        this.isPlaying = false;
-      });
+      return this.audio
+        .play()
+        .then(() => this.riseVolume(this.currentVolume, 0.001, 5))
+        .catch((e) => {
+          console.error(e);
+          this.isPlaying = false;
+        });
     }
 
     return new Promise(() => {});
@@ -113,11 +116,13 @@ export class MusicPlayer {
 
   pause() {
     if (this.audio) {
-      this.fadeVolume(0, 0.001, 5).then(() => {
-        this.audio.pause();
-        this.isPlaying = false;
-        this.isPaused = true;
-      }).catch((e) => console.error(e));
+      this.fadeVolume(0, 0.001, 5)
+        .then(() => {
+          this.audio.pause();
+          this.isPlaying = false;
+          this.isPaused = true;
+        })
+        .catch((e) => console.error(e));
     }
   }
 

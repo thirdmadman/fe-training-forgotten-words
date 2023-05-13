@@ -146,15 +146,16 @@ export class UserWordService {
       if (wordData) {
         const oldParameters = { ...wordData.optional };
         const parameters = {
-          successCounter: isCorrect ? oldParameters.successCounter += 1 : oldParameters.successCounter,
-          failCounter: isCorrect ? oldParameters.successCounter : oldParameters.failCounter += 1,
+          successCounter: isCorrect ? (oldParameters.successCounter += 1) : oldParameters.successCounter,
+          failCounter: isCorrect ? oldParameters.successCounter : (oldParameters.failCounter += 1),
           isLearned: oldParameters.isLearned,
         };
         return {
           difficulty: wordData.difficulty,
           optional: parameters,
         } as IUserWordData;
-      } return null;
+      }
+      return null;
     });
 
     return getData.then((wordData) => {
