@@ -24,6 +24,7 @@ module.exports = {
     filename: '[name].[contenthash].bundle.js',
     path: path.resolve(__dirname, 'dist'),
     assetModuleFilename: 'assets/[hash][ext][query]',
+    publicPath: '/'
   },
   optimization: {
     minimize: !isDev,
@@ -93,6 +94,7 @@ module.exports = {
     open: true,
     port: 8000,
     hot: true,
+    historyApiFallback: true,
     static: {
       directory: path.join(__dirname, './dist'),
       watch: true,
