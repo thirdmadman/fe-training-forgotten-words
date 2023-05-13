@@ -4,6 +4,7 @@ import MainPage from './components/pages/MainPage';
 import 'normalize.css';
 import './scss/style.scss';
 import { GlobalConstants } from '../GlobalConstants';
+import WordBook from './components/pages/wordBook/WordBook';
 
 export default class App extends Component {
   render() {
@@ -11,6 +12,7 @@ export default class App extends Component {
       <BrowserRouter>
         <Routes>
           <Route path={GlobalConstants.ROUTE_MAIN} element={<MainPage />} />
+          <Route path="/wordbook" element={<WordBook />} />
           <Route path="*" element={<h1>NOT FOUND</h1>} />
         </Routes>
       </BrowserRouter>
