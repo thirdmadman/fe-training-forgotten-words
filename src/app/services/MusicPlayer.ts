@@ -58,6 +58,7 @@ export class MusicPlayer {
     }
     if (!this.isPlaying && !this.isPaused) {
       this.audio.src = this.currentPlaylist[this.currentTrack];
+      console.log(this.audio.src);
       this.audio.volume = this.currentVolume;
 
       this.audio.onended = () => {

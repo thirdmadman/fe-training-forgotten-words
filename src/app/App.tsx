@@ -12,7 +12,7 @@ export default class App extends Component {
       <BrowserRouter>
         <Routes>
           <Route path={GlobalConstants.ROUTE_MAIN} element={<MainPage />} />
-          <Route path="/wordbook" element={<WordBook />} />
+          <Route path="/wordbook/:level/:page" element={<WordBook />} />
           <Route path="*" element={<h1>NOT FOUND</h1>} />
         </Routes>
       </BrowserRouter>
