@@ -1,0 +1,8 @@
+.cards-container {
+  width: 100%;
+  max-width: 1620px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 300px);
+  gap: 30px;
+  justify-content: center;
+}
