@@ -5,11 +5,13 @@ import 'normalize.css';
 import './scss/style.scss';
 import { GlobalConstants } from '../GlobalConstants';
 import WordBook from './components/pages/wordBook/WordBook';
+import Menu from './components/common/menu/Menu';
 
 export default class App extends Component {
   render() {
     return (
       <BrowserRouter>
+        <Menu />
         <Routes>
           <Route path={GlobalConstants.ROUTE_MAIN} element={<MainPage />} />
           <Route path="/wordbook/:level/:page" element={<WordBook />} />
