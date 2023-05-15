@@ -24,7 +24,7 @@ module.exports = {
     filename: '[name].[contenthash].bundle.js',
     path: path.resolve(__dirname, 'dist'),
     assetModuleFilename: 'assets/[hash][ext][query]',
-    publicPath: '/'
+    publicPath: './'
   },
   optimization: {
     minimize: !isDev,
