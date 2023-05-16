@@ -1,9 +1,11 @@
 /* eslint-disable react/no-danger */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IWordAdvanced } from '../../../../../interfaces/IWordAdvanced';
 import { GlobalConstants } from '../../../../../../GlobalConstants';
 import { musicPlayer } from '../../../../../services/SingleMusicPlayer';
 import './Card.scss';
+import { TokenProvider } from '../../../../../services/TokenProvider';
+import { UserWordService } from '../../../../../services/UserWordService';
 
 export interface CardProps {
   wordAdvanced: IWordAdvanced;
@@ -29,6 +31,9 @@ export function Card(props: CardProps) {
   const [isEngDescriptionShown, setIsEngDescriptionShown] = useState(false);
   const [isRuDescriptionShown, setIsRuDescriptionShown] = useState(false);
 
+  const [isWordDifficult, setIsWordDifficult] = useState(false);
+  const [isWordLearned, setIsWordLearned] = useState(false);
+
   const playWordAudio = () => {
     musicPlayer.setPlayList([`${GlobalConstants.API_URL}/${audio}`]);
     musicPlayer.setVolume(0.7);
@@ -45,98 +50,109 @@ export function Card(props: CardProps) {
     musicPlayer.play().catch(() => {});
   };
 
-  // if (!userId) {
-  //   return;
-  // }
+  useEffect(() => {
+    setIsWordLearned(Boolean(wordAdvanced.userData?.optional.isLearned));
+    setIsWordDifficult(Boolean(wordAdvanced.userData?.difficulty !== 'normal'));
+    console.error(Boolean(wordAdvanced.userData?.difficulty !== 'normal'), wordAdvanced.userData);
+  }, [wordAdvanced]);
 
-  // imageContainer.append(this.buttonSetDifficultyState, this.buttonSetLearnedState);
+  const isLearnStarted = Boolean(wordAdvanced.userData?.optional);
 
-  // if (!this.data.userData) {
-  //   return;
-  // }
+  const getGameResult = () => {
+    if (wordAdvanced.userData?.optional?.successCounter && wordAdvanced.userData?.optional.failCounter) {
+      const successCounter = wordAdvanced.userData?.optional?.successCounter;
+      const failCounter = wordAdvanced.userData?.optional?.failCounter;
 
-  // if (this.data.userData.difficulty && this.data.userData.difficulty !== 'normal') {
-  //   this.isWordDifficult = true;
-  //   this.buttonSetDifficultyState.classList.add('word-card__button-difficulty_true');
-  // }
+      const resultText = `${successCounter}/${failCounter + successCounter}`;
+      return <div className="word-card__games-result">{resultText}</div>;
+    }
+    return '';
+  };
 
-  // if (!this.data.userData.optional) {
-  //   return;
-  // }
+  const buttonToggleDifficultyHandler = () => {
+    const userId = TokenProvider.getUserId();
+    if (!userId) {
+      return;
+    }
+    if (!isWordDifficult) {
+      UserWordService.setWorDifficultById(userId, wordAdvanced.word.id)
+        .then((userWord) => {
+          if (userWord) {
+            setIsWordDifficult(true);
+          }
+        })
+        .catch(() => {});
+    } else {
+      UserWordService.setWordNormalById(userId, wordAdvanced.word.id)
+        .then((userWord) => {
+          if (userWord) {
+            setIsWordDifficult(false);
+          }
+        })
+        .catch(() => {});
+    }
+  };
 
-  // const resultText = `${this.data.userData.optional.successCounter}/
-  // ${this.data.userData.optional.failCounter + this.data.userData.optional.successCounter}`;
+  const buttonToggleLearnedHandler = () => {
+    const userId = TokenProvider.getUserId();
+    if (!userId) {
+      return;
+    }
+    if (!isWordLearned) {
+      UserWordService.addWordLearnedById(userId, wordAdvanced.word.id)
+        .then((userWord) => {
+          if (userWord) {
+            setIsWordLearned(true);
+          }
+        })
+        .catch(() => {});
+    } else {
+      UserWordService.removeWordFromLearnedById(userId, wordAdvanced.word.id)
+        .then((userWord) => {
+          if (userWord) {
+            setIsWordLearned(false);
+          }
+        })
+        .catch(() => {});
+    }
+  };
 
-  // const gamesResultContainer = dch('div', ['word-card__games-result'], resultText);
-  // imageContainer.append(gamesResultContainer);
-  // this.image.classList.add('word-card__image_started');
+  const buttonSetDifficultyState = (
+    <button
+      type="button"
+      aria-label="button-difficulty"
+      className={
+        isWordDifficult
+          ? 'word-card__button-difficulty word-card__button-difficulty_true'
+          : 'word-card__button-difficulty'
+      }
+      onClick={() => buttonToggleDifficultyHandler()}
+    />
+  );
 
-  // if (this.data.userData.optional.isLearned) {
-  //   this.image.classList.add('word-card__image_learned');
-  //   this.isWordLearned = true;
-  //   this.buttonSetLearnedState.classList.add('word-card__button-learned_true');
-  // }
-
-  // const buttonToggleDifficultyHandler() {
-  //   const userId = TokenProvider.getUserId();
-  //   if (!userId) {
-  //     return;
-  //   }
-  //   if (!this.isWordDifficult) {
-  //     UserWordService.setWorDifficultById(userId, this.data.word.id)
-  //       .then((userWord) => {
-  //         if (userWord) {
-  //           this.isWordDifficult = true;
-  //           this.buttonSetDifficultyState.classList.add('word-card__button-difficulty_true');
-  //         }
-  //       })
-  //       .catch(() => {});
-  //   } else {
-  //     UserWordService.setWordNormalById(userId, this.data.word.id)
-  //       .then((userWord) => {
-  //         if (userWord) {
-  //           this.isWordDifficult = false;
-  //           this.buttonSetDifficultyState.classList.remove('word-card__button-difficulty_true');
-  //         }
-  //       })
-  //       .catch(() => {});
-  //   }
-  // };
-
-  // const buttonToggleLearnedHandler() {
-  //   const userId = TokenProvider.getUserId();
-  //   if (!userId) {
-  //     return;
-  //   }
-  //   if (!this.isWordLearned) {
-  //     UserWordService.addWordLearnedById(userId, this.data.word.id)
-  //       .then((userWord) => {
-  //         if (userWord) {
-  //           this.isWordLearned = true;
-  //           this.image.classList.add('word-card__image_learned');
-  //           this.buttonSetLearnedState.classList.add('word-card__button-learned_true');
-  //         }
-  //       })
-  //       .catch(() => {});
-  //   } else {
-  //     UserWordService.removeWordFromLearnedById(userId, this.data.word.id)
-  //       .then((userWord) => {
-  //         if (userWord) {
-  //           this.isWordLearned = false;
-  //           this.image.classList.remove('word-card__image_learned');
-  //           this.buttonSetLearnedState.classList.remove('word-card__button-learned_true');
-  //         }
-  //       })
-  //       .catch(() => {});
-  //   }
-  // }
+  const buttonSetLearnedState = (
+    <button
+      type="button"
+      aria-label="button-learned"
+      className={
+        isWordLearned ? 'word-card__button-learned word-card__button-learned_true' : 'word-card__button-learned'
+      }
+      onClick={() => buttonToggleLearnedHandler()}
+    />
+  );
 
   const imagePath = `${GlobalConstants.API_URL}/${image}`;
+
+  let imageStyles = isLearnStarted ? 'word-card__image word-card__image_started' : 'word-card__image';
+  imageStyles += isWordLearned ? 'word-card__image_learned' : '';
 
   return (
     <div className="word-card">
       <div className="word-card__image-container">
-        <img className="word-card__image" src={imagePath} alt={word} />
+        <img className={imageStyles} src={imagePath} alt={word} />
+        {buttonSetDifficultyState}
+        {buttonSetLearnedState}
+        {getGameResult()}
       </div>
       <div className="word-card__text-container">
         <button
