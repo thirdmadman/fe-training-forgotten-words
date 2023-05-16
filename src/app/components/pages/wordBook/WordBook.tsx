@@ -18,8 +18,12 @@ export default function WordBook() {
 
   const params = useParams();
 
-  const level = Number(params.level ? params.level : '0');
-  const page = Number(params.page ? params.page : '0');
+  if (!params.level || !params.page) {
+    navigate(`${GlobalConstants.ROUTE_WORDBOOK}/1/1`);
+  }
+
+  const level = Number(params.level ? params.level : '1');
+  const page = Number(params.page ? params.page : '1');
 
   const { NUMBER_OF_PAGES, NUMBER_OF_GROUP_NO_AUTH_USER, ROUTE_WORDBOOK } = GlobalConstants;
 

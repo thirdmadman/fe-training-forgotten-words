@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { GlobalConstants } from '../../../../GlobalConstants';
 // import { musicPlayer2 } from '../../../services/SingleMusicPlayer2';
 // import { TokenProvider } from '../../../services/TokenProvider';
@@ -134,9 +134,12 @@ export default function Menu() {
     const isSelected = location.pathname === path || (location.pathname.indexOf(path) === 0 && path.length > 1);
     return (
       <li className={isSelected ? 'nav-menu--item nav-menu--item-active' : 'nav-menu--item'} key={path}>
-        <a className="nav-menu--link" href={path}>
+        {/* <a className="nav-menu--link" href={path}>
           {title}
-        </a>
+        </a> */}
+        <Link to={path} className="nav-menu--link" onClick={() => setIsHidden(true)}>
+          {title}
+        </Link>
       </li>
     );
   };
