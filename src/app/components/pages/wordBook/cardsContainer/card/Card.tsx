@@ -53,18 +53,18 @@ export function Card(props: CardProps) {
   useEffect(() => {
     setIsWordLearned(Boolean(wordAdvanced.userData?.optional.isLearned));
     setIsWordDifficult(Boolean(wordAdvanced.userData?.difficulty !== 'normal'));
-    console.error(Boolean(wordAdvanced.userData?.difficulty !== 'normal'), wordAdvanced.userData);
   }, [wordAdvanced]);
 
   const isLearnStarted = Boolean(wordAdvanced.userData?.optional);
 
   const getGameResult = () => {
-    if (wordAdvanced.userData?.optional?.successCounter && wordAdvanced.userData?.optional.failCounter) {
-      const successCounter = wordAdvanced.userData?.optional?.successCounter;
-      const failCounter = wordAdvanced.userData?.optional?.failCounter;
-
-      const resultText = `${successCounter}/${failCounter + successCounter}`;
-      return <div className="word-card__games-result">{resultText}</div>;
+    const successCounter = wordAdvanced.userData?.optional?.successCounter;
+    const failCounter = wordAdvanced.userData?.optional.failCounter;
+    if (successCounter !== undefined && failCounter !== undefined) {
+      if (successCounter > 0 || failCounter > 0) {
+        const resultText = `${successCounter}/${failCounter + successCounter}`;
+        return <div className="word-card__games-result">{resultText}</div>;
+      }
     }
     return '';
   };
