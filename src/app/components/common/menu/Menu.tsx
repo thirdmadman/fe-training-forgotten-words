@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { GlobalConstants } from '../../../../GlobalConstants';
 import { musicPlayer2 } from '../../../services/SingleMusicPlayer2';
-// import { TokenProvider } from '../../../services/TokenProvider';
+import { TokenProvider } from '../../../services/TokenProvider';
 import './Menu.scss';
 
 const menuData = [
@@ -130,13 +130,12 @@ export default function Menu() {
 
   const location = useLocation();
 
+  const isUserAuth = Boolean(TokenProvider.getToken()) && !TokenProvider.checkIsExpired();
+
   const getMenuLink = (title: string, path: string) => {
     const isSelected = location.pathname === path || (location.pathname.indexOf(path) === 0 && path.length > 1);
     return (
       <li className={isSelected ? 'nav-menu--item nav-menu--item-active' : 'nav-menu--item'} key={path}>
-        {/* <a className="nav-menu--link" href={path}>
-          {title}
-        </a> */}
         <Link to={path} className="nav-menu--link" onClick={() => setIsHidden(true)}>
           {title}
         </Link>
@@ -150,6 +149,12 @@ export default function Menu() {
     }
   });
 
+  let menuLinks = menuData;
+
+  if (!isUserAuth) {
+    menuLinks = menuLinks.filter((menuLink) => !menuLink.isAuthNeeded);
+  }
+
   return (
     <div className="menu">
       <div className={isHidden ? 'main main-hidden' : 'main'}>
@@ -159,7 +164,9 @@ export default function Menu() {
         <div className="navigation-container">
           <div className="logo-container" />
           <nav className="nav-menu">
-            <ul className="nav-menu--list">{menuData.map((menuLink) => getMenuLink(menuLink.title, menuLink.path))}</ul>
+            <ul className="nav-menu--list">
+              {menuLinks.map((menuLink) => getMenuLink(menuLink.title, menuLink.path))}
+            </ul>
           </nav>
         </div>
         <button
