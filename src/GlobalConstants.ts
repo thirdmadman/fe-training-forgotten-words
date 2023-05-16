@@ -31,7 +31,7 @@ export class GlobalConstants {
 
   public static GAME_TIME = 60;
 
-  public static MUSIC_PATH = '/static/music/';
+  public static MUSIC_PATH = './static/music/';
 
   public static WORDBOOK_MUSIC_NAME = 'wordbook.mp3';
 

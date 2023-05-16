@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { GlobalConstants } from '../../../../GlobalConstants';
-// import { musicPlayer2 } from '../../../services/SingleMusicPlayer2';
+import { musicPlayer2 } from '../../../services/SingleMusicPlayer2';
 // import { TokenProvider } from '../../../services/TokenProvider';
 import './Menu.scss';
 
@@ -144,6 +144,12 @@ export default function Menu() {
     );
   };
 
+  useEffect(() => {
+    if (!isHidden) {
+      musicPlayer2.pause();
+    }
+  });
+
   return (
     <div className="menu">
       <div className={isHidden ? 'main main-hidden' : 'main'}>
@@ -156,7 +162,15 @@ export default function Menu() {
             <ul className="nav-menu--list">{menuData.map((menuLink) => getMenuLink(menuLink.title, menuLink.path))}</ul>
           </nav>
         </div>
-        <button type="button" className="close-button" aria-label="close" onClick={() => setIsHidden(true)} />
+        <button
+          type="button"
+          className="close-button"
+          aria-label="close"
+          onClick={() => {
+            musicPlayer2.play().catch((e) => console.error(e));
+            setIsHidden(true);
+          }}
+        />
       </div>
       <button
         type="button"
