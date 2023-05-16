@@ -1,17 +1,13 @@
 /* eslint-disable class-methods-use-this */
 import { useState } from 'react';
+import { GlobalConstants } from '../../../../GlobalConstants';
 import { SigninService } from '../../../services/SigninService';
+import { musicPlayer2 } from '../../../services/SingleMusicPlayer2';
 import { TokenProvider } from '../../../services/TokenProvider';
 import { UserService } from '../../../services/UserService';
 import './AuthorizationPage.scss';
 
 export function AuthorizationPage() {
-  // // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // onCreateButtonClick = () => {};
-
-  // // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // onCancelButtonClick = () => {};
-
   // private redirectPage = GlobalConstants.ROUTE_WORDBOOK;
 
   // constructor(path: string) {
@@ -28,120 +24,6 @@ export function AuthorizationPage() {
   //   this.showSignIn();
   // }
 
-  // showSignIn() {
-  //   this.rootNode.innerHTML = '';
-
-  //   const mainTitleSignIn = dch('div', ['auth-page__title'], 'Identity recognizing');
-
-  //   const inputGroupEmail = dch('div', ['auth-page__input-group']);
-  //   const emailInputTitle = dch('div', ['auth-page__input-title'], 'E-mail');
-  //   const emailInput = dch('input', ['auth-page__input']) as HTMLInputElement;
-  //   emailInput.setAttribute('type', 'email');
-  //   emailInput.setAttribute('placeholder', 'notfound@syntax.error');
-  //   inputGroupEmail.append(emailInputTitle, emailInput);
-
-  //   const inputGroupPassword = dch('div', ['auth-page__input-group', 'auth-page__input-group__last']);
-  //   const passwordInputTitle = dch('div', ['auth-page__input-title'], 'Secret');
-  //   const passwordInput = dch('input', ['auth-page__input']) as HTMLInputElement;
-  //   passwordInput.setAttribute('type', 'password');
-  //   passwordInput.setAttribute('placeholder', '*****');
-  //   inputGroupPassword.append(passwordInputTitle, passwordInput);
-
-  //   const signInButton = dch('button', ['auth-form__button'], 'Start sync');
-  //   signInButton.onclick = () => {
-  //     const emailValue = emailInput.value;
-  //     const passwordValue = passwordInput.value;
-  //     this.signIn(emailValue, passwordValue);
-  //   };
-
-  //   const text = dch('h3', ['auth-form__text'], 'or');
-
-  //   const openRegisterButton = dch('button', ['auth-form__button'], 'CREATE NEW');
-  //   openRegisterButton.onclick = () => {
-  //     this.showRegister();
-  //   };
-
-  //   const exitButton = dch('button', ['auth-form__button'], 'STOP SYNC');
-  //   exitButton.onclick = () => {
-  //     this.signOut();
-  //   };
-
-  //   const pageContainer = dch('div', ['auth-page__container']);
-  //   if (!TokenProvider.checkIsExpired()) {
-  //     pageContainer.append(
-  //       mainTitleSignIn,
-  //       exitButton,
-  //       text,
-  //       openRegisterButton,
-  //     );
-  //   } else {
-  //     pageContainer.append(
-  //       mainTitleSignIn,
-  //       inputGroupEmail,
-  //       inputGroupPassword,
-  //       signInButton,
-  //       text,
-  //       openRegisterButton,
-  //     );
-  //   }
-  //   this.rootNode.append(pageContainer);
-  // }
-
-  // showRegister() {
-  //   this.rootNode.innerHTML = '';
-
-  //   const mainTitleRegistration = dch('div', ['auth-page__title'], 'Identity creation');
-
-  //   const inputGroupName = dch('div', ['auth-page__input-group']);
-  //   const nameInputTitle = dch('div', ['auth-page__input-title'], 'UID');
-  //   const nameInput = dch('input', ['auth-page__input']) as HTMLInputElement;
-  //   nameInput.setAttribute('type', 'username');
-  //   nameInput.setAttribute('placeholder', 'any-name');
-  //   inputGroupName.append(nameInputTitle, nameInput);
-
-  //   const inputGroupEmail = dch('div', ['auth-page__input-group']);
-  //   const emailInputTitle = dch('div', ['auth-page__input-title'], 'E-mail');
-  //   const emailInput = dch('input', ['auth-page__input']) as HTMLInputElement;
-  //   emailInput.setAttribute('type', 'email');
-  //   emailInput.setAttribute('placeholder', 'notfound@syntax.error');
-  //   inputGroupEmail.append(emailInputTitle, emailInput);
-
-  //   const inputGroupPassword = dch('div', ['auth-page__input-group', 'auth-page__input-group__last']);
-  //   const passwordInputTitle = dch('div', ['auth-page__input-title'], 'Secret');
-  //   const passwordInput = dch('input', ['auth-page__input']) as HTMLInputElement;
-  //   passwordInput.setAttribute('type', 'password');
-  //   passwordInput.setAttribute('placeholder', '*****');
-  //   inputGroupPassword.append(passwordInputTitle, passwordInput);
-
-  //   const registerButton = dch('button', ['auth-form__button'], 'create new');
-  //   registerButton.onclick = () => {
-  //     const emailValue = emailInput.value;
-  //     const passwordValue = passwordInput.value;
-  //     const nameValue = nameInput.value;
-  //     this.registerUser(emailValue, passwordValue, nameValue);
-  //   };
-
-  //   const text = dch('h3', ['auth-form__text'], 'or');
-
-  //   const cancelButton = dch('button', ['auth-form__button'], 'Cancel');
-  //   cancelButton.onclick = () => {
-  //     this.showSignIn();
-  //   };
-
-  //   const pageContainer = dch('div', ['auth-page__container']);
-  //   pageContainer.append(
-  //     mainTitleRegistration,
-  //     inputGroupName,
-  //     inputGroupEmail,
-  //     inputGroupPassword,
-  //     registerButton,
-  //     text,
-  //     cancelButton,
-  //   );
-
-  //   this.rootNode.append(pageContainer);
-  // }
-
   const [emailSignin, setEmailSignin] = useState('');
   const [passwordSignin, setPasswordSignin] = useState('');
   const [isShowRegister, setIsShowRegister] = useState(false);
@@ -151,6 +33,13 @@ export function AuthorizationPage() {
   const [nameRegister, setNameRegister] = useState('');
 
   const isUserAuth = !TokenProvider.checkIsExpired();
+
+  const currentTrack = musicPlayer2.getCurrentPlayingTrack();
+  if (!currentTrack || currentTrack.indexOf(GlobalConstants.AUTH_MUSIC_NAME) < 0) {
+    musicPlayer2.setVolume(0.2);
+    musicPlayer2.setPlayList([`${GlobalConstants.MUSIC_PATH + GlobalConstants.AUTH_MUSIC_NAME}`], true);
+    musicPlayer2.play().catch(() => {});
+  }
 
   const signIn = (email: string, password: string) => {
     SigninService.auth(email, password)
