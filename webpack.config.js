@@ -85,7 +85,7 @@ module.exports = {
         use: ['ts-loader'],
       },
       {
-        test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2|.ico)$/i,
+        test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2|ico)$/i,
         type: 'asset/resource',
       },
     ],
