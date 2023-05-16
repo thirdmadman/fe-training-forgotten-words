@@ -30,7 +30,7 @@ export function Card(props: CardProps) {
   const [isRuDescriptionShown, setIsRuDescriptionShown] = useState(false);
 
   const playWordAudio = () => {
-    musicPlayer.setPlayList([`${GlobalConstants.DEFAULT_API_URL}/${audio}`]);
+    musicPlayer.setPlayList([`${GlobalConstants.API_URL}/${audio}`]);
     musicPlayer.setVolume(0.7);
     musicPlayer.play().catch((e) => console.error(e));
   };
@@ -38,9 +38,9 @@ export function Card(props: CardProps) {
   const playFullAudio = () => {
     musicPlayer.setVolume(0.7);
     musicPlayer.setPlayList([
-      `${GlobalConstants.DEFAULT_API_URL}/${audio}`,
-      `${GlobalConstants.DEFAULT_API_URL}/${audioMeaning}`,
-      `${GlobalConstants.DEFAULT_API_URL}/${audioExample}`,
+      `${GlobalConstants.API_URL}/${audio}`,
+      `${GlobalConstants.API_URL}/${audioMeaning}`,
+      `${GlobalConstants.API_URL}/${audioExample}`,
     ]);
     musicPlayer.play().catch(() => {});
   };
@@ -131,7 +131,7 @@ export function Card(props: CardProps) {
   //   }
   // }
 
-  const imagePath = `${GlobalConstants.DEFAULT_API_URL}/${image}`;
+  const imagePath = `${GlobalConstants.API_URL}/${image}`;
 
   return (
     <div className="word-card">

@@ -1,7 +1,9 @@
 export class GlobalConstants {
   public static APP_NAME = 'Forgotten Words';
 
-  public static DEFAULT_API_URL = process.env.NODE_ENV === 'development' ? process.env.DEFAULT_API_URL || '' : '/api';
+  public static DEFAULT_API_URL = 'https://unusual-cummerbund-slug.cyclic.app';
+
+  public static API_URL = process.env.API_URL || GlobalConstants.DEFAULT_API_URL;
 
   public static ROUTE_MAIN = '/';
 

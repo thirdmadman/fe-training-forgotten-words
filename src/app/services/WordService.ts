@@ -6,7 +6,7 @@ import { axiosInstance } from './axiosInstance';
 export class WordService {
   static getWordsByGroupAndPage(group: number, page: number) {
     return axiosInstance(true)
-      .get(`${GlobalConstants.DEFAULT_API_URL}${GlobalConstants.API_ENDPOINT_WORDS}`, {
+      .get(`${GlobalConstants.API_URL}${GlobalConstants.API_ENDPOINT_WORDS}`, {
         params: {
           group,
           page,
@@ -26,7 +26,7 @@ export class WordService {
 
   static getWordsById(id: string) {
     return axiosInstance(true)
-      .get(`${GlobalConstants.DEFAULT_API_URL}${GlobalConstants.API_ENDPOINT_WORDS}/${id}`)
+      .get(`${GlobalConstants.API_URL}${GlobalConstants.API_ENDPOINT_WORDS}/${id}`)
       .then((res) => res.data as IWord);
   }
 }

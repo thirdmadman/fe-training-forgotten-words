@@ -9,7 +9,7 @@ export function axiosInstance(isIgnoreToken = false) {
     }
   }
   const instance = axios.create({
-    baseURL: GlobalConstants.DEFAULT_API_URL,
+    baseURL: GlobalConstants.API_URL,
     headers: { Authorization: `bearer ${String(TokenProvider.getToken())}` },
   });
   return instance;
