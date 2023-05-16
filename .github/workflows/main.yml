@@ -36,6 +36,7 @@ jobs:
         run: |
           npm ci
           npm run build
+          cp ./build/index.html ./build/404.html
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
