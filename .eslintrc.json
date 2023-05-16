@@ -44,7 +44,7 @@
     "no-plusplus": [2, { "allowForLoopAfterthoughts": true }],
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
-    "no-console": "off",
+    "no-console": ["error", { "allow": ["warn", "error"] }],
     "max-len": ["warn", { "code": 120 }],
     "indent": [
       "warn",

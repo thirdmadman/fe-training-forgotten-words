@@ -9,7 +9,6 @@ import Menu from './components/common/menu/Menu';
 
 export default class App extends Component {
   render() {
-    console.log(`${GlobalConstants.ROUTE_WORDBOOK}/:level/:page"`);
     return (
       <HashRouter>
         <Menu />
