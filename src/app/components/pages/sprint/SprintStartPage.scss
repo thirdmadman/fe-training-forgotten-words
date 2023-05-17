@@ -1,0 +1,85 @@
+$color-dark-s: #767676;
+$color-dark-m: #555555;
+$color-dark-xl: #1b1b1b;
+$color-light-m: #f6f6f6;
+
+.sprint-page {
+  margin: 0px auto;
+  padding: 20px 0;
+  max-width: 1000px;
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Roboto';
+  font-weight: 100;
+  text-align: center;
+  color: #767676;
+
+  @media screen and (max-width: 768px) {
+    padding: 0 20px;
+  }
+
+  @media screen and (max-width: 555px) {
+    min-height: 100%;
+  }
+
+  .sprint-page__main {
+    margin-bottom: 80px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .sprint-page__title {
+    margin-bottom: 50px;
+    padding: 0px 40px;
+    font-size: 60px;
+    font-weight: 100;
+    line-height: 70px;
+    text-transform: uppercase;
+    background: url('../../../../assets/img/svg/corner-left-top.svg') top left no-repeat,
+    url('../../../../assets/img/svg/corner-right-bottom.svg') bottom right no-repeat;
+
+    &_in-game {
+      margin-bottom: 15px;
+    }
+
+    @media screen and (max-width: 768px) {
+      font-size: 40px;
+    }
+  }
+
+  &__text {
+    font-size: 36px;
+    line-height: 50px;
+  }
+
+  &__button {
+    width: 300px;
+    height: 50px;
+    background-color: white;
+    border: 1px solid #dfdfdf;
+    font-weight: 200;
+    font-size: 24px;
+    line-height: 28px;
+    text-transform: uppercase;
+    color: $color-dark-s;
+    font-family: 'Roboto';
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.1);
+      transition: all 0.1s;
+    }
+
+    &:active {
+      color: $color-dark-xl;
+      font-weight: 300;
+      transition: all 0.1s;
+    }
+  }
+}
