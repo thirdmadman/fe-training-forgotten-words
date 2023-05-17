@@ -67,7 +67,7 @@ $color-light-m: #f6f6f6;
     }
   }
 
-  .nav-menu--item {
+  .nav-menu__item {
     padding: 0 30px;
     transition: all 0.1s;
 
@@ -79,7 +79,7 @@ $color-light-m: #f6f6f6;
       transform: scale(1.1);
     }
 
-    &-active {
+    &_active {
       color: $color-dark-xl;
       font-weight: 300;
       background: url('/src/assets/img/svg/corner-left-top.svg') top left no-repeat,
@@ -87,7 +87,7 @@ $color-light-m: #f6f6f6;
     }
   }
 
-  .nav-menu--link {
+  .nav-menu__link {
     font-weight: 100;
     font-size: 40px;
     line-height: 60px;
@@ -99,13 +99,13 @@ $color-light-m: #f6f6f6;
       font-weight: 200;
     }
 
-    &-active {
+    &_active {
       color: $color-dark-xl;
       font-weight: 300;
     }
   }
 
-  .nav-menu--list {
+  .nav-menu__list {
     display: flex;
     flex-direction: column;
     gap: 20px;

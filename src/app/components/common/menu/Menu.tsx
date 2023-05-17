@@ -53,8 +53,8 @@ export default function Menu() {
   const getMenuLink = (title: string, path: string) => {
     const isSelected = location.pathname === path || (location.pathname.indexOf(path) === 0 && path.length > 1);
     return (
-      <li className={isSelected ? 'nav-menu--item nav-menu--item-active' : 'nav-menu--item'} key={path}>
-        <Link to={path} className="nav-menu--link" onClick={() => setIsHidden(true)}>
+      <li className={isSelected ? 'nav-menu__item nav-menu__item-active' : 'nav-menu__item'} key={path}>
+        <Link to={path} className="nav-menu__link" onClick={() => setIsHidden(true)}>
           {title}
         </Link>
       </li>
@@ -82,7 +82,7 @@ export default function Menu() {
         <div className="navigation-container">
           <div className="logo-container" />
           <nav className="nav-menu">
-            <ul className="nav-menu--list">
+            <ul className="nav-menu__list">
               {menuLinks.map((menuLink) => getMenuLink(menuLink.title, menuLink.path))}
             </ul>
           </nav>
