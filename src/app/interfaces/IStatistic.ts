@@ -1,4 +1,4 @@
 export interface IStatistic {
-  learnedWords: number,
-  optional: null,
+  learnedWords: number;
+  optional: null;
 }
