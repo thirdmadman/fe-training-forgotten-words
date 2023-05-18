@@ -18,11 +18,11 @@ export function SprintQuestion(props: SprintQuestionProps) {
 
     const handlerKey = (event: KeyboardEvent) => {
       if (event.code === 'Digit1') {
+        document.removeEventListener('keyup', handlerKey);
         handleAnswer(true);
-        document.removeEventListener('keyup', handlerKey);
       } else if (event.code === 'Digit2') {
-        handleAnswer(false);
         document.removeEventListener('keyup', handlerKey);
+        handleAnswer(false);
       }
     };
 
