@@ -119,9 +119,9 @@ export function SprintGameField(props: SprintGameFieldProps) {
   if (questions) {
     return (
       <div className="gamefield-container">
-        <h2 className="sprint-page__title sprint-page__title_in-game">MEANING RESOLVING</h2>
-        <h3 className="sprint-page__sub-title">In progress</h3>
-        <div className="sprint-page__timer-text">{timerRemainTime}</div>
+        <h2 className="mini-game-page__title mini-game-page__title_in-game">MEANING RESOLVING</h2>
+        <h3 className="mini-game-page__sub-title">In progress</h3>
+        <div className="mini-game-page__timer-text">{timerRemainTime}</div>
         <SprintQuestion questionData={questions[questionNumber]} onAnswer={handleAnswer} />
       </div>
     );
