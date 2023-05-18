@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import { GlobalConstants } from '../../../../GlobalConstants';
 import { IGameAnswer } from '../../../interfaces/IGameAnswer';
@@ -13,30 +12,6 @@ import '../../common/MiniGameStartPage.scss';
 import { MiniGameStartPage } from '../../common/MiniGameStartPage';
 
 export function SprintPage() {
-  // const startPage = new SprintStartPage(group - 1, page - 1);
-  // const gameField = new SprintGameField();
-
-  // const onStartGame = (selectedGroup: number, selectedPage: number) => {
-  //   WordService.getWordsByGroupAndPage(selectedGroup, selectedPage)
-  //     .then((wordData) => {
-  //       const questionsData = {
-  //         questions: this.createQuestions(wordData.array),
-  //         currentQuestion: 0,
-  //       } as IGameQuestionArray;
-
-  //       this.rootNode.innerHTML = '';
-  //       gameField.setQuestionsArray(questionsData);
-  //       gameField.startGame();
-  //       this.rootNode.append(gameField.getElement());
-  //     })
-  //     .catch((e) => console.error(e));
-  // };
-
-  // const onFinish = (result: IResultData[], answerChain: number) => {
-  //   const resultPage = new SprintStatisticPage(result, answerChain);
-  //   this.rootNode.append(resultPage.getElement());
-  // };
-
   const [questions, setQuestions] = useState<Array<IGameQuestion>>();
   const [results, setResults] = useState<Array<IResultData>>();
   const [answerChain, setAnswerChain] = useState(0);
@@ -111,7 +86,7 @@ export function SprintPage() {
       return <StatisticPage title="Meaning Resolving" resultData={results} answerChain={answerChain} />;
     }
 
-    if (level > -1 && page > -1) {
+    if (level > -1 && page > -1 && questions) {
       return <SprintGameField questions={questions} onFinish={onGameFinish} />;
     }
 

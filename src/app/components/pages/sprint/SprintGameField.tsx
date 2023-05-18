@@ -6,7 +6,7 @@ import { IResultData } from '../../../interfaces/IResultData';
 import './SprintGameField.scss';
 
 interface SprintGameFieldProps {
-  questions: Array<IGameQuestion> | undefined;
+  questions: Array<IGameQuestion>;
   onFinish: (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => void;
 }
 
@@ -25,7 +25,7 @@ export function SprintGameField(props: SprintGameFieldProps) {
   };
 
   useEffect(() => {
-    if (timerRemainTime > 0 && questions && questionNumber < questions.length) {
+    if (timerRemainTime > 0 && questionNumber < questions.length) {
       window.setTimeout(() => {
         const lastTimerTime = timerRemainTime;
         setTimerRemainTime(lastTimerTime - 1);
@@ -63,7 +63,6 @@ export function SprintGameField(props: SprintGameFieldProps) {
       }
 
       const currentQuestionNumber = questionNumber;
-
       if (currentQuestionNumber < questions.length) {
         setQuestionNumber(currentQuestionNumber + 1);
       } else {
@@ -72,16 +71,14 @@ export function SprintGameField(props: SprintGameFieldProps) {
     }
   };
 
-  if (questions) {
-    return (
-      <div className="gamefield-container">
-        <h2 className="mini-game-page__title mini-game-page__title_in-game">MEANING RESOLVING</h2>
-        <h3 className="mini-game-page__sub-title">In progress</h3>
-        <div className="mini-game-page__timer-text">{timerRemainTime}</div>
-        <SprintQuestion questionData={questions[questionNumber]} onAnswer={handleAnswer} />
-      </div>
-    );
-  }
+  const questionData = questions[questionNumber];
 
-  return <div>gg</div>;
+  return (
+    <div className="gamefield-container">
+      <h2 className="mini-game-page__title mini-game-page__title_in-game">MEANING RESOLVING</h2>
+      <h3 className="mini-game-page__sub-title">In progress</h3>
+      <div className="mini-game-page__timer-text">{timerRemainTime}</div>
+      {questionData && <SprintQuestion questionData={questionData} onAnswer={handleAnswer} />}
+    </div>
+  );
 }
