@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { GlobalConstants } from '../../../../GlobalConstants';
 import { IGameAnswer } from '../../../interfaces/IGameAnswer';
 import { IGameQuestion } from '../../../interfaces/IGameQuestion';
@@ -25,42 +25,43 @@ export function SprintPage() {
     musicPlayer2.play().catch(() => {});
   }
 
-  useEffect(() => {
-    const createVariantForAnswer = (wordsArray: Array<IWord>, currentWord: IWord) => {
-      const onlyDifferentWords = wordsArray.filter((word) => word.id !== currentWord.id);
-      const shuffledAndCutArray = [...onlyDifferentWords].sort(() => Math.random() - 0.5).slice(0, 1);
-      const variant = [currentWord, ...shuffledAndCutArray]
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 1)
-        .map((word) => {
-          const isCorrect = word.id === currentWord.id;
-          return {
-            wordData: word,
-            isCorrect,
-          } as IGameAnswer;
-        });
-      return variant;
-    };
-
-    const createQuestions = (wordsArray: Array<IWord>) => {
-      const result = wordsArray.map((word) => {
-        const variants = createVariantForAnswer(wordsArray, word);
+  const createVariantForAnswer = (wordsArray: Array<IWord>, currentWord: IWord) => {
+    const onlyDifferentWords = wordsArray.filter((word) => word.id !== currentWord.id);
+    const shuffledAndCutArray = [...onlyDifferentWords].sort(() => Math.random() - 0.5).slice(0, 1);
+    const variant = [currentWord, ...shuffledAndCutArray]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 1)
+      .map((word) => {
+        const isCorrect = word.id === currentWord.id;
         return {
           wordData: word,
-          variants,
-        } as IGameQuestion;
+          isCorrect,
+        } as IGameAnswer;
       });
+    return variant;
+  };
 
-      return result.sort(() => Math.random() - 0.5);
-    };
+  const createQuestions = (wordsArray: Array<IWord>) => {
+    const result = wordsArray.map((word) => {
+      const variants = createVariantForAnswer(wordsArray, word);
+      return {
+        wordData: word,
+        variants,
+      } as IGameQuestion;
+    });
 
-    WordService.getWordsByGroupAndPage(0, 0)
+    return result.sort(() => Math.random() - 0.5);
+  };
+
+  if (level > -1 && page > -1 && questions === undefined) {
+    console.error(level, page, questions);
+    WordService.getWordsByGroupAndPage(level, page)
       .then((wordData) => {
         const questionsArray = createQuestions(wordData.array);
         setQuestions(questionsArray);
       })
       .catch((e) => console.error(e));
-  }, []);
+  }
 
   const onGameFinish = (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => {
     setResults(resultsOfGame);
