@@ -76,7 +76,8 @@ export function SprintPage() {
   const description = (
     <>
       Your time is limited.
-      <br /> Make decisions - is it correct match of word meaning.
+      <br />
+      Make decisions - is it correct match of word meaning.
     </>
   );
   const buttonText = 'START RESOLVING';

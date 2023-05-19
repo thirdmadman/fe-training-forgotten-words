@@ -28,21 +28,11 @@
     "react-hooks/exhaustive-deps": "warn",
     "comma-dangle": ["error", "only-multiline"],
     "object-curly-newline": ["error", { "consistent": true }],
-    "react/prop-types": "off",
-    "react/display-name": "off",
-    "@typescript-eslint/explicit-function-return-type": "off",
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
-    "@typescript-eslint/interface-name-prefix": "off",
     "import/prefer-default-export": "off",
-    "react/prefer-stateless-function": "off",
-    "@typescript-eslint/ban-ts-ignore": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-explicit-any": "error",
-    "@typescript-eslint/no-var-reqiures": "off",
     "react/jsx-one-expression-per-line": "off",
     "no-plusplus": [2, { "allowForLoopAfterthoughts": true }],
-    "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
     "no-console": ["error", { "allow": ["warn", "error"] }],
     "max-len": ["warn", { "code": 120 }],
@@ -65,8 +55,7 @@
       {
         "props": false
       }
-    ],
-    "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }]
+    ]
   },
   "ignorePatterns": ["*config.js"],
   "globals": {
