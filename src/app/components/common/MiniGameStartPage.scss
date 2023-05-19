@@ -18,6 +18,10 @@ $color-light-m: #f6f6f6;
   text-align: center;
   color: #767676;
 
+  @media screen and (max-width: 420px) {
+    padding: 0 10px;
+  }
+
   @media screen and (max-width: 768px) {
     padding: 0 20px;
   }
@@ -48,6 +52,12 @@ $color-light-m: #f6f6f6;
       margin-bottom: 15px;
     }
 
+    @media screen and (max-width: 420px) {
+      margin-top: 70px;
+      font-size: 20px;
+      padding: 0px 20px;
+    }
+
     @media screen and (max-width: 768px) {
       font-size: 40px;
     }
@@ -59,6 +69,10 @@ $color-light-m: #f6f6f6;
     line-height: 50px;
     text-transform: uppercase;
     font-weight: 100;
+
+    @media screen and (max-width: 420px) {
+      font-size: 20px;
+    }
 
     @media screen and (max-width: 768px) {
       font-size: 30px;
@@ -84,6 +98,10 @@ $color-light-m: #f6f6f6;
   &__text {
     font-size: 36px;
     line-height: 50px;
+    
+    @media screen and (max-width: 420px) {
+      font-size: 25px;
+    }
   }
 
   &__button {
