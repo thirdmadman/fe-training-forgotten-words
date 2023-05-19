@@ -86,16 +86,25 @@ export function MiniGameStartPage(props: MiniGameStartPageProps) {
     return getPageSelector();
   };
 
+  const showButton = () => {
+    if (level > -1 && page > -1) {
+      return (
+        <button type="button" className="mini-game-page__button" onClick={handleOnStart}>
+          {buttonText}
+        </button>
+      );
+    }
+    return '';
+  };
+
   return (
-    <div className="mini-game-page">
+    <>
       <div className="mini-game-page__main">
         <h2 className="mini-game-page__title">{title}</h2>
         <div className="mini-game-page__text">{description}</div>
       </div>
       {showSelector()}
-      <button type="button" className="mini-game-page__button" onClick={handleOnStart}>
-        {buttonText}
-      </button>
-    </div>
+      {showButton()}
+    </>
   );
 }
