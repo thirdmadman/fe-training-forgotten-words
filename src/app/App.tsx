@@ -1,5 +1,4 @@
-import { HashRouter, Route, Routes } from 'react-router-dom';
-import MainPage from './components/pages/MainPage';
+import { HashRouter, Route, Routes, Navigate } from 'react-router-dom';
 import 'normalize.css';
 import './scss/style.scss';
 import { GlobalConstants } from '../GlobalConstants';
@@ -14,7 +13,7 @@ export default function App() {
     <HashRouter>
       <Menu />
       <Routes>
-        <Route path={GlobalConstants.ROUTE_MAIN} element={<MainPage />} />
+        <Route path={GlobalConstants.ROUTE_MAIN} element={<Navigate to={GlobalConstants.ROUTE_WORDBOOK} />} />
         <Route path={GlobalConstants.ROUTE_WORDBOOK} element={<WordBook />} />
         <Route path={`${GlobalConstants.ROUTE_WORDBOOK}/:level/:page`} element={<WordBook />} />
         <Route path={GlobalConstants.ROUTE_SPRINT} element={<SprintPage />} />
