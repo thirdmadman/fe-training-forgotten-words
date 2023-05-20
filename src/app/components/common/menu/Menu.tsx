@@ -73,6 +73,12 @@ export default function Menu() {
     menuLinks = menuLinks.filter((menuLink) => !menuLink.isAuthNeeded);
   }
 
+  if (!isHidden) {
+    document.body.classList.add('hidden_overflow-y');
+  } else {
+    document.body.classList.remove('hidden_overflow-y');
+  }
+
   return (
     <div className="menu">
       <div className={isHidden ? 'main main-hidden' : 'main'}>
