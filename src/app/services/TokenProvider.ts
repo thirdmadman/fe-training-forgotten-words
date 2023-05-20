@@ -19,7 +19,7 @@ export class TokenProvider {
     if (TokenProvider.checkIsExpired()) {
       const currentPath = PathBus.getCurrentPath();
       this.clearAuthData();
-      PathBus.setCurrentPath(`${GlobalConstants.ROUTE_AUTH}/expired?path=${currentPath}`);
+      PathBus.setCurrentPath(`${GlobalConstants.ROUTE_AUTH}?expired=true&path=${currentPath}`);
       return true;
     }
     return false;
