@@ -141,6 +141,20 @@ export function Card(props: CardProps) {
     />
   );
 
+  const showUserButtons = () => {
+    const userId = TokenProvider.getUserId();
+    if (!userId) {
+      return '';
+    }
+    return (
+      <>
+        {buttonSetDifficultyState}
+        {buttonSetLearnedState}
+        {getGameResult()}
+      </>
+    );
+  };
+
   const imagePath = `${GlobalConstants.API_URL}/${image}`;
 
   let imageStyles = isLearnStarted ? 'word-card__image word-card__image_started' : 'word-card__image';
@@ -150,9 +164,7 @@ export function Card(props: CardProps) {
     <div className="word-card">
       <div className="word-card__image-container">
         <img className={imageStyles} src={imagePath} alt={word} />
-        {buttonSetDifficultyState}
-        {buttonSetLearnedState}
-        {getGameResult()}
+        {showUserButtons()}
       </div>
       <div className="word-card__text-container">
         <button
