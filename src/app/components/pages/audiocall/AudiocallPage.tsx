@@ -6,6 +6,8 @@ import { IGameQuestionArray } from '../../../interfaces/IGameQuestionArray';
 import { IResultData } from '../../../interfaces/IResultData';
 import { IWord } from '../../../interfaces/IWord';
 import { musicPlayer2 } from '../../../services/SingleMusicPlayer2';
+import { TokenProvider } from '../../../services/TokenProvider';
+import { UserWordService } from '../../../services/UserWordService';
 import { WordService } from '../../../services/WordService';
 import { MiniGameStartPage } from '../../common/MiniGameStartPage';
 import { StatisticPage } from '../../common/StatisticPage';
@@ -71,6 +73,13 @@ export function AudiocallPage() {
   }
 
   const onGameFinish = (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => {
+    const userId = TokenProvider.getUserId();
+    if (userId && !TokenProvider.checkIsExpired()) {
+      resultsOfGame.forEach((item) => {
+        UserWordService.setWordStatistic(userId, item.questionData.id, item.isCorrect).catch((e) => console.error(e));
+      });
+    }
+
     setResults(resultsOfGame);
     setAnswerChain(answerChainOfGame);
   };

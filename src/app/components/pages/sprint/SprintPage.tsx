@@ -10,6 +10,8 @@ import { StatisticPage } from '../../common/StatisticPage';
 import { SprintGameField } from './SprintGameField';
 import '../../common/MiniGameStartPage.scss';
 import { MiniGameStartPage } from '../../common/MiniGameStartPage';
+import { TokenProvider } from '../../../services/TokenProvider';
+import { UserWordService } from '../../../services/UserWordService';
 
 export function SprintPage() {
   const [questions, setQuestions] = useState<Array<IGameQuestion>>();
@@ -64,6 +66,13 @@ export function SprintPage() {
   }
 
   const onGameFinish = (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => {
+    const userId = TokenProvider.getUserId();
+    if (userId && !TokenProvider.checkIsExpired()) {
+      resultsOfGame.forEach((item) => {
+        UserWordService.setWordStatistic(userId, item.questionData.id, item.isCorrect).catch((e) => console.error(e));
+      });
+    }
+
     setResults(resultsOfGame);
     setAnswerChain(answerChainOfGame);
   };
