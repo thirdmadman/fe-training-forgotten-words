@@ -15,18 +15,26 @@ $color-light-m: #f6f6f6;
     gap: 30px;
     justify-content: center;
     align-items: center;
-  
-  
-    &__text {
-      padding: 11px 20px;
+
+    @media screen and (max-width: 420px) {
+      gap: 20px;
+    }
+
+    .assumption__text {
+      padding: 10px 20px;
       background: url('../../../../assets/img/svg/corner-left-top.svg') top left no-repeat,
         url('../../../../assets/img/svg/corner-right-bottom.svg') bottom right no-repeat;
       font-size: 24px;
       line-height: 28px;
       text-transform: uppercase;
+
+      @media screen and (max-width: 420px) {
+        font-size: 18px;
+        line-height: 20px;
+      }
     }
-  
-    &__separator {
+
+    .assumption__separator {
       background-image: url('../../../../assets/img/svg/arrow-horizontal.svg');
       background-size: auto;
       background-position: center;
@@ -36,15 +44,20 @@ $color-light-m: #f6f6f6;
       background-color: white;
     }
   }
-  
+
   .game-question__question-text {
     font-weight: 100;
     font-size: 36px;
     line-height: 42px;
     text-transform: uppercase;
     margin-bottom: 40px;
+
+    @media screen and (max-width: 420px) {
+      font-size: 20px;
+      line-height: 25px;
+    }
   }
-  
+
   .game-btn-container {
     display: grid;
     grid-auto-flow: column;
@@ -54,8 +67,12 @@ $color-light-m: #f6f6f6;
     font-size: 24px;
     line-height: 28px;
     text-transform: uppercase;
+
+    @media screen and (max-width: 420px) {
+      gap: 40px;
+    }
   }
-  
+
   .question-container__btn {
     background: url('../../../../assets/img/svg/corner-left-top.svg') top left no-repeat,
       url('../../../../assets/img/svg/corner-right-bottom.svg') bottom right no-repeat;
@@ -64,7 +81,7 @@ $color-light-m: #f6f6f6;
     padding-right: 0;
     cursor: pointer;
   }
-  
+
   .question-container__text {
     all: unset;
     font-weight: 100;
@@ -72,18 +89,23 @@ $color-light-m: #f6f6f6;
     line-height: 50px;
     text-transform: uppercase;
     text-align: center;
-  
+
     &:hover {
       transform: scale(1.1);
       transition: all 0.1s;
     }
-  
+
     &:active {
       color: $color-dark-xl;
       font-weight: 200;
     }
+
+    @media screen and (max-width: 420px) {
+      font-size: 18px;
+      line-height: 40px;
+    }
   }
-  
+
   .question-container__count {
     margin-left: 10px;
     width: 20px;
@@ -93,5 +115,3 @@ $color-light-m: #f6f6f6;
     text-transform: uppercase;
   }
 }
-
-
