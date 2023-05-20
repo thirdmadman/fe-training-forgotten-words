@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import { useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GlobalConstants } from '../../../../GlobalConstants';
 import { SigninService } from '../../../services/SigninService';
 import { musicPlayer2 } from '../../../services/SingleMusicPlayer2';
@@ -8,21 +9,12 @@ import { UserService } from '../../../services/UserService';
 import './AuthorizationPage.scss';
 
 export function AuthorizationPage() {
-  // private redirectPage = GlobalConstants.ROUTE_WORDBOOK;
+  const [searchParams] = useSearchParams();
 
-  // constructor(path: string) {
-  //   super();
-  //   this.rootNode = dch('div', ['auth-page']);
+  const navigate = useNavigate();
 
-  //   const currentPath = path.split('/');
-  //   const redirectPage = path.split('?path=')[1];
-
-  //   if (currentPath[1] === 'expired?path=') {
-  //     this.redirectPage = redirectPage;
-  //   }
-
-  //   this.showSignIn();
-  // }
+  const isExpired = searchParams.get('expired');
+  const redirectPath = searchParams.get('path');
 
   const [emailSignin, setEmailSignin] = useState('');
   const [passwordSignin, setPasswordSignin] = useState('');
@@ -44,7 +36,11 @@ export function AuthorizationPage() {
   const signIn = (email: string, password: string) => {
     SigninService.auth(email, password)
       .then(() => {
-        // PathBus.setCurrentPath(`${this.redirectPage}`);
+        if (isExpired && redirectPath) {
+          navigate(redirectPath);
+          return;
+        }
+        navigate(GlobalConstants.ROUTE_MAIN);
       })
       .catch((error) => {
         console.error(error);
@@ -65,7 +61,7 @@ export function AuthorizationPage() {
 
   const signOut = () => {
     TokenProvider.clearAuthData();
-    // PathBus.setCurrentPath(PathBus.getCurrentPath());
+    navigate(GlobalConstants.ROUTE_MAIN);
   };
 
   const getButtonSingnin = () => (
