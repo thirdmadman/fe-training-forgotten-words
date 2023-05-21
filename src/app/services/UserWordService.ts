@@ -8,48 +8,67 @@ export class UserWordService {
   /**
    * This method uses token
    */
-  static getAllWordsByUserId(id: string) {
+  static getAllWordsByUserId(userId: string) {
     return axiosInstance()
-      .get(`${GlobalConstants.API_ENDPOINT_USERS}/${id}/words`)
-      .then((res) => res.data as Array<IUserWord>);
+      .get(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}/words`, { validateStatus: () => true })
+      .then((res) => (res.status === 200 ? (res.data as Array<IUserWord>) : null));
   }
 
   /**
    * This method uses token
    */
-  static getUserWordById(id: string, wordId: string) {
+  static getUserWordById(userId: string, wordId: string) {
     return axiosInstance()
-      .get(`${GlobalConstants.API_ENDPOINT_USERS}/${id}/words/${wordId}`)
+      .get(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}/words/${wordId}`, { validateStatus: () => true })
+      .then((res) => (res.status === 200 ? (res.data as IUserWord) : null));
+  }
+
+  /**
+   * This method uses token
+   */
+  static createUserWord(userId: string, wordId: string, userWordData: IUserWordData) {
+    return axiosInstance()
+      .post(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}/words/${wordId}`, userWordData)
       .then((res) => res.data as IUserWord);
   }
 
   /**
    * This method uses token
    */
-  static createUserWord(id: string, wordId: string, userWordData: IUserWordData) {
+  static updateUserWord(userId: string, wordId: string, userWordData: IUserWordData) {
     return axiosInstance()
-      .post(`${GlobalConstants.API_ENDPOINT_USERS}/${id}/words/${wordId}`, userWordData)
+      .put(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}/words/${wordId}`, userWordData)
       .then((res) => res.data as IUserWord);
   }
 
   /**
    * This method uses token
    */
-  private static setWorDifficultyById(id: string, wordId: string, difficulty: string) {
-    const getWord = this.getAllWordsByUserId(id).then((data) => {
-      const wordData = data.find((word) => word.wordId === wordId);
-      if (wordData) {
-        return {
-          difficulty,
-          optional: { ...wordData.optional },
-        } as IUserWordData;
+  static deleteUserWord(userId: string, wordId: string) {
+    return axiosInstance().delete(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}/words/${wordId}`);
+  }
+
+  /**
+   * This method uses token
+   */
+  private static setWorDifficultyById(userId: string, wordId: string, difficulty: string) {
+    const getWord = this.getAllWordsByUserId(userId).then((data) => {
+      if (data) {
+        const wordData = data.find((word) => word.wordId === wordId);
+        if (wordData) {
+          return {
+            difficulty,
+            optional: { ...wordData.optional },
+          } as IUserWordData;
+        }
       }
+
       return null;
     });
 
     return getWord.then((data) => {
       if (!data) {
-        return UserWordService.createUserWord(id, wordId, {
+        return UserWordService.createUserWord(userId, wordId, {
           difficulty,
           optional: {
             successCounter: 0,
@@ -58,32 +77,35 @@ export class UserWordService {
           },
         } as IUserWordData);
       }
-      return this.updateUserWord(id, wordId, data);
+      return this.updateUserWord(userId, wordId, data);
     });
   }
 
   /**
    * This method uses token
    */
-  private static setWordLearnedState(id: string, wordId: string, isLearned: boolean) {
-    const getWord = this.getAllWordsByUserId(id).then((data) => {
-      const wordData = data.find((word) => word.wordId === wordId);
-      if (wordData) {
-        return {
-          difficulty: wordData.difficulty,
-          optional: {
-            successCounter: wordData.optional.successCounter,
-            failCounter: wordData.optional.failCounter,
-            isLearned,
-          } as IUserWordOptional,
-        } as IUserWordData;
+  private static setWordLearnedState(userId: string, wordId: string, isLearned: boolean) {
+    const getWord = this.getAllWordsByUserId(userId).then((data) => {
+      if (data) {
+        const wordData = data.find((word) => word.wordId === wordId);
+        if (wordData) {
+          return {
+            difficulty: wordData.difficulty,
+            optional: {
+              successCounter: wordData.optional.successCounter,
+              failCounter: wordData.optional.failCounter,
+              isLearned,
+            } as IUserWordOptional,
+          } as IUserWordData;
+        }
       }
+
       return null;
     });
 
     return getWord.then((data) => {
       if (!data) {
-        return UserWordService.createUserWord(id, wordId, {
+        return UserWordService.createUserWord(userId, wordId, {
           difficulty: 'normal',
           optional: {
             successCounter: 0,
@@ -92,57 +114,42 @@ export class UserWordService {
           },
         } as IUserWordData);
       }
-      return this.updateUserWord(id, wordId, data);
+      return this.updateUserWord(userId, wordId, data);
     });
   }
 
   /**
    * This method uses token
    */
-  static addWordLearnedById(id: string, wordId: string) {
-    return this.setWordLearnedState(id, wordId, true);
+  static addWordLearnedById(userId: string, wordId: string) {
+    return this.setWordLearnedState(userId, wordId, true);
   }
 
   /**
    * This method uses token
    */
-  static removeWordFromLearnedById(id: string, wordId: string) {
-    return this.setWordLearnedState(id, wordId, false);
+  static removeWordFromLearnedById(userId: string, wordId: string) {
+    return this.setWordLearnedState(userId, wordId, false);
   }
 
   /**
    * This method uses token
    */
-  static setWorDifficultById(id: string, wordId: string) {
-    return this.setWorDifficultyById(id, wordId, 'hard');
+  static setWorDifficultById(userId: string, wordId: string) {
+    return this.setWorDifficultyById(userId, wordId, 'hard');
   }
 
   /**
    * This method uses token
    */
-  static setWordNormalById(id: string, wordId: string) {
-    return this.setWorDifficultyById(id, wordId, 'normal');
+  static setWordNormalById(userId: string, wordId: string) {
+    return this.setWorDifficultyById(userId, wordId, 'normal');
   }
 
-  /**
-   * This method uses token
-   */
-  static updateUserWord(id: string, wordId: string, userWordData: IUserWordData) {
-    return axiosInstance()
-      .put(`${GlobalConstants.API_ENDPOINT_USERS}/${id}/words/${wordId}`, userWordData)
-      .then((res) => res.data as IUserWord);
-  }
-
-  /**
-   * This method uses token
-   */
-  static deleteUser(id: string, wordId: string) {
-    return axiosInstance().delete(`${GlobalConstants.API_ENDPOINT_USERS}/${id}/words/${wordId}`);
-  }
-
-  static setWordStatistic(id: string, wordId: string, isCorrect: boolean) {
-    const getData = this.getAllWordsByUserId(id).then((data) => {
-      const wordData = data.find((word) => word.wordId === wordId);
+  static setWordStatistic(userId: string, wordId: string, isCorrect: boolean) {
+    const getData = this.getUserWordById(userId, wordId).then((data) => {
+      console.error(data);
+      const wordData = data;
       if (wordData) {
         const oldParameters = { ...wordData.optional };
         const parameters = {
@@ -165,12 +172,12 @@ export class UserWordService {
           failCounter: isCorrect ? 0 : 1,
           isLearned: false,
         };
-        return UserWordService.createUserWord(id, wordId, {
+        return UserWordService.createUserWord(userId, wordId, {
           difficulty: 'normal',
           optional: parameters,
         } as IUserWordData);
       }
-      return UserWordService.updateUserWord(id, wordId, wordData);
+      return UserWordService.updateUserWord(userId, wordId, wordData);
     });
   }
 }
