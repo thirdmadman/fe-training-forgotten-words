@@ -143,7 +143,8 @@ export function Card(props: CardProps) {
 
   const showUserButtons = () => {
     const userId = TokenProvider.getUserId();
-    if (!userId) {
+    const isExpired = TokenProvider.checkIsExpired();
+    if (!userId || isExpired) {
       return '';
     }
     return (
