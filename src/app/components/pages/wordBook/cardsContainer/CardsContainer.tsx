@@ -14,16 +14,18 @@ export interface CardsContainerProps {
 export function CardsContainer(props: CardsContainerProps) {
   const { data } = props;
 
+  const { array } = data;
+
   const [dataIWordAdvanced, setDataIWordAdvanced] = useState<Array<IWordAdvanced>>();
 
   useEffect(() => {
     const renderCards = () => {
       const userId = TokenProvider.getUserId();
-      let advancedWords = data.array.map((word) => ({ word } as IWordAdvanced));
+      let advancedWords = array.map((word) => ({ word } as IWordAdvanced));
       if (userId && !TokenProvider.checkIsExpired()) {
         UserWordService.getAllWordsByUserId(userId)
           .then((wordsData) => {
-            advancedWords = data.array.map((word) => {
+            advancedWords = array.map((word) => {
               const userWordFound = wordsData.find((userWord) => userWord.wordId === word.id);
               if (userWordFound) {
                 return {
@@ -45,7 +47,7 @@ export function CardsContainer(props: CardsContainerProps) {
       }
     };
     renderCards();
-  }, [data]);
+  }, [array]);
 
   return (
     <div className="cards-container">
