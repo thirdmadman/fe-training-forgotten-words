@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { IGameQuestion } from '../../../interfaces/IGameQuestion';
 import './SprintQuestion.scss';
 
@@ -15,17 +16,23 @@ export function SprintQuestion(props: SprintQuestionProps) {
     onAnswer(questionData, answer);
   };
 
-  const handlerKey = (event: KeyboardEvent) => {
-    if (event.code === 'Digit1') {
-      document.removeEventListener('keyup', handlerKey);
-      handleAnswer(true);
-    } else if (event.code === 'Digit2') {
-      document.removeEventListener('keyup', handlerKey);
-      handleAnswer(false);
-    }
-  };
+  useEffect(() => {
+    const handlerKey = (event: KeyboardEvent) => {
+      if (event.code === 'Digit1') {
+        document.removeEventListener('keyup', handlerKey);
+        handleAnswer(true);
+      } else if (event.code === 'Digit2') {
+        document.removeEventListener('keyup', handlerKey);
+        handleAnswer(false);
+      }
+    };
 
-  document.addEventListener('keyup', handlerKey);
+    document.addEventListener('keyup', handlerKey);
+
+    return () => {
+      document.removeEventListener('keyup', handlerKey);
+    };
+  });
 
   const { word } = wordData;
   const translation = variants[0].wordData.wordTranslate;
