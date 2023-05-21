@@ -24,14 +24,16 @@ export function CardsContainer(props: CardsContainerProps) {
       let advancedWords = array.map((word) => ({ word } as IWordAdvanced));
       if (userId && !TokenProvider.checkIsExpired()) {
         UserWordService.getAllWordsByUserId(userId)
-          .then((wordsData) => {
+          .then((userWordsData) => {
             advancedWords = array.map((word) => {
-              const userWordFound = wordsData.find((userWord) => userWord.wordId === word.id);
-              if (userWordFound) {
-                return {
-                  word,
-                  userData: userWordFound,
-                } as IWordAdvanced;
+              if (userWordsData) {
+                const userWordFound = userWordsData.find((userWord) => userWord.wordId === word.id);
+                if (userWordFound) {
+                  return {
+                    word,
+                    userData: userWordFound,
+                  } as IWordAdvanced;
+                }
               }
 
               return {
