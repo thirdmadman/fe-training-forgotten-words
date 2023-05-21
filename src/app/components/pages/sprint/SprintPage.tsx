@@ -12,6 +12,8 @@ import '../../common/MiniGameStartPage.scss';
 import { MiniGameStartPage } from '../../common/MiniGameStartPage';
 import { TokenProvider } from '../../../services/TokenProvider';
 import { UserWordService } from '../../../services/UserWordService';
+import { executePromisesSequentially } from '../../../utils/executePromisesSequentially';
+import { IUserWord } from '../../../interfaces/IUserWord';
 
 export function SprintPage() {
   const [questions, setQuestions] = useState<Array<IGameQuestion>>();
@@ -56,7 +58,6 @@ export function SprintPage() {
   };
 
   if (level > -1 && page > -1 && questions === undefined) {
-    console.error(level, page, questions);
     WordService.getWordsByGroupAndPage(level, page)
       .then((wordData) => {
         const questionsArray = createQuestions(wordData.array);
@@ -68,9 +69,18 @@ export function SprintPage() {
   const onGameFinish = (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => {
     const userId = TokenProvider.getUserId();
     if (userId && !TokenProvider.checkIsExpired()) {
-      resultsOfGame.forEach((item) => {
-        UserWordService.setWordStatistic(userId, item.questionData.id, item.isCorrect).catch((e) => console.error(e));
-      });
+      // eslint-disable-next-line arrow-body-style
+      const promiseFunction = (item: IResultData) => {
+        return () => UserWordService.setWordStatistic(userId, item.questionData.id, item.isCorrect);
+      };
+
+      const setWordStatisticPromises = resultsOfGame.map(promiseFunction);
+
+      executePromisesSequentially<IUserWord>(setWordStatisticPromises)
+        .then()
+        .catch((error) => {
+          console.error('Error:', error);
+        });
     }
 
     setResults(resultsOfGame);
