@@ -18,7 +18,7 @@ export class UsersAggregatedWordsService {
   /**
    * This method uses token
    */
-  static getAllAggregatedWordsByUserId(id: string, group = -1, page = -1, wordsPerPage = -1, filter = '') {
+  static getAllAggregatedWordsByUserId(userId: string, group = -1, page = -1, wordsPerPage = -1, filter = '') {
     const params = new URLSearchParams();
     if (group > -1) {
       params.append('group', String(group));
@@ -33,7 +33,7 @@ export class UsersAggregatedWordsService {
       params.append('filter', String(filter));
     }
     return axiosInstance()
-      .get(`${GlobalConstants.API_ENDPOINT_USERS}/${id}/aggregatedWords`, { params })
+      .get(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}/aggregatedWords`, { params })
       .then((res) => {
         const resultData = res.data as IPaginatedResults;
         return {
@@ -49,9 +49,9 @@ export class UsersAggregatedWordsService {
   /**
    * This method uses token
    */
-  static getAggregatedWordsByUserIdAndWordId(id: string, wordId: string) {
+  static getAggregatedWordsByUserIdAndWordId(userId: string, wordId: string) {
     return axiosInstance()
-      .get(`${GlobalConstants.API_ENDPOINT_USERS}/${id}/aggregatedWords/${wordId}`)
+      .get(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}/aggregatedWords/${wordId}`)
       .then((res) => {
         const resultData = res.data as Array<IAggregatedWord>;
         return resultData[0];

@@ -24,9 +24,9 @@ export class WordService {
       });
   }
 
-  static getWordsById(id: string) {
+  static getWordsById(wordId: string) {
     return axiosInstance(true)
-      .get(`${GlobalConstants.API_URL}${GlobalConstants.API_ENDPOINT_WORDS}/${id}`)
+      .get(`${GlobalConstants.API_URL}${GlobalConstants.API_ENDPOINT_WORDS}/${wordId}`)
       .then((res) => res.data as IWord);
   }
 }

@@ -8,9 +8,9 @@ export class UserService {
   /**
    * This method uses token
    */
-  static getUserById(id: string) {
+  static getUserById(userId: string) {
     return axiosInstance()
-      .get(`${GlobalConstants.API_ENDPOINT_USERS}/${id}`)
+      .get(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}`)
       .then((res) => res.data as IUser);
   }
 
@@ -27,9 +27,9 @@ export class UserService {
   /**
    * This method uses token
    */
-  static updateUser(email: string, password: string, id: string) {
+  static updateUser(email: string, password: string, userId: string) {
     return axiosInstance()
-      .put(`${GlobalConstants.API_ENDPOINT_USERS}/${id}`, {
+      .put(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}`, {
         email,
         password,
       })
@@ -39,16 +39,16 @@ export class UserService {
   /**
    * This method uses token
    */
-  static deleteUser(id: string) {
-    return axiosInstance().delete(`${GlobalConstants.API_ENDPOINT_USERS}/${id}`);
+  static deleteUser(userId: string) {
+    return axiosInstance().delete(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}`);
   }
 
   /**
    * This method uses token
    */
-  static refreshUserToken(id: string) {
+  static refreshUserToken(userId: string) {
     return axiosInstance()
-      .get(`${GlobalConstants.API_ENDPOINT_USERS}/${id}/tokens`)
+      .get(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}/tokens`)
       .then((res) => res.data as IAuth);
   }
 }

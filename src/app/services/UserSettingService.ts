@@ -6,18 +6,18 @@ export class UserSettingService {
   /**
    * This method uses token
    */
-  static getUserSettingById(id: string) {
+  static getUserSettingById(userId: string) {
     return axiosInstance()
-      .get(`${GlobalConstants.API_ENDPOINT_USERS}/${id}/settings`)
+      .get(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}/settings`)
       .then((res) => res.data as IUserSetting);
   }
 
   /**
    * This method uses token
    */
-  static updateUserSettingById(id: string, statisticsData: IUserSetting) {
+  static updateUserSettingById(userId: string, statisticsData: IUserSetting) {
     return axiosInstance()
-      .put(`${GlobalConstants.API_ENDPOINT_USERS}/${id}/settings`, statisticsData)
+      .put(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}/settings`, statisticsData)
       .then((res) => res.data as IUserSetting);
   }
 }
