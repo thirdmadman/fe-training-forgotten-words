@@ -23,7 +23,7 @@ const menuData = [
   },
   {
     title: 'Diary',
-    path: GlobalConstants.ROUTE_STATISTICS,
+    path: GlobalConstants.ROUTE_DIARY,
     isAuthNeeded: true,
   },
   {
@@ -33,7 +33,7 @@ const menuData = [
   },
   {
     title: 'Our memories',
-    path: GlobalConstants.ROUTE_VOCABULARY,
+    path: GlobalConstants.ROUTE_OUR_MEMORIES,
     isAuthNeeded: true,
   },
   {

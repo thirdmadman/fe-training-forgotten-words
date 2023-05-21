@@ -5,13 +5,17 @@ export class GlobalConstants {
 
   public static API_URL = process.env.API_URL || GlobalConstants.DEFAULT_API_URL;
 
-  public static ROUTE_MAIN = '/';
+  // API EndPoints
 
   public static API_ENDPOINT_WORDS = '/words';
 
   public static API_ENDPOINT_USERS = '/users';
 
   public static API_ENDPOINT_SIGNIN = '/signin';
+
+  // Routes
+
+  public static ROUTE_MAIN = '/';
 
   public static ROUTE_AUTH = '/auth';
 
@@ -21,9 +25,11 @@ export class GlobalConstants {
 
   public static ROUTE_SPRINT = '/sprint';
 
-  public static ROUTE_VOCABULARY = '/vocabulary';
+  public static ROUTE_DIARY = '/diary';
 
-  public static ROUTE_STATISTICS = '/statistics';
+  public static ROUTE_OUR_MEMORIES = '/our-memories';
+
+  // Other variables
 
   public static NUMBER_OF_PAGES = 30;
 
@@ -32,6 +38,8 @@ export class GlobalConstants {
   public static NUMBER_OF_GROUP_AUTH_USER = 7;
 
   public static GAME_TIME = 60;
+
+  // Music
 
   public static MUSIC_PATH = './static/music/';
 
