@@ -4,11 +4,13 @@ import { IGameAnswer } from '../../../interfaces/IGameAnswer';
 import { IGameQuestion } from '../../../interfaces/IGameQuestion';
 import { IGameQuestionArray } from '../../../interfaces/IGameQuestionArray';
 import { IResultData } from '../../../interfaces/IResultData';
+import { IUserWord } from '../../../interfaces/IUserWord';
 import { IWord } from '../../../interfaces/IWord';
 import { musicPlayer2 } from '../../../services/SingleMusicPlayer2';
 import { TokenProvider } from '../../../services/TokenProvider';
 import { UserWordService } from '../../../services/UserWordService';
 import { WordService } from '../../../services/WordService';
+import { executePromisesSequentially } from '../../../utils/executePromisesSequentially';
 import { MiniGameStartPage } from '../../common/MiniGameStartPage';
 import { StatisticPage } from '../../common/StatisticPage';
 import { AudiocallGameField } from './AudiocallGameField';
@@ -75,9 +77,18 @@ export function AudiocallPage() {
   const onGameFinish = (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => {
     const userId = TokenProvider.getUserId();
     if (userId && !TokenProvider.checkIsExpired()) {
-      resultsOfGame.forEach((item) => {
-        UserWordService.setWordStatistic(userId, item.questionData.id, item.isCorrect).catch((e) => console.error(e));
-      });
+      // eslint-disable-next-line arrow-body-style
+      const promiseFunction = (item: IResultData) => {
+        return () => UserWordService.setWordStatistic(userId, item.questionData.id, item.isCorrect);
+      };
+
+      const setWordStatisticPromises = resultsOfGame.map(promiseFunction);
+
+      executePromisesSequentially<IUserWord>(setWordStatisticPromises)
+        .then()
+        .catch((error) => {
+          console.error('Error:', error);
+        });
     }
 
     setResults(resultsOfGame);
