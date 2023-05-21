@@ -1,7 +1,6 @@
 import { GlobalConstants } from '../../GlobalConstants';
 import { IAuth } from '../interfaces/IAuth';
 import DataLocalStorageProvider from './DataLocalStorageProvider';
-import { PathBus } from './PathBus';
 
 export class TokenProvider {
   private static authData: IAuth | undefined;
@@ -17,9 +16,9 @@ export class TokenProvider {
 
   static redirectIfTokenExpired() {
     if (TokenProvider.checkIsExpired()) {
-      const currentPath = PathBus.getCurrentPath();
+      const currentPath = window.location.hash;
       this.clearAuthData();
-      PathBus.setCurrentPath(`${GlobalConstants.ROUTE_AUTH}?expired=true&path=${currentPath}`);
+      window.location.hash = `${GlobalConstants.ROUTE_AUTH}?expired=true&path=${currentPath}`;
       return true;
     }
     return false;
