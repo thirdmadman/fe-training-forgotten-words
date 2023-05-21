@@ -7,6 +7,7 @@ import Menu from './components/common/menu/Menu';
 import { AuthorizationPage } from './components/pages/auth/AuthorizationPage';
 import { SprintPage } from './components/pages/sprint/SprintPage';
 import { AudiocallPage } from './components/pages/audiocall/AudiocallPage';
+import { DiaryPage } from './components/pages/diary/DiaryPage';
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Route path={GlobalConstants.ROUTE_SPRINT} element={<SprintPage />} />
         <Route path={GlobalConstants.ROUTE_AUDIOCALL} element={<AudiocallPage />} />
         <Route path={GlobalConstants.ROUTE_AUTH} element={<AuthorizationPage />} />
+        <Route path={GlobalConstants.ROUTE_DIARY} element={<DiaryPage />} />
         <Route path="*" element={<h1>NOT FOUND</h1>} />
       </Routes>
     </HashRouter>
