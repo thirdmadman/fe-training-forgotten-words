@@ -148,7 +148,6 @@ export class UserWordService {
 
   static setWordStatistic(userId: string, wordId: string, isCorrect: boolean) {
     const getData = this.getUserWordById(userId, wordId).then((data) => {
-      console.error(data);
       const wordData = data;
       if (wordData) {
         const oldParameters = { ...wordData.optional };
