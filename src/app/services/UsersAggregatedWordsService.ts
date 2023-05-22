@@ -35,7 +35,7 @@ export class UsersAggregatedWordsService {
           const data = res.data as Array<IPaginatedResults>;
           const resultData = data[0];
           const respCount = resultData.totalCount[0].count;
-          const pageSize = respCount < wordsPerPage ? respCount : wordsPerPage;
+          const pageSize = respCount;
           return {
             array: [...resultData.paginatedResults],
             pageSize: wordsPerPage,
