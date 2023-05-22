@@ -6,8 +6,9 @@ import { IWord } from '../../interfaces/IWord';
 import { WordService } from '../../services/WordService';
 import { Spinner } from '../../components/common/spinner/Spinner';
 import { CardsContainer } from '../../components/cardsContainer/CardsContainer';
-import './WordBook.scss';
 import { musicPlayer2 } from '../../services/SingleMusicPlayer2';
+import './WordBook.scss';
+import { Pagination } from '../../components/common/pagination/Pagination';
 
 export default function WordBook() {
   type StateType = IPaginatedArray<IWord> | null;
@@ -18,24 +19,12 @@ export default function WordBook() {
 
   const params = useParams();
 
-  if (!params.level || !params.page) {
-    navigate(`${GlobalConstants.ROUTE_WORDBOOK}/1/1`);
-  }
-
   const level = Number(params.level ? params.level : '1');
   const page = Number(params.page ? params.page : '1');
 
   const { NUMBER_OF_PAGES, NUMBER_OF_GROUP_NO_AUTH_USER, ROUTE_WORDBOOK } = GlobalConstants;
 
   const { WORDBOOK_MUSIC_NAME, MUSIC_PATH } = GlobalConstants;
-
-  useEffect(() => {
-    WordService.getWordsByGroupAndPage(level - 1, page - 1)
-      .then((data) => {
-        setDataCards(data);
-      })
-      .catch((e) => console.error(e));
-  }, [level, page]);
 
   const currentTrack = musicPlayer2.getCurrentPlayingTrack();
   if (!currentTrack || currentTrack.indexOf(WORDBOOK_MUSIC_NAME) < 0) {
@@ -76,40 +65,33 @@ export default function WordBook() {
     }
   };
 
+  useEffect(() => {
+    if (!params.level || !params.page) {
+      navigate(`${GlobalConstants.ROUTE_WORDBOOK}/1/1`);
+      return;
+    }
+
+    WordService.getWordsByGroupAndPage(level - 1, page - 1)
+      .then((data) => {
+        setDataCards(data);
+      })
+      .catch((e) => console.error(e));
+  }, [level, page, params, navigate]);
+
   return (
     <div className="wordbook">
       <div className="wordbook__title">Their memories</div>
       <div className="navigation-container">
-        <div className="pagination">
-          <button
-            className="pagination__button pagination__button_prev"
-            type="button"
-            aria-label="prev"
-            onClick={() => changePage('prev')}
-          />
-          <div className="pagination__text">{`Page number ${page}/${NUMBER_OF_PAGES}`}</div>
-          <button
-            className="pagination__button pagination__button_next"
-            type="button"
-            aria-label="next"
-            onClick={() => changePage('next')}
-          />
-        </div>
-        <div className="pagination">
-          <button
-            className="pagination__button pagination__button_prev"
-            type="button"
-            aria-label="prev"
-            onClick={() => changeLevel('prev')}
-          />
-          <div className="pagination__text">{`Depth level ${level}/${NUMBER_OF_GROUP_NO_AUTH_USER}`}</div>
-          <button
-            className="pagination__button pagination__button_next"
-            type="button"
-            aria-label="next"
-            onClick={() => changeLevel('next')}
-          />
-        </div>
+        <Pagination
+          text={`Page number ${page}/${NUMBER_OF_PAGES}`}
+          onPreviousAction={() => changePage('prev')}
+          onNextAction={() => changePage('next')}
+        />
+        <Pagination
+          text={`Depth level ${level}/${NUMBER_OF_GROUP_NO_AUTH_USER}`}
+          onPreviousAction={() => changeLevel('prev')}
+          onNextAction={() => changeLevel('next')}
+        />
       </div>
       {dataCards ? <CardsContainer data={dataCards} /> : <Spinner />}
     </div>
