@@ -1,0 +1,33 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  .pagination__button {
+    all: unset;
+    width: 25px;
+    height: 25px;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    transition: all 0.1s ease-in-out;
+
+    &_prev {
+      background-image: url('/src/assets/img/svg/arrow-horizontal-left.svg');
+    }
+
+    &_next {
+      background-image: url('/src/assets/img/svg/arrow-horizontal-right.svg');
+    }
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  .pagination__text {
+    font-weight: 100;
+    font-size: 18px;
+    line-height: 25px;
+    text-align: center;
+    text-transform: uppercase;
+  }
+}
