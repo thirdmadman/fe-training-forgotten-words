@@ -20,18 +20,6 @@ export function MiniGameStatistic(props: MiniGameStatisticProps) {
     musicPlayer.play().catch((e) => console.error(e));
   };
 
-  // useEffect(() => {
-  //   resultData.forEach((result) => {
-  //     const userId = TokenProvider.getUserId();
-
-  //     if (userId && !TokenProvider.checkIsExpired()) {
-  //       UserWordService.setWordStatistic(userId, result.questionData.id, result.isCorrect).catch((e) =>
-  //         console.error(e),
-  //       );
-  //     }
-  //   });
-  // }, []);
-
   const creteResultCard = (result: IResultData) => {
     const { questionData } = result;
     const audioWordData = `${GlobalConstants.DEFAULT_API_URL}/${questionData.audio}`;
