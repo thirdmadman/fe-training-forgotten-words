@@ -45,6 +45,11 @@ const routes: RouteObject = {
       element: <DiaryPage />,
     },
     {
+      path: `${GlobalConstants.ROUTE_DIARY}/:page`,
+
+      element: <DiaryPage />,
+    },
+    {
       path: '*',
 
       element: <h1>NOT FOUND</h1>,
