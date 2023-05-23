@@ -150,11 +150,29 @@ export function AuthorizationPage() {
     </>
   );
 
+  const showUserInformation = () => {
+    const userName = 'someone';
+    const userEmail = 'someone@email.com';
+    return (
+      <div className="user-information">
+        <div className="user-information__group">
+          <div className="user-information__title">You</div>
+          <div className="user-information__text user-information__text_username">{userName}</div>
+        </div>
+        <div className="user-information__group">
+          <div className="user-information__title">Yor email</div>
+          <div className="user-information__text user-information__text_email">{userEmail}</div>
+        </div>
+      </div>
+    );
+  };
+
   const showAuthPage = () => (
     <div className="auth-page">
       <div className="auth-page__container">
         <div className="auth-page__title">{isUserAuth ? 'SYNCHRONIZED' : 'Identity recognizing'}</div>
         {isUserAuth ? '' : showInputAuth()}
+        {isUserAuth ? showUserInformation() : ''}
         {isUserAuth ? getButtonExit() : getButtonSingnin()}
         <h3 className="auth-form__text">or</h3>
         <button className="auth-form__button" type="button" onClick={() => setIsShowRegister(true)}>
