@@ -153,7 +153,7 @@ export function AuthorizationPage() {
   const showAuthPage = () => (
     <div className="auth-page">
       <div className="auth-page__container">
-        <div className="auth-page__title">Identity recognizing</div>
+        <div className="auth-page__title">{isUserAuth ? 'SYNCHRONIZED' : 'Identity recognizing'}</div>
         {isUserAuth ? '' : showInputAuth()}
         {isUserAuth ? getButtonExit() : getButtonSingnin()}
         <h3 className="auth-form__text">or</h3>
