@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { IWord } from '../../interfaces/IWord';
-import { Card } from '../common/card/Card';
-import { IPaginatedArray } from '../../interfaces/IPaginatedArray';
-import { TokenProvider } from '../../services/TokenProvider';
-import { UserWordService } from '../../services/UserWordService';
-import { IWordAdvanced } from '../../interfaces/IWordAdvanced';
+import { IWord } from '../../../interfaces/IWord';
+import { Card } from '../card/Card';
+import { IPaginatedArray } from '../../../interfaces/IPaginatedArray';
+import { TokenProvider } from '../../../services/TokenProvider';
+import { UserWordService } from '../../../services/UserWordService';
+import { IWordAdvanced } from '../../../interfaces/IWordAdvanced';
 import './CardsContainer.scss';
-import { IAggregatedWord } from '../../interfaces/IAggregatedWord';
-import { convertAggregatedWordToWordAdvanced } from '../../utils/convertAggregatedWordToWordAdvanced';
+import { IAggregatedWord } from '../../../interfaces/IAggregatedWord';
+import { convertAggregatedWordToWordAdvanced } from '../../../utils/convertAggregatedWordToWordAdvanced';
 
 export interface CardsContainerProps {
   paginatedArrayOfIWord: IPaginatedArray<IWord> | null;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { GlobalConstants } from '../../../GlobalConstants';
-import { CardsContainer } from '../../components/cardsContainer/CardsContainer';
+import { CardsContainer } from '../../components/common/cardsContainer/CardsContainer';
 import { Pagination } from '../../components/common/pagination/Pagination';
 import { Spinner } from '../../components/common/spinner/Spinner';
 import { IAggregatedWord } from '../../interfaces/IAggregatedWord';

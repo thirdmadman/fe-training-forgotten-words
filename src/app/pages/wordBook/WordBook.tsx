@@ -5,7 +5,7 @@ import { IPaginatedArray } from '../../interfaces/IPaginatedArray';
 import { IWord } from '../../interfaces/IWord';
 import { WordService } from '../../services/WordService';
 import { Spinner } from '../../components/common/spinner/Spinner';
-import { CardsContainer } from '../../components/cardsContainer/CardsContainer';
+import { CardsContainer } from '../../components/common/cardsContainer/CardsContainer';
 import { musicPlayer2 } from '../../services/SingleMusicPlayer2';
 import './WordBook.scss';
 import { Pagination } from '../../components/common/pagination/Pagination';
