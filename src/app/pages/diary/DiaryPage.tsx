@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { GlobalConstants } from '../../../GlobalConstants';
+import { CardsContainer } from '../../components/cardsContainer/CardsContainer';
 import { Pagination } from '../../components/common/pagination/Pagination';
-import { DiaryCardsContainer } from '../../components/diary/DiaryCardsContainer';
+import { Spinner } from '../../components/common/spinner/Spinner';
 import { IAggregatedWord } from '../../interfaces/IAggregatedWord';
 import { IPaginatedArray } from '../../interfaces/IPaginatedArray';
 import { TokenProvider } from '../../services/TokenProvider';
@@ -50,6 +51,7 @@ export function DiaryPage() {
 
   return (
     <div className="diary">
+      <div className="diary__title">Diary</div>
       <div className="navigation-container">
         <Pagination
           text={`Page number ${pageNumber + 1}/${totalPages + 1}`}
@@ -57,7 +59,11 @@ export function DiaryPage() {
           onNextAction={() => changePage('next')}
         />
       </div>
-      {userDiaryWords && <DiaryCardsContainer wordsPaginatedArray={userDiaryWords} />}
+      {userDiaryWords ? (
+        <CardsContainer paginatedArrayOfIWord={null} paginatedArrayOfIAggregatedWord={userDiaryWords} />
+      ) : (
+        <Spinner />
+      )}
     </div>
   );
 }
