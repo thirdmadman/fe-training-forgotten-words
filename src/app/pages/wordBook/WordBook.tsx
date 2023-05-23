@@ -93,7 +93,11 @@ export default function WordBook() {
           onNextAction={() => changeLevel('next')}
         />
       </div>
-      {dataCards ? <CardsContainer data={dataCards} /> : <Spinner />}
+      {dataCards ? (
+        <CardsContainer paginatedArrayOfIWord={dataCards} paginatedArrayOfIAggregatedWord={null} />
+      ) : (
+        <Spinner />
+      )}
     </div>
   );
 }
