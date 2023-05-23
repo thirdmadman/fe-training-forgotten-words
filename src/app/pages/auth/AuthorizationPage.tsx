@@ -24,6 +24,9 @@ export function AuthorizationPage() {
   const [passwordRegister, setPasswordRegister] = useState('');
   const [nameRegister, setNameRegister] = useState('');
 
+  const [userShowName, setUserShowName] = useState('');
+  const [userShowEmail, setUserShowEmail] = useState('');
+
   const isUserAuth = !TokenProvider.checkIsExpired();
 
   const currentTrack = musicPlayer2.getCurrentPlayingTrack();
@@ -151,17 +154,28 @@ export function AuthorizationPage() {
   );
 
   const showUserInformation = () => {
-    const userName = 'someone';
-    const userEmail = 'someone@email.com';
+    if (userShowName === '' && userShowEmail === '') {
+      const userId = TokenProvider.getUserId();
+      if (!userId) {
+        return '';
+      }
+      UserService.getUserById(userId)
+        .then((user) => {
+          setUserShowName(user.name);
+          setUserShowEmail(user.email);
+        })
+        .catch((e) => console.error(e));
+    }
+
     return (
       <div className="user-information">
         <div className="user-information__group">
           <div className="user-information__title">You</div>
-          <div className="user-information__text user-information__text_username">{userName}</div>
+          <div className="user-information__text user-information__text_username">{userShowName}</div>
         </div>
         <div className="user-information__group">
           <div className="user-information__title">Yor email</div>
-          <div className="user-information__text user-information__text_email">{userEmail}</div>
+          <div className="user-information__text user-information__text_email">{userShowEmail}</div>
         </div>
       </div>
     );
