@@ -6,50 +6,60 @@ import { TokenProvider } from '../../services/TokenProvider';
 import { UserWordService } from '../../services/UserWordService';
 import { IWordAdvanced } from '../../interfaces/IWordAdvanced';
 import './CardsContainer.scss';
+import { IAggregatedWord } from '../../interfaces/IAggregatedWord';
+import { convertAggregatedWordToWordAdvanced } from '../../utils/convertAggregatedWordToWordAdvanced';
 
 export interface CardsContainerProps {
-  data: IPaginatedArray<IWord>;
+  paginatedArrayOfIWord: IPaginatedArray<IWord> | null;
+  paginatedArrayOfIAggregatedWord: IPaginatedArray<IAggregatedWord> | null;
 }
 
 export function CardsContainer(props: CardsContainerProps) {
-  const { data } = props;
-
-  const { array } = data;
+  const { paginatedArrayOfIWord, paginatedArrayOfIAggregatedWord } = props;
 
   const [dataIWordAdvanced, setDataIWordAdvanced] = useState<Array<IWordAdvanced>>();
 
   useEffect(() => {
-    const renderCards = () => {
-      const userId = TokenProvider.getUserId();
-      let advancedWords = array.map((word) => ({ word } as IWordAdvanced));
-      if (userId && !TokenProvider.checkIsExpired()) {
-        UserWordService.getAllWordsByUserId(userId)
-          .then((userWordsData) => {
-            advancedWords = array.map((word) => {
-              if (userWordsData) {
-                const userWordFound = userWordsData.find((userWord) => userWord.wordId === word.id);
-                if (userWordFound) {
-                  return {
-                    word,
-                    userData: userWordFound,
-                  } as IWordAdvanced;
+    if (paginatedArrayOfIWord) {
+      const { array } = paginatedArrayOfIWord;
+      const renderCards = () => {
+        const userId = TokenProvider.getUserId();
+        let advancedWords = array.map((word) => ({ word } as IWordAdvanced));
+        if (userId && !TokenProvider.checkIsExpired()) {
+          UserWordService.getAllWordsByUserId(userId)
+            .then((userWordsData) => {
+              advancedWords = array.map((word) => {
+                if (userWordsData) {
+                  const userWordFound = userWordsData.find((userWord) => userWord.wordId === word.id);
+                  if (userWordFound) {
+                    return {
+                      word,
+                      userData: userWordFound,
+                    } as IWordAdvanced;
+                  }
                 }
-              }
 
-              return {
-                word,
-              } as IWordAdvanced;
-            });
+                return {
+                  word,
+                } as IWordAdvanced;
+              });
 
-            setDataIWordAdvanced(advancedWords);
-          })
-          .catch((e) => console.error(e));
-      } else {
-        setDataIWordAdvanced(advancedWords);
-      }
-    };
-    renderCards();
-  }, [array]);
+              setDataIWordAdvanced(advancedWords);
+            })
+            .catch((e) => console.error(e));
+        } else {
+          setDataIWordAdvanced(advancedWords);
+        }
+      };
+      renderCards();
+    }
+
+    if (paginatedArrayOfIAggregatedWord) {
+      const { array } = paginatedArrayOfIAggregatedWord;
+      const convertedWords = array.map(convertAggregatedWordToWordAdvanced);
+      setDataIWordAdvanced(convertedWords);
+    }
+  }, [paginatedArrayOfIWord, paginatedArrayOfIAggregatedWord]);
 
   return (
     <div className="cards-container">
