@@ -24,6 +24,9 @@ export function AuthorizationPage() {
   const [passwordRegister, setPasswordRegister] = useState('');
   const [nameRegister, setNameRegister] = useState('');
 
+  const [userShowName, setUserShowName] = useState('');
+  const [userShowEmail, setUserShowEmail] = useState('');
+
   const isUserAuth = !TokenProvider.checkIsExpired();
 
   const currentTrack = musicPlayer2.getCurrentPlayingTrack();
@@ -150,11 +153,40 @@ export function AuthorizationPage() {
     </>
   );
 
+  const showUserInformation = () => {
+    if (userShowName === '' && userShowEmail === '') {
+      const userId = TokenProvider.getUserId();
+      if (!userId) {
+        return '';
+      }
+      UserService.getUserById(userId)
+        .then((user) => {
+          setUserShowName(user.name);
+          setUserShowEmail(user.email);
+        })
+        .catch((e) => console.error(e));
+    }
+
+    return (
+      <div className="user-information">
+        <div className="user-information__group">
+          <div className="user-information__title">You</div>
+          <div className="user-information__text user-information__text_username">{userShowName}</div>
+        </div>
+        <div className="user-information__group">
+          <div className="user-information__title">Yor email</div>
+          <div className="user-information__text user-information__text_email">{userShowEmail}</div>
+        </div>
+      </div>
+    );
+  };
+
   const showAuthPage = () => (
     <div className="auth-page">
       <div className="auth-page__container">
         <div className="auth-page__title">{isUserAuth ? 'SYNCHRONIZED' : 'Identity recognizing'}</div>
         {isUserAuth ? '' : showInputAuth()}
+        {isUserAuth ? showUserInformation() : ''}
         {isUserAuth ? getButtonExit() : getButtonSingnin()}
         <h3 className="auth-form__text">or</h3>
         <button className="auth-form__button" type="button" onClick={() => setIsShowRegister(true)}>

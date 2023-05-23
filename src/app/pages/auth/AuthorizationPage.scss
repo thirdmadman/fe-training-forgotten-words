@@ -78,6 +78,43 @@ $color-light-m: #f6f6f6;
     }
   }
 
+  .user-information {
+    margin-bottom: 50px;
+    font-weight: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+
+    .user-information__group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-information__title {
+      margin-bottom: 15px;
+      font-size: 24px;
+      line-height: 30px;
+      text-align: center;
+      text-transform: uppercase;
+      font-weight: 200;
+    }
+
+    .user-information__text {
+      font-size: 30px;
+      line-height: 45px;
+      text-align: center;
+    }
+
+    .user-information__text_username {
+      padding: 0 35px;
+      background: url('/src/assets/img/svg/arrow-horizontal-right.svg') center left no-repeat,
+      url('/src/assets/img/svg/arrow-horizontal-left.svg') center right no-repeat;
+    }
+
+    .user-information__text_email {
+    }
+  }
+
   .auth-form__text {
     font-weight: 200;
     font-size: 18px;
