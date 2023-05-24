@@ -140,6 +140,7 @@ $color-light-m: #f6f6f6;
   text-transform: uppercase;
   color: $color-dark-s;
   font-family: 'Roboto';
+  cursor: pointer;
 
   &:hover {
     transform: scale(1.1);

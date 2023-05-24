@@ -42,6 +42,7 @@
     height: 25px;
     background: url('/src/assets/img/svg/icon-hard.svg') top center no-repeat;
     transition: all 0.1s ease-in-out;
+    cursor: pointer;
 
     &:hover {
       transform: scale(1.5);
@@ -61,6 +62,7 @@
     height: 25px;
     background: url('/src/assets/img/svg/icon-trained.svg') top center no-repeat;
     transition: all 0.1s ease-in-out;
+    cursor: pointer;
 
     &:hover {
       transform: scale(1.5);
@@ -107,6 +109,7 @@
     width: 300px;
     height: 18px;
     transition: all 0.1s ease-in-out;
+    cursor: pointer;
 
     &_show {
       background: url('/src/assets/img/svg/arrow-vertical-up.svg') top center no-repeat;
@@ -130,6 +133,7 @@
     height: 50px;
     background: url('/src/assets/img/svg/icon-audio.svg') top center no-repeat;
     transition: all 0.1s ease-in-out;
+    cursor: pointer;
 
     &:hover {
       transform: scale(1.1);
@@ -157,6 +161,7 @@
     height: 22px;
     background: url('/src/assets/img/svg/icon-audio-s.svg') top center no-repeat;
     transition: all 0.1s ease-in-out;
+    cursor: pointer;
 
     &:hover {
       transform: scale(1.1);

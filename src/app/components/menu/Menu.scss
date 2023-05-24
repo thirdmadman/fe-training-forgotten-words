@@ -163,6 +163,7 @@ $color-light-m: #f6f6f6;
     background: url('/src/assets/img/svg/button-cross.svg');
     background-size: cover;
     background-repeat: no-repeat;
+    cursor: pointer;
 
     &:hover {
       transform: scale(1.1);
@@ -180,6 +181,7 @@ $color-light-m: #f6f6f6;
     background: url('/src/assets/img/svg/burger-menu.svg');
     background-size: cover;
     background-repeat: no-repeat;
+    cursor: pointer;
 
     &:hover {
       transform: scale(1.1);

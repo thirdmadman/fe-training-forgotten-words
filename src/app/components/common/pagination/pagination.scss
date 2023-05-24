@@ -9,6 +9,7 @@
     background-repeat: no-repeat;
     background-size: contain;
     transition: all 0.1s ease-in-out;
+    cursor: pointer;
 
     &_prev {
       background-image: url('/src/assets/img/svg/arrow-horizontal-left.svg');

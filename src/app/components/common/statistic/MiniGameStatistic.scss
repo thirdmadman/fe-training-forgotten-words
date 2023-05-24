@@ -65,6 +65,7 @@ $color-light-m: #f6f6f6;
     url('/src/assets/img/svg/corner-right-bottom.svg') bottom right no-repeat;
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
 
   .button-word__text {
     font-weight: 100;
@@ -84,6 +85,7 @@ $color-light-m: #f6f6f6;
     height: 22px;
     width: 24px;
     background-color: white;
+    cursor: pointer;
 
     .button-word:hover {
       transform: scale(1.1);
