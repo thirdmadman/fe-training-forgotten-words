@@ -1,9 +1,9 @@
-import { IConfigs } from '../interfaces/IConfigs';
+import { ILocalConfigs } from '../interfaces/ILocalConfigs';
 
 class DataLocalStorageProvider {
-  static localStorageItemName = 'thirdmadman-rs-lang';
+  static localStorageItemName = 'thirdmadman-forgotten-words';
 
-  public static setData(data: IConfigs) {
+  public static setData(data: ILocalConfigs) {
     localStorage.setItem(DataLocalStorageProvider.localStorageItemName, JSON.stringify(data));
   }
 
@@ -16,12 +16,12 @@ class DataLocalStorageProvider {
     localStorage.removeItem(DataLocalStorageProvider.localStorageItemName);
   }
 
-  public static getData(): IConfigs | null {
+  public static getData(): ILocalConfigs | null {
     const data = localStorage.getItem(DataLocalStorageProvider.localStorageItemName);
     let localStorageKeysNumber = 0;
     let dataIConfigs = null;
     if (data) {
-      dataIConfigs = JSON.parse(data) as IConfigs;
+      dataIConfigs = JSON.parse(data) as ILocalConfigs;
       localStorageKeysNumber = Object.keys(dataIConfigs).length;
     }
 
@@ -41,7 +41,7 @@ class DataLocalStorageProvider {
     const configs = {
       isExists: false,
     };
-    return configs as IConfigs;
+    return configs as ILocalConfigs;
   }
 }
 
