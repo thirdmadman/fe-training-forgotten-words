@@ -33,7 +33,7 @@ class DataLocalStorageProvider {
       const localStorageData = localStorage.getItem(DataLocalStorageProvider.localStorageItemName);
       if (localStorageData) {
         const dataILocalConfigs = JSON.parse(localStorageData) as ILocalConfigs;
-        if (dataILocalConfigs.version === CONFIGS_VERSION) {
+        if (dataILocalConfigs.version && dataILocalConfigs.version === CONFIGS_VERSION) {
           return dataILocalConfigs;
         }
       }
