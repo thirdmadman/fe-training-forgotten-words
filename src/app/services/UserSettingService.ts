@@ -15,9 +15,9 @@ export class UserSettingService {
   /**
    * This method uses token
    */
-  static updateUserSettingById(userId: string, statisticsData: IUserSetting) {
+  static updateUserSettingById(userId: string, settingsData: IUserSetting) {
     return axiosInstance()
-      .put(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}/settings`, statisticsData)
+      .put(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}/settings`, settingsData)
       .then((res) => res.data as IUserSetting);
   }
 }
