@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GlobalConstants } from '../../../GlobalConstants';
+import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 import { SigninService } from '../../services/SigninService';
 import { musicPlayer2 } from '../../services/SingleMusicPlayer2';
 import { TokenProvider } from '../../services/TokenProvider';
@@ -31,7 +32,12 @@ export function AuthorizationPage() {
 
   const currentTrack = musicPlayer2.getCurrentPlayingTrack();
   if (!currentTrack || currentTrack.indexOf(GlobalConstants.AUTH_MUSIC_NAME) < 0) {
-    musicPlayer2.setVolume(0.2);
+    const userConfigs = DataLocalStorageProvider.getData();
+
+    const musicVolumeMultiplier = userConfigs.userConfigs.musicLevel;
+    const musicVolume = musicVolumeMultiplier * 0.2;
+
+    musicPlayer2.setVolume(musicVolume);
     musicPlayer2.setPlayList([`${GlobalConstants.MUSIC_PATH + GlobalConstants.AUTH_MUSIC_NAME}`], true);
     musicPlayer2.play().catch(() => {});
   }

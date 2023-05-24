@@ -14,6 +14,7 @@ import { executePromisesSequentially } from '../../utils/executePromisesSequenti
 import { MiniGameStart } from '../../components/common/min-game/MiniGameStart';
 import { MiniGameStatistic } from '../../components/common/statistic/MiniGameStatistic';
 import { AudiocallGameField } from '../../components/audiocall/AudiocallGameField';
+import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 
 export function AudiocallPage() {
   const [questions, setQuestions] = useState<IGameQuestionArray>();
@@ -24,7 +25,12 @@ export function AudiocallPage() {
 
   const currentTrack = musicPlayer2.getCurrentPlayingTrack();
   if (!currentTrack || currentTrack.indexOf(GlobalConstants.AUDIOCALL_MUSIC_NAME) < 0) {
-    musicPlayer2.setVolume(0.1);
+    const userConfigs = DataLocalStorageProvider.getData();
+
+    const musicVolumeMultiplier = userConfigs.userConfigs.musicLevel;
+    const musicVolume = musicVolumeMultiplier * 0.1;
+
+    musicPlayer2.setVolume(musicVolume);
     musicPlayer2.setPlayList([`${GlobalConstants.MUSIC_PATH + GlobalConstants.AUDIOCALL_MUSIC_NAME}`], true);
     musicPlayer2.play().catch(() => {});
   }

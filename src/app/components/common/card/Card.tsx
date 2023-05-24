@@ -6,6 +6,7 @@ import { musicPlayer } from '../../../services/SingleMusicPlayer';
 import './Card.scss';
 import { TokenProvider } from '../../../services/TokenProvider';
 import { UserWordService } from '../../../services/UserWordService';
+import DataLocalStorageProvider from '../../../services/DataLocalStorageProvider';
 
 export interface CardProps {
   wordAdvanced: IWordAdvanced;
@@ -34,14 +35,18 @@ export function Card(props: CardProps) {
   const [isWordDifficult, setIsWordDifficult] = useState(false);
   const [isWordLearned, setIsWordLearned] = useState(false);
 
+  const userConfigs = DataLocalStorageProvider.getData();
+
+  const soundsVolumeMultiplier = userConfigs.userConfigs.soundsLevel;
+
   const playWordAudio = () => {
     musicPlayer.setPlayList([`${GlobalConstants.API_URL}/${audio}`]);
-    musicPlayer.setVolume(0.7);
+    musicPlayer.setVolume(0.7 * soundsVolumeMultiplier);
     musicPlayer.play().catch((e) => console.error(e));
   };
 
   const playFullAudio = () => {
-    musicPlayer.setVolume(0.7);
+    musicPlayer.setVolume(0.7 * soundsVolumeMultiplier);
     musicPlayer.setPlayList([
       `${GlobalConstants.API_URL}/${audio}`,
       `${GlobalConstants.API_URL}/${audioMeaning}`,

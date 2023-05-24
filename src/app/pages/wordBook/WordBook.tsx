@@ -9,6 +9,7 @@ import { CardsContainer } from '../../components/common/cardsContainer/CardsCont
 import { musicPlayer2 } from '../../services/SingleMusicPlayer2';
 import './WordBook.scss';
 import { Pagination } from '../../components/common/pagination/Pagination';
+import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 
 export default function WordBook() {
   type StateType = IPaginatedArray<IWord> | null;
@@ -28,7 +29,12 @@ export default function WordBook() {
 
   const currentTrack = musicPlayer2.getCurrentPlayingTrack();
   if (!currentTrack || currentTrack.indexOf(WORDBOOK_MUSIC_NAME) < 0) {
-    musicPlayer2.setVolume(0.09);
+    const userConfigs = DataLocalStorageProvider.getData();
+
+    const musicVolumeMultiplier = userConfigs.userConfigs.musicLevel;
+    const musicVolume = musicVolumeMultiplier * 0.09;
+
+    musicPlayer2.setVolume(musicVolume);
     musicPlayer2.setPlayList([`${MUSIC_PATH + WORDBOOK_MUSIC_NAME}`], true);
     musicPlayer2.play().catch(() => {});
   }
