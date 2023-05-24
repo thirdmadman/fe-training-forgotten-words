@@ -41,6 +41,11 @@ const menuData = [
     path: GlobalConstants.ROUTE_MAIN,
     isAuthNeeded: false,
   },
+  {
+    title: 'Configs',
+    path: GlobalConstants.ROUTE_CONFIGS,
+    isAuthNeeded: false,
+  },
 ];
 
 export default function Menu() {

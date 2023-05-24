@@ -6,6 +6,7 @@ import { SprintPage } from './pages/sprint/SprintPage';
 import { AudiocallPage } from './pages/audiocall/AudiocallPage';
 import { DiaryPage } from './pages/diary/DiaryPage';
 import { Layout } from './pages/Layout';
+import { ConfigsPage } from './pages/configs/ConfigsPage';
 
 const routes: RouteObject = {
   element: <Layout />,
@@ -48,6 +49,11 @@ const routes: RouteObject = {
       path: `${GlobalConstants.ROUTE_DIARY}/:page`,
 
       element: <DiaryPage />,
+    },
+    {
+      path: `${GlobalConstants.ROUTE_CONFIGS}`,
+
+      element: <ConfigsPage />,
     },
     {
       path: '*',

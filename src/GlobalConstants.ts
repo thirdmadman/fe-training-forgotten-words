@@ -29,6 +29,8 @@ export class GlobalConstants {
 
   public static ROUTE_OUR_MEMORIES = '/our-memories';
 
+  public static ROUTE_CONFIGS = '/configs';
+
   // Other variables
 
   public static NUMBER_OF_PAGES = 30;
