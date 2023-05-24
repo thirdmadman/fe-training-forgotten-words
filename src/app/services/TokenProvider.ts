@@ -1,15 +1,18 @@
 import { GlobalConstants } from '../../GlobalConstants';
 import { IAuth } from '../interfaces/IAuth';
+import { IAuthData } from '../interfaces/IAuthData';
 import DataLocalStorageProvider from './DataLocalStorageProvider';
 
+const AUTH_TOKEN_EXPIRES_HOURS = 4;
+
 export class TokenProvider {
-  private static authData: IAuth | undefined;
+  private static authData: IAuthData | undefined;
 
   private static authDataDate: number | undefined;
 
   static getUserId() {
-    if (this.checkIsAuthDataExists() && this.authData?.userId) {
-      return this.authData.userId;
+    if (this.checkIsAuthDataExists() && this.authData?.authResponse.userId) {
+      return this.authData.authResponse.userId;
     }
     return null;
   }
@@ -27,7 +30,7 @@ export class TokenProvider {
   static checkIsExpired() {
     if (this.checkIsAuthDataExists() && this.authDataDate) {
       const expiresIn = new Date(this.authDataDate);
-      expiresIn.setHours(expiresIn.getHours() + 4);
+      expiresIn.setHours(expiresIn.getHours() + AUTH_TOKEN_EXPIRES_HOURS);
       return new Date().getTime() > expiresIn.getTime();
     }
     return true;
@@ -39,9 +42,8 @@ export class TokenProvider {
       result = true;
     } else {
       const configs = DataLocalStorageProvider.getData();
-      if (configs?.authData && configs?.authDataDate) {
+      if (configs?.authData) {
         this.authData = { ...configs.authData };
-        this.authDataDate = configs.authDataDate;
         result = true;
       }
     }
@@ -49,8 +51,8 @@ export class TokenProvider {
   }
 
   static getToken() {
-    if (this.checkIsAuthDataExists() && this.authData?.token) {
-      return this.authData.token;
+    if (this.checkIsAuthDataExists() && this.authData?.authResponse.token) {
+      return this.authData.authResponse.token;
     }
     return null;
   }
@@ -58,12 +60,21 @@ export class TokenProvider {
   static setAuthData(data: IAuth) {
     const configs = DataLocalStorageProvider.getData();
     if (configs) {
-      configs.authData = { ...data };
-      configs.authDataDate = new Date().getTime();
+      const authData = {
+        authResponse: { ...data },
+        authDataDate: new Date().getTime(),
+      } as IAuthData;
+
+      configs.authData = authData;
       DataLocalStorageProvider.setData(configs);
     }
-    this.authData = { ...data };
-    this.authDataDate = new Date().getTime();
+
+    const authData = {
+      authResponse: { ...data },
+      authDataDate: new Date().getTime(),
+    } as IAuthData;
+
+    this.authData = authData;
   }
 
   static refreshToken() {
