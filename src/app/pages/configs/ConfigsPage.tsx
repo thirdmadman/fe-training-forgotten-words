@@ -62,7 +62,7 @@ export function ConfigsPage() {
       <div className="configs__title">Configs</div>
       <div className="configs__group">
         <label htmlFor="config_music_level">
-          Music level [{musicLevel}]
+          <p>Music level [{musicLevel}]</p>
           <input
             type="range"
             id="config_music_level"
@@ -77,7 +77,7 @@ export function ConfigsPage() {
       </div>
       <div className="configs__group">
         <label htmlFor="config_sounds_level">
-          Sounds level [{soundsLevel}]
+          <p>Sounds level [{soundsLevel}]</p>
           <input
             type="range"
             id="config_sounds_level"
@@ -90,7 +90,7 @@ export function ConfigsPage() {
         </label>
         <button className="configs__play" aria-label="Play" type="button" onClick={playWordExample} />
       </div>
-      <button type="button" onClick={saveSettings}>
+      <button type="button" className="configs__save-button" onClick={saveSettings}>
         Save
       </button>
     </div>

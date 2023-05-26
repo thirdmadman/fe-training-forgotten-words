@@ -1,9 +1,14 @@
+$color-dark-s: #767676;
+$color-dark-m: #555555;
+$color-dark-xl: #1b1b1b;
+$color-light-m: #f6f6f6;
+
 .configs {
   margin: 0 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #767676;
+  color: $color-dark-s;
 
   .configs__title {
     margin-top: 40px;
@@ -15,7 +20,7 @@
     text-align: center;
     text-transform: uppercase;
     background: url('/src/assets/img/svg/corner-left-top.svg') top left no-repeat,
-    url('/src/assets/img/svg/corner-right-bottom.svg') bottom right no-repeat;
+      url('/src/assets/img/svg/corner-right-bottom.svg') bottom right no-repeat;
   }
 
   .configs__group {
@@ -29,6 +34,75 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+
+      p {
+        margin-bottom: 20px;
+        font-size: 24px;
+      }
+    }
+
+    /********** Range Input Styles **********/
+    /*Range Reset*/
+    input[type='range'] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+      width: 15rem;
+    }
+
+    /* Removes default focus */
+    input[type='range']:focus {
+      outline: none;
+    }
+
+    /***** Chrome, Safari, Opera and Edge Chromium styles *****/
+    /* slider track */
+    input[type='range']::-webkit-slider-runnable-track {
+      background-color: $color-dark-xl;
+      height: 2px;
+    }
+
+    /* slider thumb */
+    input[type='range']::-webkit-slider-thumb {
+      -webkit-appearance: none; /* Override default look */
+      appearance: none;
+      margin-top: -12px; /* Centers thumb on the track */
+
+      /*custom styles*/
+      background-color: $color-dark-s;
+      height: 2rem;
+      width: 5px;
+    }
+
+    input[type='range']:focus::-webkit-slider-thumb {
+      border: 1px solid $color-dark-s;
+      outline: 1px solid $color-dark-s;
+      outline-offset: 0.125rem;
+    }
+
+    /******** Firefox styles ********/
+    /* slider track */
+    input[type='range']::-moz-range-track {
+      background-color: $color-dark-xl;
+      height: 2px;
+    }
+
+    /* slider thumb */
+    input[type='range']::-moz-range-thumb {
+      border: none; /*Removes extra border that FF applies*/
+      border-radius: 0; /*Removes default border-radius that FF applies*/
+
+      /*custom styles*/
+      background-color: $color-dark-s;
+      height: 2rem;
+      width: 5px;
+    }
+
+    input[type='range']:focus::-moz-range-thumb {
+      border: 1px solid $color-dark-s;
+      outline: 1px solid $color-dark-s;
+      outline-offset: 0.125rem;
     }
   }
 
@@ -41,7 +115,7 @@
   }
 
   .configs__play {
-    border: 1px solid #767676;
+    border: 1px solid $color-dark-s;
     background-image: url('/src/assets/img/svg/icon-audio.svg');
     background-size: auto;
     background-position: center;
@@ -49,6 +123,26 @@
     height: 62px;
     width: 62px;
     background-color: white;
+
+    &:hover {
+      transform: scale(1.1);
+      transition: all 0.1s;
+    }
+  }
+
+  .configs__save-button {
+    all: unset;
+    margin-top: 20px;
+    width: 300px;
+    font-weight: 200;
+    font-size: 24px;
+    line-height: 48px;
+    text-align: center;
+    border: 1px solid $color-dark-s;
+    text-transform: uppercase;
+    color: $color-dark-s;
+    font-family: 'Roboto';
+    cursor: pointer;
   
     &:hover {
       transform: scale(1.1);
