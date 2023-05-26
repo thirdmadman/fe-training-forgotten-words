@@ -18,12 +18,42 @@
     url('/src/assets/img/svg/corner-right-bottom.svg') bottom right no-repeat;
   }
 
+  .configs__group {
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    label {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
   .navigation-container {
     margin-bottom: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
+  }
+
+  .configs__play {
+    border: 1px solid #767676;
+    background-image: url('/src/assets/img/svg/icon-audio.svg');
+    background-size: auto;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 62px;
+    width: 62px;
+    background-color: white;
+  
+    &:hover {
+      transform: scale(1.1);
+      transition: all 0.1s;
+    }
   }
 }
 
