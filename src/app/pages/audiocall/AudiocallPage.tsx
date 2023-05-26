@@ -81,21 +81,25 @@ export function AudiocallPage() {
   }
 
   const onGameFinish = (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => {
+    const isExpired = TokenProvider.checkIsExpired();
     const userId = TokenProvider.getUserId();
-    if (userId && !TokenProvider.checkIsExpired()) {
-      // eslint-disable-next-line arrow-body-style
-      const promiseFunction = (item: IResultData) => {
-        return () => UserWordService.setWordStatistic(userId, item.questionData.id, item.isCorrect);
-      };
 
-      const setWordStatisticPromises = resultsOfGame.map(promiseFunction);
-
-      executePromisesSequentially<IUserWord>(setWordStatisticPromises)
-        .then()
-        .catch((error) => {
-          console.error('Error:', error);
-        });
+    if (isExpired || !userId) {
+      return;
     }
+
+    // eslint-disable-next-line arrow-body-style
+    const promiseFunction = (item: IResultData) => {
+      return () => UserWordService.setWordStatistic(userId, item.questionData.id, item.isCorrect);
+    };
+
+    const setWordStatisticPromises = resultsOfGame.map(promiseFunction);
+
+    executePromisesSequentially<IUserWord>(setWordStatisticPromises)
+      .then()
+      .catch((error) => {
+        console.error('Error:', error);
+      });
 
     setResults(resultsOfGame);
     setAnswerChain(answerChainOfGame);

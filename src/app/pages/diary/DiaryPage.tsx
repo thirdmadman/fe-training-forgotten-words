@@ -41,12 +41,16 @@ export function DiaryPage() {
       return;
     }
 
+    const isExpired = TokenProvider.checkIsExpired();
     const userId = TokenProvider.getUserId();
-    if (userId && !TokenProvider.checkIsExpired()) {
-      UsersAggregatedWordsService.getAggregatedWordsWithResults(userId, page, WORDS_PER_DIARY_PAGE)
-        .then((userAggregatedWords) => setUserDiaryWords(userAggregatedWords))
-        .catch((e) => console.error(e));
+
+    if (isExpired || !userId) {
+      return;
     }
+
+    UsersAggregatedWordsService.getAggregatedWordsWithResults(userId, page, WORDS_PER_DIARY_PAGE)
+      .then((userAggregatedWords) => setUserDiaryWords(userAggregatedWords))
+      .catch((e) => console.error(e));
   }, [setUserDiaryWords, page, navigate, params]);
 
   return (

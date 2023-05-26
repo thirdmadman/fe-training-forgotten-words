@@ -24,8 +24,9 @@ export function CardsContainer(props: CardsContainerProps) {
       const { array } = paginatedArrayOfIWord;
       const renderCards = () => {
         const userId = TokenProvider.getUserId();
+        const isExpired = TokenProvider.checkIsExpired();
         let advancedWords = array.map((word) => ({ word } as IWordAdvanced));
-        if (userId && !TokenProvider.checkIsExpired()) {
+        if (!isExpired && userId) {
           UserWordService.getAllWordsByUserId(userId)
             .then((userWordsData) => {
               advancedWords = array.map((word) => {

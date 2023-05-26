@@ -75,10 +75,13 @@ export function Card(props: CardProps) {
   };
 
   const buttonToggleDifficultyHandler = () => {
+    const isExpired = TokenProvider.checkIsExpired();
     const userId = TokenProvider.getUserId();
-    if (!userId) {
+
+    if (isExpired || !userId) {
       return;
     }
+
     if (!isWordDifficult) {
       UserWordService.setWorDifficultById(userId, wordAdvanced.word.id)
         .then((userWord) => {
@@ -99,10 +102,13 @@ export function Card(props: CardProps) {
   };
 
   const buttonToggleLearnedHandler = () => {
+    const isExpired = TokenProvider.checkIsExpired();
     const userId = TokenProvider.getUserId();
-    if (!userId) {
+
+    if (isExpired || !userId) {
       return;
     }
+
     if (!isWordLearned) {
       UserWordService.addWordLearnedById(userId, wordAdvanced.word.id)
         .then((userWord) => {
@@ -147,11 +153,13 @@ export function Card(props: CardProps) {
   );
 
   const showUserButtons = () => {
-    const userId = TokenProvider.getUserId();
     const isExpired = TokenProvider.checkIsExpired();
-    if (!userId || isExpired) {
+    const userId = TokenProvider.getUserId();
+
+    if (isExpired || !userId) {
       return '';
     }
+
     return (
       <>
         {buttonSetDifficultyState}

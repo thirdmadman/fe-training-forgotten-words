@@ -14,7 +14,7 @@ export function AuthorizationPage() {
 
   const navigate = useNavigate();
 
-  const isExpired = searchParams.get('expired');
+  const isExpiredSate = searchParams.get('expired');
   const redirectPath = searchParams.get('path');
 
   const [emailSignin, setEmailSignin] = useState('');
@@ -45,7 +45,7 @@ export function AuthorizationPage() {
   const signIn = (email: string, password: string) => {
     SigninService.auth(email, password)
       .then(() => {
-        if (isExpired && redirectPath) {
+        if (isExpiredSate && redirectPath) {
           navigate(redirectPath);
           return;
         }
@@ -161,10 +161,13 @@ export function AuthorizationPage() {
 
   const showUserInformation = () => {
     if (userShowName === '' && userShowEmail === '') {
+      const isExpired = TokenProvider.checkIsExpired();
       const userId = TokenProvider.getUserId();
-      if (!userId) {
+
+      if (isExpired || !userId) {
         return '';
       }
+
       UserService.getUserById(userId)
         .then((user) => {
           setUserShowName(user.name);
