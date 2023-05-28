@@ -7,6 +7,7 @@ import { SigninService } from '../../services/SigninService';
 import { musicPlayer2 } from '../../services/SingleMusicPlayer2';
 import { TokenProvider } from '../../services/TokenProvider';
 import { UserService } from '../../services/UserService';
+import { UserSettingService } from '../../services/UserSettingService';
 import './AuthorizationPage.scss';
 
 export function AuthorizationPage() {
@@ -44,7 +45,18 @@ export function AuthorizationPage() {
 
   const signIn = (email: string, password: string) => {
     SigninService.auth(email, password)
-      .then(() => {
+      .then((auth) => {
+        const { userId } = auth;
+        UserSettingService.getUserSettingById(userId)
+          .then((settings) => {
+            if (settings.optional) {
+              const configs = { ...DataLocalStorageProvider.getData() };
+              configs.userConfigs = settings.optional;
+              DataLocalStorageProvider.setData(configs);
+            }
+          })
+          .catch((e) => console.error(e));
+
         if (isExpiredSate && redirectPath) {
           navigate(redirectPath);
           return;

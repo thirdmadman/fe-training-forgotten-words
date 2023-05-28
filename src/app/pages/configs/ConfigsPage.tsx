@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { GlobalConstants } from '../../../GlobalConstants';
+import { ISettings } from '../../interfaces/ISettings';
 import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 import { musicPlayer } from '../../services/SingleMusicPlayer';
 import { musicPlayer2 } from '../../services/SingleMusicPlayer2';
+import { TokenProvider } from '../../services/TokenProvider';
+import { UserSettingService } from '../../services/UserSettingService';
 import { WordService } from '../../services/WordService';
 import './configsPage.scss';
 
@@ -28,6 +31,20 @@ export function ConfigsPage() {
     configs.userConfigs.soundsLevel = soundsLevel;
     configs.userConfigs.musicLevel = musicLevel;
     DataLocalStorageProvider.setData(configs);
+
+    const isExpired = TokenProvider.checkIsExpired();
+    const userId = TokenProvider.getUserId();
+
+    if (isExpired || !userId) {
+      return;
+    }
+
+    const userSetting = {
+      wordsPerDay: 1,
+      optional: configs.userConfigs,
+    } as ISettings;
+
+    UserSettingService.updateUserSettingById(userId, userSetting).catch((e) => console.error(e));
   };
 
   const soundsLevelHandler = (level: number) => {
