@@ -10,6 +10,7 @@ import { musicPlayer2 } from '../../services/SingleMusicPlayer2';
 import './WordBook.scss';
 import { Pagination } from '../../components/common/pagination/Pagination';
 import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
+import { IStateStore } from '../../interfaces/IStateStore';
 
 export default function WordBook() {
   type StateType = IPaginatedArray<IWord> | null;
@@ -26,18 +27,6 @@ export default function WordBook() {
   const { NUMBER_OF_PAGES, NUMBER_OF_GROUP_NO_AUTH_USER, ROUTE_WORDBOOK } = GlobalConstants;
 
   const { WORDBOOK_MUSIC_NAME, MUSIC_PATH } = GlobalConstants;
-
-  const currentTrack = musicPlayer2.getCurrentPlayingTrack();
-  if (!currentTrack || currentTrack.indexOf(WORDBOOK_MUSIC_NAME) < 0) {
-    const userConfigs = DataLocalStorageProvider.getData();
-
-    const musicVolumeMultiplier = userConfigs.userConfigs.musicLevel;
-    const musicVolume = musicVolumeMultiplier * 0.09;
-
-    musicPlayer2.setVolume(musicVolume);
-    musicPlayer2.setPlayList([`${MUSIC_PATH + WORDBOOK_MUSIC_NAME}`], true);
-    musicPlayer2.play().catch(() => {});
-  }
 
   const changePage = (btn: string) => {
     if (!dataCards) return;
@@ -73,8 +62,49 @@ export default function WordBook() {
 
   useEffect(() => {
     if (!params.level || !params.page) {
+      const localData = DataLocalStorageProvider.getData();
+      const { stateStore } = localData;
+      if (stateStore && stateStore.wordBook) {
+        const { lastWordBookOpenLevel, lastWordBookOpenPage } = stateStore.wordBook;
+        navigate(`${GlobalConstants.ROUTE_WORDBOOK}/${lastWordBookOpenLevel}/${lastWordBookOpenPage}`);
+        return;
+      }
+
       navigate(`${GlobalConstants.ROUTE_WORDBOOK}/1/1`);
       return;
+    }
+
+    const localData = { ...DataLocalStorageProvider.getData() };
+    const { stateStore } = localData;
+
+    const wordBook = { lastWordBookOpenLevel: level, lastWordBookOpenPage: page };
+
+    const newStateStore = {
+      wordBook,
+      lastRoute: '',
+    } as IStateStore;
+
+    if (!stateStore) {
+      localData.stateStore = newStateStore;
+    } else if (!stateStore.wordBook) {
+      stateStore.wordBook = wordBook;
+      localData.stateStore = newStateStore;
+    }
+
+    localData.stateStore = newStateStore;
+
+    DataLocalStorageProvider.setData(localData);
+
+    const currentTrack = musicPlayer2.getCurrentPlayingTrack();
+    if (!currentTrack || currentTrack.indexOf(WORDBOOK_MUSIC_NAME) < 0) {
+      const userConfigs = DataLocalStorageProvider.getData();
+
+      const musicVolumeMultiplier = userConfigs.userConfigs.musicLevel;
+      const musicVolume = musicVolumeMultiplier * 0.09;
+
+      musicPlayer2.setVolume(musicVolume);
+      musicPlayer2.setPlayList([`${MUSIC_PATH + WORDBOOK_MUSIC_NAME}`], true);
+      musicPlayer2.play().catch(() => {});
     }
 
     WordService.getWordsByGroupAndPage(level - 1, page - 1)
@@ -82,7 +112,7 @@ export default function WordBook() {
         setDataCards(data);
       })
       .catch((e) => console.error(e));
-  }, [level, page, params, navigate]);
+  }, [level, page, params, navigate, MUSIC_PATH, WORDBOOK_MUSIC_NAME]);
 
   return (
     <div className="wordbook">
