@@ -17,15 +17,6 @@ export function ConfigsPage() {
   const [soundsLevel, setSoundsLevel] = useState(0);
   const [musicLevel, setMusicLevel] = useState(0);
 
-  useEffect(() => {
-    const { userConfigs } = DataLocalStorageProvider.getData();
-    const soundsLevelConfig = userConfigs.soundsLevel;
-    const musicLevelConfig = userConfigs.musicLevel;
-
-    setSoundsLevel(soundsLevelConfig);
-    setMusicLevel(musicLevelConfig);
-  }, []);
-
   const saveSettings = () => {
     const configs = { ...DataLocalStorageProvider.getData() };
     configs.userConfigs.soundsLevel = soundsLevel;
@@ -73,6 +64,15 @@ export function ConfigsPage() {
     musicPlayer2.setPlayList([`${MUSIC_PATH + WORDBOOK_MUSIC_NAME}`]);
     musicPlayer2.play().catch(() => {});
   };
+
+  useEffect(() => {
+    const { userConfigs } = DataLocalStorageProvider.getData();
+    const soundsLevelConfig = userConfigs.soundsLevel;
+    const musicLevelConfig = userConfigs.musicLevel;
+
+    setSoundsLevel(soundsLevelConfig);
+    setMusicLevel(musicLevelConfig);
+  }, []);
 
   return (
     <div className="configs">

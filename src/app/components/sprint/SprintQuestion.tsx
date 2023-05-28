@@ -16,6 +16,9 @@ export function SprintQuestion(props: SprintQuestionProps) {
     onAnswer(questionData, answer);
   };
 
+  const { word } = wordData;
+  const translation = variants[0].wordData.wordTranslate;
+
   useEffect(() => {
     const handlerKey = (event: KeyboardEvent) => {
       if (event.code === 'Digit1') {
@@ -33,9 +36,6 @@ export function SprintQuestion(props: SprintQuestionProps) {
       document.removeEventListener('keyup', handlerKey);
     };
   });
-
-  const { word } = wordData;
-  const translation = variants[0].wordData.wordTranslate;
 
   return (
     <div className="game-question">

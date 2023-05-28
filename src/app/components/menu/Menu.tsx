@@ -66,12 +66,6 @@ export default function Menu() {
     );
   };
 
-  useEffect(() => {
-    if (!isHidden) {
-      musicPlayer2.pause();
-    }
-  });
-
   let menuLinks = menuData;
 
   if (!isUserAuth) {
@@ -83,6 +77,12 @@ export default function Menu() {
   } else {
     document.body.classList.remove('hidden_overflow-y');
   }
+
+  useEffect(() => {
+    if (!isHidden) {
+      musicPlayer2.pause();
+    }
+  });
 
   return (
     <div className="menu">

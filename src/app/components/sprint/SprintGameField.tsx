@@ -24,17 +24,6 @@ export function SprintGameField(props: SprintGameFieldProps) {
     }
   };
 
-  useEffect(() => {
-    if (timerRemainTime > 0 && questionNumber < questions.length) {
-      window.setTimeout(() => {
-        const lastTimerTime = timerRemainTime;
-        setTimerRemainTime(lastTimerTime - 1);
-      }, 1000);
-    } else {
-      onGameEnd();
-    }
-  });
-
   const handleAnswer = (question: IGameQuestion, answer: boolean) => {
     if (questions && questionNumber < questions.length) {
       let isAnswerCorrect = false;
@@ -72,6 +61,17 @@ export function SprintGameField(props: SprintGameFieldProps) {
   };
 
   const questionData = questions[questionNumber];
+
+  useEffect(() => {
+    if (timerRemainTime > 0 && questionNumber < questions.length) {
+      window.setTimeout(() => {
+        const lastTimerTime = timerRemainTime;
+        setTimerRemainTime(lastTimerTime - 1);
+      }, 1000);
+    } else {
+      onGameEnd();
+    }
+  });
 
   return (
     <div className="gamefield-container">

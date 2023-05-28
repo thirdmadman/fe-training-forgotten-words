@@ -55,11 +55,6 @@ export function Card(props: CardProps) {
     musicPlayer.play().catch(() => {});
   };
 
-  useEffect(() => {
-    setIsWordLearned(Boolean(wordAdvanced.userData?.optional.isLearned));
-    setIsWordDifficult(Boolean(wordAdvanced.userData?.difficulty !== 'normal'));
-  }, [wordAdvanced]);
-
   const isLearnStarted = Boolean(wordAdvanced.userData?.optional);
 
   const getGameResult = () => {
@@ -173,6 +168,11 @@ export function Card(props: CardProps) {
 
   let imageStyles = isLearnStarted ? 'word-card__image word-card__image_started' : 'word-card__image';
   imageStyles += isWordLearned ? 'word-card__image_learned' : '';
+
+  useEffect(() => {
+    setIsWordLearned(Boolean(wordAdvanced.userData?.optional.isLearned));
+    setIsWordDifficult(Boolean(wordAdvanced.userData?.difficulty !== 'normal'));
+  }, [wordAdvanced]);
 
   return (
     <div className="word-card">
