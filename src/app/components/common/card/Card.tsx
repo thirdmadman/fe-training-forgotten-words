@@ -6,6 +6,7 @@ import { musicPlayer } from '../../../services/SingleMusicPlayer';
 import './Card.scss';
 import { TokenProvider } from '../../../services/TokenProvider';
 import { UserWordService } from '../../../services/UserWordService';
+import DataLocalStorageProvider from '../../../services/DataLocalStorageProvider';
 
 export interface CardProps {
   wordAdvanced: IWordAdvanced;
@@ -34,14 +35,18 @@ export function Card(props: CardProps) {
   const [isWordDifficult, setIsWordDifficult] = useState(false);
   const [isWordLearned, setIsWordLearned] = useState(false);
 
+  const userConfigs = DataLocalStorageProvider.getData();
+
+  const soundsVolumeMultiplier = userConfigs.userConfigs.soundsLevel;
+
   const playWordAudio = () => {
     musicPlayer.setPlayList([`${GlobalConstants.API_URL}/${audio}`]);
-    musicPlayer.setVolume(0.7);
+    musicPlayer.setVolume(0.7 * soundsVolumeMultiplier);
     musicPlayer.play().catch((e) => console.error(e));
   };
 
   const playFullAudio = () => {
-    musicPlayer.setVolume(0.7);
+    musicPlayer.setVolume(0.7 * soundsVolumeMultiplier);
     musicPlayer.setPlayList([
       `${GlobalConstants.API_URL}/${audio}`,
       `${GlobalConstants.API_URL}/${audioMeaning}`,
@@ -49,11 +54,6 @@ export function Card(props: CardProps) {
     ]);
     musicPlayer.play().catch(() => {});
   };
-
-  useEffect(() => {
-    setIsWordLearned(Boolean(wordAdvanced.userData?.optional.isLearned));
-    setIsWordDifficult(Boolean(wordAdvanced.userData?.difficulty !== 'normal'));
-  }, [wordAdvanced]);
 
   const isLearnStarted = Boolean(wordAdvanced.userData?.optional);
 
@@ -70,10 +70,13 @@ export function Card(props: CardProps) {
   };
 
   const buttonToggleDifficultyHandler = () => {
+    const isExpired = TokenProvider.checkIsExpired();
     const userId = TokenProvider.getUserId();
-    if (!userId) {
+
+    if (isExpired || !userId) {
       return;
     }
+
     if (!isWordDifficult) {
       UserWordService.setWorDifficultById(userId, wordAdvanced.word.id)
         .then((userWord) => {
@@ -94,10 +97,13 @@ export function Card(props: CardProps) {
   };
 
   const buttonToggleLearnedHandler = () => {
+    const isExpired = TokenProvider.checkIsExpired();
     const userId = TokenProvider.getUserId();
-    if (!userId) {
+
+    if (isExpired || !userId) {
       return;
     }
+
     if (!isWordLearned) {
       UserWordService.addWordLearnedById(userId, wordAdvanced.word.id)
         .then((userWord) => {
@@ -142,11 +148,13 @@ export function Card(props: CardProps) {
   );
 
   const showUserButtons = () => {
-    const userId = TokenProvider.getUserId();
     const isExpired = TokenProvider.checkIsExpired();
-    if (!userId || isExpired) {
+    const userId = TokenProvider.getUserId();
+
+    if (isExpired || !userId) {
       return '';
     }
+
     return (
       <>
         {buttonSetDifficultyState}
@@ -160,6 +168,11 @@ export function Card(props: CardProps) {
 
   let imageStyles = isLearnStarted ? 'word-card__image word-card__image_started' : 'word-card__image';
   imageStyles += isWordLearned ? 'word-card__image_learned' : '';
+
+  useEffect(() => {
+    setIsWordLearned(Boolean(wordAdvanced.userData?.optional.isLearned));
+    setIsWordDifficult(Boolean(wordAdvanced.userData?.difficulty !== 'normal'));
+  }, [wordAdvanced]);
 
   return (
     <div className="word-card">

@@ -2,10 +2,12 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GlobalConstants } from '../../../GlobalConstants';
+import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 import { SigninService } from '../../services/SigninService';
 import { musicPlayer2 } from '../../services/SingleMusicPlayer2';
 import { TokenProvider } from '../../services/TokenProvider';
 import { UserService } from '../../services/UserService';
+import { UserSettingService } from '../../services/UserSettingService';
 import './AuthorizationPage.scss';
 
 export function AuthorizationPage() {
@@ -13,7 +15,7 @@ export function AuthorizationPage() {
 
   const navigate = useNavigate();
 
-  const isExpired = searchParams.get('expired');
+  const isExpiredSate = searchParams.get('expired');
   const redirectPath = searchParams.get('path');
 
   const [emailSignin, setEmailSignin] = useState('');
@@ -31,15 +33,31 @@ export function AuthorizationPage() {
 
   const currentTrack = musicPlayer2.getCurrentPlayingTrack();
   if (!currentTrack || currentTrack.indexOf(GlobalConstants.AUTH_MUSIC_NAME) < 0) {
-    musicPlayer2.setVolume(0.2);
+    const userConfigs = DataLocalStorageProvider.getData();
+
+    const musicVolumeMultiplier = userConfigs.userConfigs.musicLevel;
+    const musicVolume = musicVolumeMultiplier * 0.2;
+
+    musicPlayer2.setVolume(musicVolume);
     musicPlayer2.setPlayList([`${GlobalConstants.MUSIC_PATH + GlobalConstants.AUTH_MUSIC_NAME}`], true);
     musicPlayer2.play().catch(() => {});
   }
 
   const signIn = (email: string, password: string) => {
     SigninService.auth(email, password)
-      .then(() => {
-        if (isExpired && redirectPath) {
+      .then((auth) => {
+        const { userId } = auth;
+        UserSettingService.getUserSettingById(userId)
+          .then((settings) => {
+            if (settings.optional) {
+              const configs = { ...DataLocalStorageProvider.getData() };
+              configs.userConfigs = settings.optional;
+              DataLocalStorageProvider.setData(configs);
+            }
+          })
+          .catch((e) => console.error(e));
+
+        if (isExpiredSate && redirectPath) {
           navigate(redirectPath);
           return;
         }
@@ -155,10 +173,13 @@ export function AuthorizationPage() {
 
   const showUserInformation = () => {
     if (userShowName === '' && userShowEmail === '') {
+      const isExpired = TokenProvider.checkIsExpired();
       const userId = TokenProvider.getUserId();
-      if (!userId) {
+
+      if (isExpired || !userId) {
         return '';
       }
+
       UserService.getUserById(userId)
         .then((user) => {
           setUserShowName(user.name);

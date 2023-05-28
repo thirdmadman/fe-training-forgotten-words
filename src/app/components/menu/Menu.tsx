@@ -41,6 +41,11 @@ const menuData = [
     path: GlobalConstants.ROUTE_MAIN,
     isAuthNeeded: false,
   },
+  {
+    title: 'Configs',
+    path: GlobalConstants.ROUTE_CONFIGS,
+    isAuthNeeded: false,
+  },
 ];
 
 export default function Menu() {
@@ -61,12 +66,6 @@ export default function Menu() {
     );
   };
 
-  useEffect(() => {
-    if (!isHidden) {
-      musicPlayer2.pause();
-    }
-  });
-
   let menuLinks = menuData;
 
   if (!isUserAuth) {
@@ -78,6 +77,12 @@ export default function Menu() {
   } else {
     document.body.classList.remove('hidden_overflow-y');
   }
+
+  useEffect(() => {
+    if (!isHidden) {
+      musicPlayer2.pause();
+    }
+  });
 
   return (
     <div className="menu">

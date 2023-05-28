@@ -1,5 +1,5 @@
 import { GlobalConstants } from '../../GlobalConstants';
-import { IUserSetting } from '../interfaces/IUserSetting';
+import { ISettings } from '../interfaces/ISettings';
 import { axiosInstance } from './axiosInstance';
 
 export class UserSettingService {
@@ -9,15 +9,15 @@ export class UserSettingService {
   static getUserSettingById(userId: string) {
     return axiosInstance()
       .get(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}/settings`)
-      .then((res) => res.data as IUserSetting);
+      .then((res) => res.data as ISettings);
   }
 
   /**
    * This method uses token
    */
-  static updateUserSettingById(userId: string, statisticsData: IUserSetting) {
+  static updateUserSettingById(userId: string, settingsData: ISettings) {
     return axiosInstance()
-      .put(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}/settings`, statisticsData)
-      .then((res) => res.data as IUserSetting);
+      .put(`${GlobalConstants.API_ENDPOINT_USERS}/${userId}/settings`, settingsData)
+      .then((res) => res.data as ISettings);
   }
 }

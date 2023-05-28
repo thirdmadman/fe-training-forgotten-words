@@ -41,8 +41,6 @@ export function AudiocallQuestion(props: AudiocallQuestionProps) {
     }
   };
 
-  useEffect(() => playAudio());
-
   document.addEventListener('keyup', keyPressHandler);
 
   const getVariants = () => {
@@ -61,6 +59,8 @@ export function AudiocallQuestion(props: AudiocallQuestionProps) {
     };
     return variants.map(getVariantElement);
   };
+
+  useEffect(() => playAudio());
 
   return (
     <div className="word-container">

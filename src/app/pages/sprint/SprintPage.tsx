@@ -13,6 +13,7 @@ import { TokenProvider } from '../../services/TokenProvider';
 import { UserWordService } from '../../services/UserWordService';
 import { executePromisesSequentially } from '../../utils/executePromisesSequentially';
 import { IUserWord } from '../../interfaces/IUserWord';
+import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 
 export function SprintPage() {
   const [questions, setQuestions] = useState<Array<IGameQuestion>>();
@@ -23,7 +24,12 @@ export function SprintPage() {
 
   const currentTrack = musicPlayer2.getCurrentPlayingTrack();
   if (!currentTrack || currentTrack.indexOf(GlobalConstants.SPRINT_MUSIC_NAME) < 0) {
-    musicPlayer2.setVolume(0.1);
+    const userConfigs = DataLocalStorageProvider.getData();
+
+    const musicVolumeMultiplier = userConfigs.userConfigs.musicLevel;
+    const musicVolume = musicVolumeMultiplier * 0.2;
+
+    musicPlayer2.setVolume(musicVolume);
     musicPlayer2.setPlayList([`${GlobalConstants.MUSIC_PATH + GlobalConstants.SPRINT_MUSIC_NAME}`], true);
     musicPlayer2.play().catch(() => {});
   }
@@ -66,21 +72,25 @@ export function SprintPage() {
   }
 
   const onGameFinish = (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => {
+    const isExpired = TokenProvider.checkIsExpired();
     const userId = TokenProvider.getUserId();
-    if (userId && !TokenProvider.checkIsExpired()) {
-      // eslint-disable-next-line arrow-body-style
-      const promiseFunction = (item: IResultData) => {
-        return () => UserWordService.setWordStatistic(userId, item.questionData.id, item.isCorrect);
-      };
 
-      const setWordStatisticPromises = resultsOfGame.map(promiseFunction);
-
-      executePromisesSequentially<IUserWord>(setWordStatisticPromises)
-        .then()
-        .catch((error) => {
-          console.error('Error:', error);
-        });
+    if (isExpired || !userId) {
+      return;
     }
+
+    // eslint-disable-next-line arrow-body-style
+    const promiseFunction = (item: IResultData) => {
+      return () => UserWordService.setWordStatistic(userId, item.questionData.id, item.isCorrect);
+    };
+
+    const setWordStatisticPromises = resultsOfGame.map(promiseFunction);
+
+    executePromisesSequentially<IUserWord>(setWordStatisticPromises)
+      .then()
+      .catch((error) => {
+        console.error('Error:', error);
+      });
 
     setResults(resultsOfGame);
     setAnswerChain(answerChainOfGame);

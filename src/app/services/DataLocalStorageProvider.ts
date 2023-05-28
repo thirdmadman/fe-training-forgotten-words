@@ -1,47 +1,63 @@
-import { IConfigs } from '../interfaces/IConfigs';
+import { ILocalConfigs } from '../interfaces/ILocalConfigs';
+import { IUserConfigs } from '../interfaces/IUserConfigs';
+
+const CONFIGS_VERSION = 1;
 
 class DataLocalStorageProvider {
-  static localStorageItemName = 'thirdmadman-rs-lang';
+  static localStorageItemName = 'thirdmadman-forgotten-words';
 
-  public static setData(data: IConfigs) {
+  public static setData(data: ILocalConfigs) {
     localStorage.setItem(DataLocalStorageProvider.localStorageItemName, JSON.stringify(data));
   }
 
   public static isNotEmpty() {
     const localStorageData = localStorage.getItem(DataLocalStorageProvider.localStorageItemName);
-    return localStorageData && localStorageData[0] === '{';
+
+    if (localStorageData && localStorageData[0] === '{') {
+      const dataILocalConfigs = JSON.parse(localStorageData) as ILocalConfigs;
+      const localStorageKeysNumber = Object.keys(dataILocalConfigs).length;
+      if (localStorageKeysNumber > 0) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public static destroy() {
     localStorage.removeItem(DataLocalStorageProvider.localStorageItemName);
   }
 
-  public static getData(): IConfigs | null {
-    const data = localStorage.getItem(DataLocalStorageProvider.localStorageItemName);
-    let localStorageKeysNumber = 0;
-    let dataIConfigs = null;
-    if (data) {
-      dataIConfigs = JSON.parse(data) as IConfigs;
-      localStorageKeysNumber = Object.keys(dataIConfigs).length;
+  public static getData() {
+    if (DataLocalStorageProvider.isNotEmpty()) {
+      const localStorageData = localStorage.getItem(DataLocalStorageProvider.localStorageItemName);
+      if (localStorageData) {
+        const dataILocalConfigs = JSON.parse(localStorageData) as ILocalConfigs;
+        if (dataILocalConfigs.version && dataILocalConfigs.version === CONFIGS_VERSION) {
+          return dataILocalConfigs;
+        }
+      }
     }
 
-    if (DataLocalStorageProvider.isNotEmpty()) {
-      if (localStorageKeysNumber > 0) {
-        return dataIConfigs;
-      }
-    } else {
-      const generatedData = DataLocalStorageProvider.generateData();
-      DataLocalStorageProvider.setData(generatedData);
-      return generatedData;
-    }
-    return null;
+    const generatedData = DataLocalStorageProvider.generateData();
+    DataLocalStorageProvider.setData(generatedData);
+    return generatedData;
   }
 
   private static generateData() {
+    const userConfigs = {
+      musicLevel: 1,
+      soundsLevel: 1,
+      gameDifficulty: 1,
+      isRememberAuthData: true,
+    } as IUserConfigs;
+
     const configs = {
-      isExists: false,
+      isExists: true,
+      userConfigs,
+      version: CONFIGS_VERSION,
     };
-    return configs as IConfigs;
+    return configs as ILocalConfigs;
   }
 }
 
