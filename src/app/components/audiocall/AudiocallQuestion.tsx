@@ -41,8 +41,6 @@ export function AudiocallQuestion(props: AudiocallQuestionProps) {
     }
   };
 
-  document.addEventListener('keyup', keyPressHandler);
-
   const getVariants = () => {
     if (!variants) {
       return '';
@@ -60,7 +58,13 @@ export function AudiocallQuestion(props: AudiocallQuestionProps) {
     return variants.map(getVariantElement);
   };
 
-  useEffect(() => playAudio());
+  useEffect(() => {
+    playAudio();
+    document.addEventListener('keyup', keyPressHandler);
+    return () => {
+      document.removeEventListener('keyup', keyPressHandler);
+    };
+  });
 
   return (
     <div className="word-container">
