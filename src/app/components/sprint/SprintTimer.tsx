@@ -5,14 +5,24 @@ interface SprintTimerProps {
   timerOnFinishAction: () => void;
 }
 
+interface SprintTimerState {
+  timerRemainTime: number;
+}
+
 export function SprintTimer(props: SprintTimerProps) {
   const { timerTime, timerOnFinishAction } = props;
-  const [timerRemainTime, setTimerRemainTime] = useState(timerTime);
+  const initialState = {
+    timerRemainTime: timerTime,
+  };
+  const [state, setState] = useState<SprintTimerState>(initialState);
+  const { timerRemainTime } = state;
 
   useEffect(() => {
     if (timerRemainTime > 0) {
       window.setTimeout(() => {
-        setTimerRemainTime(timerRemainTime - 1);
+        setState({
+          timerRemainTime: timerRemainTime - 1,
+        });
       }, 1000);
     } else {
       timerOnFinishAction();

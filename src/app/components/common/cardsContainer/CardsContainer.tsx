@@ -14,10 +14,20 @@ export interface CardsContainerProps {
   paginatedArrayOfIAggregatedWord: IPaginatedArray<IAggregatedWord> | null;
 }
 
+interface CardsContainerState {
+  dataIWordAdvanced: Array<IWordAdvanced> | undefined;
+}
+
 export function CardsContainer(props: CardsContainerProps) {
   const { paginatedArrayOfIWord, paginatedArrayOfIAggregatedWord } = props;
 
-  const [dataIWordAdvanced, setDataIWordAdvanced] = useState<Array<IWordAdvanced>>();
+  const initialState = {
+    dataIWordAdvanced: undefined,
+  };
+
+  const [state, setState] = useState<CardsContainerState>(initialState);
+
+  const { dataIWordAdvanced } = state;
 
   useEffect(() => {
     if (paginatedArrayOfIWord) {
@@ -45,11 +55,11 @@ export function CardsContainer(props: CardsContainerProps) {
                 } as IWordAdvanced;
               });
 
-              setDataIWordAdvanced(advancedWords);
+              setState({ dataIWordAdvanced: advancedWords });
             })
             .catch((e) => console.error(e));
         } else {
-          setDataIWordAdvanced(advancedWords);
+          setState({ dataIWordAdvanced: advancedWords });
         }
       };
       renderCards();
@@ -58,7 +68,7 @@ export function CardsContainer(props: CardsContainerProps) {
     if (paginatedArrayOfIAggregatedWord) {
       const { array } = paginatedArrayOfIAggregatedWord;
       const convertedWords = array.map(convertAggregatedWordToWordAdvanced);
-      setDataIWordAdvanced(convertedWords);
+      setState({ dataIWordAdvanced: convertedWords });
     }
   }, [paginatedArrayOfIWord, paginatedArrayOfIAggregatedWord]);
 

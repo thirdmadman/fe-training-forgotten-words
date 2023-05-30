@@ -48,8 +48,17 @@ const menuData = [
   },
 ];
 
+interface MenuState {
+  isHidden: boolean;
+}
+
 export default function Menu() {
-  const [isHidden, setIsHidden] = useState(true);
+  const initialState = {
+    isHidden: false,
+  };
+  const [state, setState] = useState<MenuState>(initialState);
+
+  const { isHidden } = state;
 
   const location = useLocation();
 
@@ -59,7 +68,7 @@ export default function Menu() {
     const isSelected = location.pathname === path || (location.pathname.indexOf(path) === 0 && path.length > 1);
     return (
       <li className={isSelected ? 'nav-menu__item nav-menu__item-active' : 'nav-menu__item'} key={path}>
-        <Link to={path} className="nav-menu__link" onClick={() => setIsHidden(true)}>
+        <Link to={path} className="nav-menu__link" onClick={() => setState({ isHidden: true })}>
           {title}
         </Link>
       </li>
@@ -104,7 +113,7 @@ export default function Menu() {
           aria-label="close"
           onClick={() => {
             musicPlayer2.play().catch((e) => console.error(e));
-            setIsHidden(true);
+            setState({ isHidden: true });
           }}
         />
       </div>
@@ -112,7 +121,7 @@ export default function Menu() {
         type="button"
         className={isHidden ? 'burger-menu-button' : 'burger-menu-button burger-menu-button-hidden'}
         aria-label="menu"
-        onClick={() => setIsHidden(false)}
+        onClick={() => setState({ isHidden: false })}
       />
     </div>
   );

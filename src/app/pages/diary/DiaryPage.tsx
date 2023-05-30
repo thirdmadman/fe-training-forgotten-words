@@ -10,11 +10,22 @@ import { TokenProvider } from '../../services/TokenProvider';
 import { UsersAggregatedWordsService } from '../../services/UsersAggregatedWordsService';
 import './diaryPage.scss';
 
+interface DiaryPageState {
+  userDiaryWords: IPaginatedArray<IAggregatedWord> | null;
+}
+
 export function DiaryPage() {
   const WORDS_PER_DIARY_PAGE = 50;
   const navigate = useNavigate();
   const params = useParams();
-  const [userDiaryWords, setUserDiaryWords] = useState<IPaginatedArray<IAggregatedWord> | null>(null);
+
+  const initialState = {
+    userDiaryWords: null,
+  };
+
+  const [state, setState] = useState<DiaryPageState>(initialState);
+
+  const { userDiaryWords } = state;
 
   const pageNumber = userDiaryWords ? userDiaryWords.currentPage : 0;
   const totalPages = userDiaryWords ? Math.floor(userDiaryWords.size / WORDS_PER_DIARY_PAGE) : 0;
@@ -49,9 +60,9 @@ export function DiaryPage() {
     }
 
     UsersAggregatedWordsService.getAggregatedWordsWithResults(userId, page, WORDS_PER_DIARY_PAGE)
-      .then((userAggregatedWords) => setUserDiaryWords(userAggregatedWords))
+      .then((userAggregatedWords) => setState({ userDiaryWords: userAggregatedWords }))
       .catch((e) => console.error(e));
-  }, [setUserDiaryWords, page, navigate, params]);
+  }, [setState, page, navigate, params]);
 
   return (
     <div className="diary">
