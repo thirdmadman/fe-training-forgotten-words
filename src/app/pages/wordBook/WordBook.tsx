@@ -12,10 +12,17 @@ import { Pagination } from '../../components/common/pagination/Pagination';
 import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 import { IStateStore } from '../../interfaces/IStateStore';
 
-export default function WordBook() {
-  type StateType = IPaginatedArray<IWord> | null;
+interface WordBookState {
+  dataCards: IPaginatedArray<IWord> | null;
+}
 
-  const [dataCards, setDataCards] = useState<StateType>(null);
+export default function WordBook() {
+  const initialState = {
+    dataCards: null,
+  };
+
+  const [state, setState] = useState<WordBookState>(initialState);
+  const { dataCards } = state;
 
   const navigate = useNavigate();
 
@@ -109,7 +116,7 @@ export default function WordBook() {
 
     WordService.getWordsByGroupAndPage(level - 1, page - 1)
       .then((data) => {
-        setDataCards(data);
+        setState({ dataCards: data });
       })
       .catch((e) => console.error(e));
   }, [level, page, params, navigate, MUSIC_PATH, WORDBOOK_MUSIC_NAME]);
