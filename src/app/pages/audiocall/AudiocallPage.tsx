@@ -16,7 +16,7 @@ import { MiniGameStatistic } from '../../components/common/statistic/MiniGameSta
 import { AudiocallGameField } from '../../components/audiocall/AudiocallGameField';
 import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 
-interface IAudiocallPageState {
+interface AudiocallPageState {
   questions: IGameQuestionArray | undefined;
   results: Array<IResultData> | undefined;
   answerChain: number;
@@ -31,9 +31,9 @@ export function AudiocallPage() {
     answerChain: 0,
     level: -1,
     page: -1,
-  } as IAudiocallPageState;
+  } as AudiocallPageState;
 
-  const [state, setState] = useState<IAudiocallPageState>(initialState);
+  const [state, setState] = useState<AudiocallPageState>(initialState);
 
   const { questions, results, answerChain, level, page } = state;
 

@@ -12,7 +12,7 @@ export interface CardProps {
   wordAdvanced: IWordAdvanced;
 }
 
-interface ICardState {
+interface CardState {
   isEngDescriptionShown: boolean;
   isRuDescriptionShown: boolean;
   isWordDifficult: boolean;
@@ -43,7 +43,7 @@ export function Card(props: CardProps) {
     isWordLearned: false,
   };
 
-  const [state, setState] = useState<ICardState>(initialState);
+  const [state, setState] = useState<CardState>(initialState);
 
   const { isEngDescriptionShown, isRuDescriptionShown, isWordDifficult, isWordLearned } = state;
 

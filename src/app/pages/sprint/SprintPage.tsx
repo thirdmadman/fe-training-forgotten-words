@@ -15,7 +15,7 @@ import { executePromisesSequentially } from '../../utils/executePromisesSequenti
 import { IUserWord } from '../../interfaces/IUserWord';
 import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 
-interface ISprintPageState {
+interface SprintPageState {
   questions: Array<IGameQuestion> | undefined;
   results: Array<IResultData> | undefined;
   answerChain: number;
@@ -30,9 +30,9 @@ export function SprintPage() {
     answerChain: 0,
     level: -1,
     page: -1,
-  } as ISprintPageState;
+  } as SprintPageState;
 
-  const [state, setState] = useState<ISprintPageState>(initialState);
+  const [state, setState] = useState<SprintPageState>(initialState);
 
   const { questions, results, answerChain, level, page } = state;
 

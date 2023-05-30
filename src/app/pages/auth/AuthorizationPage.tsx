@@ -10,7 +10,7 @@ import { UserService } from '../../services/UserService';
 import { UserSettingService } from '../../services/UserSettingService';
 import './AuthorizationPage.scss';
 
-interface IAuthPageState {
+interface AuthPageState {
   emailSignin: string;
   passwordSignin: string;
   isShowRegister: boolean;
@@ -44,7 +44,7 @@ export function AuthorizationPage() {
     userShowEmail: '',
   };
 
-  const [state, setState] = useState<IAuthPageState>(initialState);
+  const [state, setState] = useState<AuthPageState>(initialState);
 
   const {
     emailSignin,

@@ -11,7 +11,7 @@ interface AudiocallGameFieldProps {
   onFinish: (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => void;
 }
 
-interface IAudiocallGameFieldState {
+interface AudiocallGameFieldState {
   questionNumber: number;
   answerChain: number;
   maxAnswerChain: number;
@@ -27,7 +27,7 @@ export function AudiocallGameField(props: AudiocallGameFieldProps) {
     result: undefined,
   };
 
-  const [state, setState] = useState<IAudiocallGameFieldState>(initialState);
+  const [state, setState] = useState<AudiocallGameFieldState>(initialState);
 
   const { questionNumber, answerChain, maxAnswerChain, result } = state;
 

@@ -11,7 +11,7 @@ interface SprintGameFieldProps {
   onFinish: (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => void;
 }
 
-interface ISprintGameFieldState {
+interface SprintGameFieldState {
   questionNumber: number;
   answerChain: number;
   maxAnswerChain: number;
@@ -28,7 +28,7 @@ export function SprintGameField(props: SprintGameFieldProps) {
     result: undefined,
   };
 
-  const [state, setState] = useState<ISprintGameFieldState>(initialState);
+  const [state, setState] = useState<SprintGameFieldState>(initialState);
 
   const { questionNumber, answerChain, maxAnswerChain, result } = state;
 
