@@ -11,26 +11,38 @@ interface AudiocallGameFieldProps {
   onFinish: (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => void;
 }
 
+interface IAudiocallGameFieldState {
+  questionNumber: number;
+  answerChain: number;
+  maxAnswerChain: number;
+  result: Array<IResultData> | undefined;
+}
+
 export function AudiocallGameField(props: AudiocallGameFieldProps) {
   const { questions, onFinish } = props;
-  const [questionNumber, setQuestionNumber] = useState(0);
-  const [answerChain, setAnswerChain] = useState(0);
-  const [maxAnswerChain, setMaxAnswerChain] = useState(1);
-  const [result, setResult] = useState<Array<IResultData>>();
+  const initialState = {
+    questionNumber: 0,
+    answerChain: 0,
+    maxAnswerChain: 1,
+    result: undefined,
+  };
+
+  const [state, setState] = useState<IAudiocallGameFieldState>(initialState);
+
+  const { questionNumber, answerChain, maxAnswerChain, result } = state;
 
   const onAnswer = (question: IWord, answersArray: Array<IGameAnswer>, index: number) => {
     if (questions && questionNumber < questions.length) {
+      const newState = { ...state };
       let isAnswerCorrect = false;
-      const oldAnswerChain = answerChain;
       if (answersArray[index] && answersArray[index].isCorrect) {
         isAnswerCorrect = true;
-        const oldMaxAnswerChain = maxAnswerChain;
-        if (oldAnswerChain + 1 > oldMaxAnswerChain) {
-          setMaxAnswerChain(oldAnswerChain + 1);
+        if (answerChain + 1 > maxAnswerChain) {
+          newState.maxAnswerChain = answerChain + 1;
         }
-        setAnswerChain(oldAnswerChain + 1);
+        newState.answerChain = answerChain + 1;
       } else {
-        setAnswerChain(1);
+        newState.answerChain = 1;
       }
 
       const currentResult = {
@@ -38,19 +50,18 @@ export function AudiocallGameField(props: AudiocallGameFieldProps) {
         isCorrect: isAnswerCorrect,
       } as IResultData;
 
-      const oldResult = result;
-
-      const currentQuestionNumber = questionNumber;
-      if (currentQuestionNumber < questions.length - 1) {
-        if (oldResult) {
-          setResult([...oldResult, currentResult]);
+      if (result) {
+        if (result.length + 1 < questions.length) {
+          newState.result = [...result, currentResult];
         } else {
-          setResult([currentResult]);
+          onFinish([...result, currentResult] as Array<IResultData>, maxAnswerChain);
         }
-        setQuestionNumber(currentQuestionNumber + 1);
-      } else if (oldResult) {
-        onFinish([...oldResult, currentResult] as Array<IResultData>, maxAnswerChain);
+      } else {
+        newState.result = [currentResult];
       }
+
+      newState.questionNumber = questionNumber + 1;
+      setState(newState);
     }
   };
 

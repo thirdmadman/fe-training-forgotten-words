@@ -12,6 +12,13 @@ export interface CardProps {
   wordAdvanced: IWordAdvanced;
 }
 
+interface ICardState {
+  isEngDescriptionShown: boolean;
+  isRuDescriptionShown: boolean;
+  isWordDifficult: boolean;
+  isWordLearned: boolean;
+}
+
 export function Card(props: CardProps) {
   const { wordAdvanced } = props;
 
@@ -29,11 +36,16 @@ export function Card(props: CardProps) {
     audioExample,
   } = wordAdvanced.word;
 
-  const [isEngDescriptionShown, setIsEngDescriptionShown] = useState(false);
-  const [isRuDescriptionShown, setIsRuDescriptionShown] = useState(false);
+  const initialState = {
+    isEngDescriptionShown: false,
+    isRuDescriptionShown: false,
+    isWordDifficult: false,
+    isWordLearned: false,
+  };
 
-  const [isWordDifficult, setIsWordDifficult] = useState(false);
-  const [isWordLearned, setIsWordLearned] = useState(false);
+  const [state, setState] = useState<ICardState>(initialState);
+
+  const { isEngDescriptionShown, isRuDescriptionShown, isWordDifficult, isWordLearned } = state;
 
   const userConfigs = DataLocalStorageProvider.getData();
 
@@ -81,7 +93,10 @@ export function Card(props: CardProps) {
       UserWordService.setWorDifficultById(userId, wordAdvanced.word.id)
         .then((userWord) => {
           if (userWord) {
-            setIsWordDifficult(true);
+            setState({
+              ...state,
+              isWordDifficult: true,
+            });
           }
         })
         .catch(() => {});
@@ -89,7 +104,10 @@ export function Card(props: CardProps) {
       UserWordService.setWordNormalById(userId, wordAdvanced.word.id)
         .then((userWord) => {
           if (userWord) {
-            setIsWordDifficult(false);
+            setState({
+              ...state,
+              isWordDifficult: false,
+            });
           }
         })
         .catch(() => {});
@@ -108,7 +126,10 @@ export function Card(props: CardProps) {
       UserWordService.addWordLearnedById(userId, wordAdvanced.word.id)
         .then((userWord) => {
           if (userWord) {
-            setIsWordLearned(true);
+            setState({
+              ...state,
+              isWordLearned: true,
+            });
           }
         })
         .catch(() => {});
@@ -116,7 +137,10 @@ export function Card(props: CardProps) {
       UserWordService.removeWordFromLearnedById(userId, wordAdvanced.word.id)
         .then((userWord) => {
           if (userWord) {
-            setIsWordLearned(false);
+            setState({
+              ...state,
+              isWordLearned: false,
+            });
           }
         })
         .catch(() => {});
@@ -170,9 +194,12 @@ export function Card(props: CardProps) {
   imageStyles += isWordLearned ? 'word-card__image_learned' : '';
 
   useEffect(() => {
-    setIsWordLearned(Boolean(wordAdvanced.userData?.optional.isLearned));
-    setIsWordDifficult(Boolean(wordAdvanced.userData?.difficulty !== 'normal'));
-  }, [wordAdvanced]);
+    setState({
+      ...state,
+      isWordLearned: Boolean(wordAdvanced.userData?.optional.isLearned),
+      isWordDifficult: Boolean(wordAdvanced.userData?.difficulty !== 'normal'),
+    });
+  }, [wordAdvanced, state]);
 
   return (
     <div className="word-card">
@@ -185,7 +212,7 @@ export function Card(props: CardProps) {
           className="word-card__button-vertical word-card__button-vertical_show"
           aria-label="Show card description"
           type="button"
-          onClick={() => setIsEngDescriptionShown(!isEngDescriptionShown)}
+          onClick={() => setState({ ...state, isEngDescriptionShown: !isEngDescriptionShown })}
         />
         <div className="word-card__word-english">{word}</div>
         <div className="word-card__word-transcription">{transcription}</div>
@@ -200,7 +227,7 @@ export function Card(props: CardProps) {
           className="word-card__button-vertical word-card__button-vertical_hide"
           aria-label="Hide card description"
           type="button"
-          onClick={() => setIsEngDescriptionShown(false)}
+          onClick={() => setState({ ...state, isEngDescriptionShown: false })}
         />
         <div className="word-card__text-eng-meaning">
           <p dangerouslySetInnerHTML={{ __html: textMeaning }} />
@@ -218,7 +245,7 @@ export function Card(props: CardProps) {
           className="word-card__button-vertical word-card__button-vertical_show"
           aria-label="Show ru translation"
           type="button"
-          onClick={() => setIsRuDescriptionShown(true)}
+          onClick={() => setState({ ...state, isRuDescriptionShown: true })}
         />
       </div>
       <div
@@ -230,7 +257,7 @@ export function Card(props: CardProps) {
           className="word-card__button-vertical word-card__button-vertical_hide"
           aria-label="Hide description and example on russian"
           type="button"
-          onClick={() => setIsRuDescriptionShown(false)}
+          onClick={() => setState({ ...state, isRuDescriptionShown: false })}
         />
         <div className="word-card__text-ru-word">{wordTranslate}</div>
         <div className="word-card__text-ru-meaning">

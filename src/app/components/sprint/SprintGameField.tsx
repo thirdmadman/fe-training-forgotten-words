@@ -1,22 +1,36 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { IGameQuestion } from '../../interfaces/IGameQuestion';
 import { SprintQuestion } from './SprintQuestion';
 import { GlobalConstants } from '../../../GlobalConstants';
 import { IResultData } from '../../interfaces/IResultData';
 import './SprintGameField.scss';
+import { SprintTimer } from './SprintTimer';
 
 interface SprintGameFieldProps {
   questions: Array<IGameQuestion>;
   onFinish: (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => void;
 }
 
+interface ISprintGameFieldState {
+  questionNumber: number;
+  answerChain: number;
+  maxAnswerChain: number;
+  result: Array<IResultData> | undefined;
+}
+
 export function SprintGameField(props: SprintGameFieldProps) {
   const { questions, onFinish } = props;
-  const [timerRemainTime, setTimerRemainTime] = useState(GlobalConstants.GAME_TIME);
-  const [questionNumber, setQuestionNumber] = useState(0);
-  const [answerChain, setAnswerChain] = useState(0);
-  const [maxAnswerChain, setMaxAnswerChain] = useState(1);
-  const [result, setResult] = useState<Array<IResultData>>();
+
+  const initialState = {
+    questionNumber: 0,
+    answerChain: 0,
+    maxAnswerChain: 1,
+    result: undefined,
+  };
+
+  const [state, setState] = useState<ISprintGameFieldState>(initialState);
+
+  const { questionNumber, answerChain, maxAnswerChain, result } = state;
 
   const onGameEnd = () => {
     if (result) {
@@ -26,17 +40,17 @@ export function SprintGameField(props: SprintGameFieldProps) {
 
   const handleAnswer = (question: IGameQuestion, answer: boolean) => {
     if (questions && questionNumber < questions.length) {
+      const newState = { ...state };
       let isAnswerCorrect = false;
-      const oldAnswerChain = answerChain;
       if (question.variants[0].isCorrect === answer) {
         isAnswerCorrect = true;
-        const oldMaxAnswerChain = maxAnswerChain;
-        if (oldAnswerChain + 1 > oldMaxAnswerChain) {
-          setMaxAnswerChain(oldAnswerChain + 1);
+
+        if (answerChain + 1 > maxAnswerChain) {
+          newState.maxAnswerChain = answerChain + 1;
         }
-        setAnswerChain(oldAnswerChain + 1);
+        newState.answerChain = answerChain + 1;
       } else {
-        setAnswerChain(1);
+        newState.answerChain = 1;
       }
 
       const currentResult = {
@@ -44,40 +58,40 @@ export function SprintGameField(props: SprintGameFieldProps) {
         isCorrect: isAnswerCorrect,
       } as IResultData;
 
-      const oldResult = result;
-      if (oldResult) {
-        setResult([...oldResult, currentResult]);
+      if (result) {
+        if (result.length + 1 < questions.length) {
+          newState.result = [...result, currentResult];
+        } else {
+          onFinish([...result, currentResult] as Array<IResultData>, maxAnswerChain);
+        }
       } else {
-        setResult([currentResult]);
+        newState.result = [currentResult];
       }
 
-      const currentQuestionNumber = questionNumber;
-      if (currentQuestionNumber < questions.length) {
-        setQuestionNumber(currentQuestionNumber + 1);
-      } else {
-        onGameEnd();
-      }
+      newState.questionNumber = questionNumber + 1;
+      setState(newState);
     }
   };
 
   const questionData = questions[questionNumber];
 
-  useEffect(() => {
-    if (timerRemainTime > 0 && questionNumber < questions.length) {
-      window.setTimeout(() => {
-        const lastTimerTime = timerRemainTime;
-        setTimerRemainTime(lastTimerTime - 1);
-      }, 1000);
-    } else {
-      onGameEnd();
-    }
-  });
+  // useEffect(() => {
+  //   if (timerRemainTime > 0 && questionNumber < questions.length) {
+  //     console.error('setTimeout');
+  //     window.setTimeout(() => {
+  //       console.error(state);
+  //       setState({ ...state, timerRemainTime: timerRemainTime - 1 });
+  //     }, 1000);
+  //   } else {
+  //     onGameEnd();
+  //   }
+  // });
 
   return (
     <div className="gamefield-container">
       <h2 className="mini-game-page__title mini-game-page__title_in-game">MEANING RESOLVING</h2>
       <h3 className="mini-game-page__sub-title">In progress</h3>
-      <div className="mini-game-page__timer-text">{timerRemainTime}</div>
+      <SprintTimer timerTime={GlobalConstants.GAME_TIME} timerOnFinishAction={onGameEnd} />
       {questionData && <SprintQuestion questionData={questionData} onAnswer={handleAnswer} />}
     </div>
   );

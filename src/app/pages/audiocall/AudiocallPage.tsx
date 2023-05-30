@@ -16,12 +16,26 @@ import { MiniGameStatistic } from '../../components/common/statistic/MiniGameSta
 import { AudiocallGameField } from '../../components/audiocall/AudiocallGameField';
 import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 
+interface IAudiocallPageState {
+  questions: IGameQuestionArray | undefined;
+  results: Array<IResultData> | undefined;
+  answerChain: number;
+  level: number;
+  page: number;
+}
+
 export function AudiocallPage() {
-  const [questions, setQuestions] = useState<IGameQuestionArray>();
-  const [results, setResults] = useState<Array<IResultData>>();
-  const [answerChain, setAnswerChain] = useState(0);
-  const [level, setLevel] = useState(-1);
-  const [page, setPage] = useState(-1);
+  const initialState = {
+    questions: undefined,
+    results: undefined,
+    answerChain: 0,
+    level: -1,
+    page: -1,
+  } as IAudiocallPageState;
+
+  const [state, setState] = useState<IAudiocallPageState>(initialState);
+
+  const { questions, results, answerChain, level, page } = state;
 
   const currentTrack = musicPlayer2.getCurrentPlayingTrack();
   if (!currentTrack || currentTrack.indexOf(GlobalConstants.AUDIOCALL_MUSIC_NAME) < 0) {
@@ -75,12 +89,14 @@ export function AudiocallPage() {
           questions: createQuestions(wordData.array),
           currentQuestion: 0,
         } as IGameQuestionArray;
-        setQuestions(questionsData);
+        setState({ ...state, questions: questionsData });
       })
       .catch((e) => console.error(e));
   }
 
   const onGameFinish = (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => {
+    setState({ ...state, results: resultsOfGame, answerChain: answerChainOfGame });
+
     const isExpired = TokenProvider.checkIsExpired();
     const userId = TokenProvider.getUserId();
 
@@ -100,14 +116,10 @@ export function AudiocallPage() {
       .catch((error) => {
         console.error('Error:', error);
       });
-
-    setResults(resultsOfGame);
-    setAnswerChain(answerChainOfGame);
   };
 
-  const onGameStart = (levelChosen: number, pageChose: number) => {
-    setLevel(levelChosen);
-    setPage(pageChose);
+  const onGameStart = (levelChosen: number, pageChosen: number) => {
+    setState({ ...state, level: levelChosen, page: pageChosen });
   };
 
   const title = 'Audio decoding';

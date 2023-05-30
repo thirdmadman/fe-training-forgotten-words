@@ -10,6 +10,19 @@ import { UserService } from '../../services/UserService';
 import { UserSettingService } from '../../services/UserSettingService';
 import './AuthorizationPage.scss';
 
+interface IAuthPageState {
+  emailSignin: string;
+  passwordSignin: string;
+  isShowRegister: boolean;
+
+  emailRegister: string;
+  passwordRegister: string;
+  nameRegister: string;
+
+  userShowName: string;
+  userShowEmail: string;
+}
+
 export function AuthorizationPage() {
   const [searchParams] = useSearchParams();
 
@@ -18,16 +31,33 @@ export function AuthorizationPage() {
   const isExpiredSate = searchParams.get('expired');
   const redirectPath = searchParams.get('path');
 
-  const [emailSignin, setEmailSignin] = useState('');
-  const [passwordSignin, setPasswordSignin] = useState('');
-  const [isShowRegister, setIsShowRegister] = useState(false);
+  const initialState = {
+    emailSignin: '',
+    passwordSignin: '',
+    isShowRegister: false,
 
-  const [emailRegister, setEmailRegister] = useState('');
-  const [passwordRegister, setPasswordRegister] = useState('');
-  const [nameRegister, setNameRegister] = useState('');
+    emailRegister: '',
+    passwordRegister: '',
+    nameRegister: '',
 
-  const [userShowName, setUserShowName] = useState('');
-  const [userShowEmail, setUserShowEmail] = useState('');
+    userShowName: '',
+    userShowEmail: '',
+  };
+
+  const [state, setState] = useState<IAuthPageState>(initialState);
+
+  const {
+    emailSignin,
+    passwordSignin,
+    isShowRegister,
+
+    emailRegister,
+    passwordRegister,
+    nameRegister,
+
+    userShowName,
+    userShowEmail,
+  } = state;
 
   const isUserAuth = !TokenProvider.checkIsExpired();
 
@@ -108,7 +138,7 @@ export function AuthorizationPage() {
             type="username"
             placeholder="any-name"
             value={nameRegister}
-            onChange={(e) => setNameRegister(e.target.value)}
+            onChange={(e) => setState({ ...state, nameRegister: e.target.value })}
           />
         </div>
         <div className="auth-page__input-group">
@@ -118,7 +148,7 @@ export function AuthorizationPage() {
             type="email"
             placeholder="notfound@syntax.error"
             value={emailRegister}
-            onChange={(e) => setEmailRegister(e.target.value)}
+            onChange={(e) => setState({ ...state, emailRegister: e.target.value })}
           />
         </div>
         <div className="auth-page__input-group auth-page__input-group__last">
@@ -128,7 +158,7 @@ export function AuthorizationPage() {
             type="password"
             placeholder="*****"
             value={passwordRegister}
-            onChange={(e) => setPasswordRegister(e.target.value)}
+            onChange={(e) => setState({ ...state, passwordRegister: e.target.value })}
           />
         </div>
         <button
@@ -139,7 +169,11 @@ export function AuthorizationPage() {
           Create new
         </button>
         <h3 className="auth-form__text">or</h3>
-        <button className="auth-form__button" type="button" onClick={() => setIsShowRegister(false)}>
+        <button
+          className="auth-form__button"
+          type="button"
+          onClick={() => setState({ ...state, isShowRegister: false })}
+        >
           Cancel
         </button>
       </div>
@@ -155,7 +189,7 @@ export function AuthorizationPage() {
           type="email"
           placeholder="notfound@syntax.error"
           value={emailSignin}
-          onChange={(e) => setEmailSignin(e.target.value)}
+          onChange={(e) => setState({ ...state, emailSignin: e.target.value })}
         />
       </div>
       <div className="auth-page__input-group auth-page__input-group_last">
@@ -165,7 +199,7 @@ export function AuthorizationPage() {
           type="password"
           placeholder="*****"
           value={passwordSignin}
-          onChange={(e) => setPasswordSignin(e.target.value)}
+          onChange={(e) => setState({ ...state, passwordSignin: e.target.value })}
         />
       </div>
     </>
@@ -182,8 +216,7 @@ export function AuthorizationPage() {
 
       UserService.getUserById(userId)
         .then((user) => {
-          setUserShowName(user.name);
-          setUserShowEmail(user.email);
+          setState({ ...state, userShowName: user.name, userShowEmail: user.email });
         })
         .catch((e) => console.error(e));
     }
@@ -210,7 +243,11 @@ export function AuthorizationPage() {
         {isUserAuth ? showUserInformation() : ''}
         {isUserAuth ? getButtonExit() : getButtonSingnin()}
         <h3 className="auth-form__text">or</h3>
-        <button className="auth-form__button" type="button" onClick={() => setIsShowRegister(true)}>
+        <button
+          className="auth-form__button"
+          type="button"
+          onClick={() => setState({ ...state, isShowRegister: true })}
+        >
           CREATE NEW
         </button>
       </div>

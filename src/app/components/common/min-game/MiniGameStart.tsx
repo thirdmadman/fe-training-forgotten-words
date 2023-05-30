@@ -10,11 +10,22 @@ interface MiniGameStartProps {
   onStart: (level: number, group: number) => void;
 }
 
+interface MiniGameStartState {
+  level: number;
+  page: number;
+}
+
 export function MiniGameStart(props: MiniGameStartProps) {
   const { title, description, buttonText, onStart } = props;
 
-  const [level, setLevel] = useState(-1);
-  const [page, setPage] = useState(-1);
+  const initialState = {
+    level: -1,
+    page: -1,
+  };
+
+  const [state, setState] = useState<MiniGameStartState>(initialState);
+
+  const { level, page } = state;
 
   const handleOnStart = () => {
     onStart(level, page);
@@ -42,9 +53,9 @@ export function MiniGameStart(props: MiniGameStartProps) {
 
       const onClick = (number: number) => {
         if (isLevelSelector) {
-          setLevel(number);
+          setState({ ...state, level: number });
         } else {
-          setPage(number);
+          setState({ ...state, page: number });
         }
       };
 

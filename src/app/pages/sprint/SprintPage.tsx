@@ -15,12 +15,26 @@ import { executePromisesSequentially } from '../../utils/executePromisesSequenti
 import { IUserWord } from '../../interfaces/IUserWord';
 import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 
+interface ISprintPageState {
+  questions: Array<IGameQuestion> | undefined;
+  results: Array<IResultData> | undefined;
+  answerChain: number;
+  level: number;
+  page: number;
+}
+
 export function SprintPage() {
-  const [questions, setQuestions] = useState<Array<IGameQuestion>>();
-  const [results, setResults] = useState<Array<IResultData>>();
-  const [answerChain, setAnswerChain] = useState(0);
-  const [level, setLevel] = useState(-1);
-  const [page, setPage] = useState(-1);
+  const initialState = {
+    questions: undefined,
+    results: undefined,
+    answerChain: 0,
+    level: -1,
+    page: -1,
+  } as ISprintPageState;
+
+  const [state, setState] = useState<ISprintPageState>(initialState);
+
+  const { questions, results, answerChain, level, page } = state;
 
   const currentTrack = musicPlayer2.getCurrentPlayingTrack();
   if (!currentTrack || currentTrack.indexOf(GlobalConstants.SPRINT_MUSIC_NAME) < 0) {
@@ -66,12 +80,14 @@ export function SprintPage() {
     WordService.getWordsByGroupAndPage(level, page)
       .then((wordData) => {
         const questionsArray = createQuestions(wordData.array);
-        setQuestions(questionsArray);
+        setState({ ...state, questions: questionsArray });
       })
       .catch((e) => console.error(e));
   }
 
   const onGameFinish = (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => {
+    setState({ ...state, results: resultsOfGame, answerChain: answerChainOfGame });
+
     const isExpired = TokenProvider.checkIsExpired();
     const userId = TokenProvider.getUserId();
 
@@ -91,14 +107,10 @@ export function SprintPage() {
       .catch((error) => {
         console.error('Error:', error);
       });
-
-    setResults(resultsOfGame);
-    setAnswerChain(answerChainOfGame);
   };
 
   const onGameStart = (levelChosen: number, pageChose: number) => {
-    setLevel(levelChosen);
-    setPage(pageChose);
+    setState({ ...state, level: levelChosen, page: pageChose });
   };
 
   const title = 'MEANING RESOLVING';

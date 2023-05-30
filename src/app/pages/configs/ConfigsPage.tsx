@@ -13,9 +13,20 @@ const { WORDBOOK_MUSIC_NAME, MUSIC_PATH, API_URL } = GlobalConstants;
 
 const WORD_EXAMPLE_ID = '5e9f5ee35eb9e72bc21af5a8';
 
+interface ConfigsPageState {
+  soundsLevel: number;
+  musicLevel: number;
+}
+
 export function ConfigsPage() {
-  const [soundsLevel, setSoundsLevel] = useState(0);
-  const [musicLevel, setMusicLevel] = useState(0);
+  const initialState = {
+    soundsLevel: 0,
+    musicLevel: 0,
+  };
+
+  const [state, setState] = useState<ConfigsPageState>(initialState);
+
+  const { soundsLevel, musicLevel } = state;
 
   const saveSettings = () => {
     const configs = { ...DataLocalStorageProvider.getData() };
@@ -39,11 +50,11 @@ export function ConfigsPage() {
   };
 
   const soundsLevelHandler = (level: number) => {
-    setSoundsLevel(Number(level));
+    setState({ ...state, soundsLevel: Number(level) });
     musicPlayer.setVolume(0.7 * level);
   };
   const musicLevelHandler = (level: number) => {
-    setMusicLevel(Number(level));
+    setState({ ...state, musicLevel: Number(level) });
     musicPlayer2.setVolume(0.09 * level);
   };
 
@@ -70,8 +81,7 @@ export function ConfigsPage() {
     const soundsLevelConfig = userConfigs.soundsLevel;
     const musicLevelConfig = userConfigs.musicLevel;
 
-    setSoundsLevel(soundsLevelConfig);
-    setMusicLevel(musicLevelConfig);
+    setState({ soundsLevel: soundsLevelConfig, musicLevel: musicLevelConfig });
   }, []);
 
   return (
