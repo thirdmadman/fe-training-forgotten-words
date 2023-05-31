@@ -1,4 +1,3 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { GlobalConstants } from '../../../GlobalConstants';
 import { IResultData } from '../../interfaces/IResultData';
@@ -9,12 +8,12 @@ import { MiniGameStart } from '../../components/common/min-game/MiniGameStart';
 import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 import { getQuestionsAction, setLevelAndPageAction, setResultsAction } from '../../redux/features/sprint/sprintSlice';
 import { sendMiniGameStatisticsAction } from '../../redux/features/mini-game/sendMiniGameStatisticsThunk';
-import { AppDispatch, RootState } from '../../store';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 
 export function SprintPage() {
-  const { questions, results, answerChain, level, page } = useSelector((state: RootState) => state.sprint);
+  const { questions, results, answerChain, level, page } = useAppSelector((state) => state.sprint);
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const onGameFinish = (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => {
     dispatch(setResultsAction({ results: resultsOfGame, answerChain: answerChainOfGame }));

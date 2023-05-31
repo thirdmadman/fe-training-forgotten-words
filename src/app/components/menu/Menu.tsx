@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { GlobalConstants } from '../../../GlobalConstants';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { hideMenu, showMenu } from '../../redux/features/menu/menuSlice';
 import { musicPlayer2 } from '../../services/SingleMusicPlayer2';
 import { TokenProvider } from '../../services/TokenProvider';
@@ -52,9 +52,9 @@ const menuData = [
 ];
 
 export default function Menu() {
-  const { isHidden } = useSelector((state: RootState) => state.menu);
+  const { isHidden } = useAppSelector((state: RootState) => state.menu);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const location = useLocation();
 

@@ -1,23 +1,21 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { GlobalConstants } from '../../../GlobalConstants';
 import { Card } from '../../components/common/card/Card';
 import { Pagination } from '../../components/common/pagination/Pagination';
 import { Spinner } from '../../components/common/spinner/Spinner';
-
 import './diaryPage.scss';
 import '../../components/common/cardsContainer/CardsContainer.scss';
-import { AppDispatch, RootState } from '../../store';
 import { loadData } from '../../redux/features/diary/diarySlice';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 
 export function DiaryPage() {
   const WORDS_PER_DIARY_PAGE = 50;
   const navigate = useNavigate();
   const params = useParams();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
-  const { userDiaryWords, currentPage, totalSize } = useSelector((state: RootState) => state.diary);
+  const { userDiaryWords, currentPage, totalSize } = useAppSelector((state) => state.diary);
 
   const pageNumber = currentPage || 0;
   const totalPages = totalSize ? Math.floor(totalSize / WORDS_PER_DIARY_PAGE) : 0;

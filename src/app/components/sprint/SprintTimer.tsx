@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setRemainTime } from '../../redux/features/mini-game/timer/timerSlice';
 import { RootState } from '../../store';
 
@@ -9,8 +9,8 @@ interface SprintTimerProps {
 }
 export function SprintTimer(props: SprintTimerProps) {
   const { timerTime, timerOnFinishAction } = props;
-  const timerRemainTime = useSelector((state: RootState) => state.timer.timerRemainTime);
-  const dispatch = useDispatch();
+  const timerRemainTime = useAppSelector((state: RootState) => state.timer.timerRemainTime);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (timerRemainTime === -1) {

@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GlobalConstants } from '../../../GlobalConstants';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import {
   getUserInfoAction,
   hideRegister,
@@ -18,7 +18,6 @@ import {
 import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 import { musicPlayer2 } from '../../services/SingleMusicPlayer2';
 import { TokenProvider } from '../../services/TokenProvider';
-import { AppDispatch, RootState } from '../../store';
 import './AuthorizationPage.scss';
 
 export function AuthorizationPage() {
@@ -40,9 +39,9 @@ export function AuthorizationPage() {
 
     userShowName,
     userShowEmail,
-  } = useSelector((state: RootState) => state.auth);
+  } = useAppSelector((state) => state.auth);
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const isUserAuth = !TokenProvider.checkIsExpired();
 

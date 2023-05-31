@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { GlobalConstants } from '../../../GlobalConstants';
 import { Spinner } from '../../components/common/spinner/Spinner';
@@ -8,16 +7,16 @@ import { Pagination } from '../../components/common/pagination/Pagination';
 import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 import { IStateStore } from '../../interfaces/IStateStore';
 import { Card } from '../../components/common/card/Card';
-import { AppDispatch, RootState } from '../../store';
 import './WordBook.scss';
 import '../../components/common/cardsContainer/CardsContainer.scss';
 import { loadData } from '../../redux/features/wordbook/wordbookSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 
 export default function WordBook() {
-  const { dataIWordAdvanced } = useSelector((state: RootState) => state.wordbook);
+  const { dataIWordAdvanced } = useAppSelector((state) => state.wordbook);
   const navigate = useNavigate();
   const params = useParams();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const level = Number(params.level ? params.level : '1');
   const page = Number(params.page ? params.page : '1');
