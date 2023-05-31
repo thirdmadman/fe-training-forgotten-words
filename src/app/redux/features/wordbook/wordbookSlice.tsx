@@ -6,17 +6,22 @@ import { TokenProvider } from '../../../services/TokenProvider';
 import { UserWordService } from '../../../services/UserWordService';
 import { WordService } from '../../../services/WordService';
 
+interface NavigateState {
+  level: number;
+  page: number;
+}
 interface WordBookState {
   dataIWordAdvanced: Array<IWordAdvanced> | null;
+  lastNavigation?: NavigateState;
 }
 
 const initialState: WordBookState = {
   dataIWordAdvanced: null,
 };
 
-interface NavigateState {
-  level: number;
-  page: number;
+interface LoadDataResultType {
+  wordsAdvanced: Array<IWordAdvanced> | null;
+  navigateState: NavigateState;
 }
 
 const getData = async (navigateState: NavigateState) => {
@@ -55,10 +60,10 @@ const getData = async (navigateState: NavigateState) => {
       console.error(e);
       return null;
     });
-  return output;
+  return { wordsAdvanced: output, navigateState };
 };
 
-export const loadData = createAsyncThunk<Array<IWordAdvanced> | null, NavigateState>('wordbook/loadPageData', getData);
+export const loadData = createAsyncThunk<LoadDataResultType, NavigateState>('wordbook/loadPageData', getData);
 
 export const wordbookSlice = createSlice({
   name: 'wordbook',
@@ -66,7 +71,13 @@ export const wordbookSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(loadData.fulfilled, (state, action) => {
-      state.dataIWordAdvanced = action.payload;
+      state.dataIWordAdvanced = action.payload.wordsAdvanced;
+      if (!state.lastNavigation) {
+        state.lastNavigation = action.payload.navigateState;
+      } else {
+        state.lastNavigation.level = action.payload.navigateState.level;
+        state.lastNavigation.page = action.payload.navigateState.page;
+      }
     });
   },
 });

@@ -7,6 +7,7 @@ import diaryReducer from './redux/features/diary/diarySlice';
 import authReducer from './redux/features/auth/authSlice';
 import audiocallReducer from './redux/features/audiocall/audiocallSlice';
 import sprintReducer from './redux/features/sprint/sprintSlice';
+import { loadState } from './services/local-storage-service';
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
     // configs: configsReducer,
     diary: diaryReducer,
   },
+  preloadedState: loadState(),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
