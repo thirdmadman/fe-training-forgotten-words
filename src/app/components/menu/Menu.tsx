@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { GlobalConstants } from '../../../GlobalConstants';
+import { hideMenu, showMenu } from '../../redux/features/menu/menuSlice';
 import { musicPlayer2 } from '../../services/SingleMusicPlayer2';
 import { TokenProvider } from '../../services/TokenProvider';
+import { RootState } from '../../store';
 import './Menu.scss';
 
 const menuData = [
@@ -48,17 +51,10 @@ const menuData = [
   },
 ];
 
-interface MenuState {
-  isHidden: boolean;
-}
-
 export default function Menu() {
-  const initialState = {
-    isHidden: false,
-  };
-  const [state, setState] = useState<MenuState>(initialState);
+  const { isHidden } = useSelector((state: RootState) => state.menuReducer);
 
-  const { isHidden } = state;
+  const dispatch = useDispatch();
 
   const location = useLocation();
 
@@ -68,7 +64,7 @@ export default function Menu() {
     const isSelected = location.pathname === path || (location.pathname.indexOf(path) === 0 && path.length > 1);
     return (
       <li className={isSelected ? 'nav-menu__item nav-menu__item-active' : 'nav-menu__item'} key={path}>
-        <Link to={path} className="nav-menu__link" onClick={() => setState({ isHidden: true })}>
+        <Link to={path} className="nav-menu__link" onClick={() => dispatch(hideMenu())}>
           {title}
         </Link>
       </li>
@@ -113,7 +109,7 @@ export default function Menu() {
           aria-label="close"
           onClick={() => {
             musicPlayer2.play().catch((e) => console.error(e));
-            setState({ isHidden: true });
+            dispatch(hideMenu());
           }}
         />
       </div>
@@ -121,7 +117,7 @@ export default function Menu() {
         type="button"
         className={isHidden ? 'burger-menu-button' : 'burger-menu-button burger-menu-button-hidden'}
         aria-label="menu"
-        onClick={() => setState({ isHidden: false })}
+        onClick={() => dispatch(showMenu())}
       />
     </div>
   );
