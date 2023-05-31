@@ -10,10 +10,10 @@ import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 import { AppDispatch, RootState } from '../../store';
 import {
   getQuestionsAction,
-  sendMiniGameStatisticsAction,
   setLevelAndPageAction,
   setResultsAction,
 } from '../../redux/features/audiocall/audiocallSlice';
+import { sendMiniGameStatisticsAction } from '../../redux/features/mini-game/sendMiniGameStatisticsThunk';
 
 export function AudiocallPage() {
   const { questions, results, answerChain, level, page } = useSelector((state: RootState) => state.audiocall);
