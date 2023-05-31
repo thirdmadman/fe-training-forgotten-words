@@ -9,7 +9,7 @@ interface SprintTimerProps {
 }
 export function SprintTimer(props: SprintTimerProps) {
   const { timerTime, timerOnFinishAction } = props;
-  const timerRemainTime = useSelector((state: RootState) => state.timerReducer.timerRemainTime);
+  const timerRemainTime = useSelector((state: RootState) => state.timer.timerRemainTime);
   const dispatch = useDispatch();
 
   useEffect(() => {

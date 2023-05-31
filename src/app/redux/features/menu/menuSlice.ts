@@ -9,7 +9,7 @@ const initialState: MenuState = {
 };
 
 export const menuSlice = createSlice({
-  name: 'timer',
+  name: 'menu',
   initialState,
   reducers: {
     hideMenu: (state) => {

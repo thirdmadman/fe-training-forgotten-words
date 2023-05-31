@@ -1,32 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { GlobalConstants } from '../../../GlobalConstants';
-import { IPaginatedArray } from '../../interfaces/IPaginatedArray';
-import { IWord } from '../../interfaces/IWord';
-import { WordService } from '../../services/WordService';
 import { Spinner } from '../../components/common/spinner/Spinner';
-import { CardsContainer } from '../../components/common/cardsContainer/CardsContainer';
 import { musicPlayer2 } from '../../services/SingleMusicPlayer2';
-import './WordBook.scss';
 import { Pagination } from '../../components/common/pagination/Pagination';
 import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 import { IStateStore } from '../../interfaces/IStateStore';
-
-interface WordBookState {
-  dataCards: IPaginatedArray<IWord> | null;
-}
+import { Card } from '../../components/common/card/Card';
+import { AppDispatch, RootState } from '../../store';
+import './WordBook.scss';
+import '../../components/common/cardsContainer/CardsContainer.scss';
+import { loadData } from '../../redux/features/wordbook/wordbookSlice';
 
 export default function WordBook() {
-  const initialState = {
-    dataCards: null,
-  };
-
-  const [state, setState] = useState<WordBookState>(initialState);
-  const { dataCards } = state;
-
+  const { dataIWordAdvanced } = useSelector((state: RootState) => state.wordbook);
   const navigate = useNavigate();
-
   const params = useParams();
+  const dispatch = useDispatch<AppDispatch>();
 
   const level = Number(params.level ? params.level : '1');
   const page = Number(params.page ? params.page : '1');
@@ -36,7 +27,7 @@ export default function WordBook() {
   const { WORDBOOK_MUSIC_NAME, MUSIC_PATH } = GlobalConstants;
 
   const changePage = (btn: string) => {
-    if (!dataCards) return;
+    if (!dataIWordAdvanced) return;
 
     if (btn === 'prev') {
       if (page > 1) {
@@ -52,7 +43,7 @@ export default function WordBook() {
   };
 
   const changeLevel = (btn: string) => {
-    if (!dataCards) return;
+    if (!dataIWordAdvanced) return;
 
     if (btn === 'prev') {
       if (level > 1) {
@@ -114,12 +105,8 @@ export default function WordBook() {
       musicPlayer2.play().catch(() => {});
     }
 
-    WordService.getWordsByGroupAndPage(level - 1, page - 1)
-      .then((data) => {
-        setState({ dataCards: data });
-      })
-      .catch((e) => console.error(e));
-  }, [level, page, params, navigate, MUSIC_PATH, WORDBOOK_MUSIC_NAME]);
+    dispatch(loadData({ level, page })).catch(() => {});
+  }, [level, page, params, navigate, MUSIC_PATH, WORDBOOK_MUSIC_NAME, dispatch]);
 
   return (
     <div className="wordbook">
@@ -136,8 +123,10 @@ export default function WordBook() {
           onNextAction={() => changeLevel('next')}
         />
       </div>
-      {dataCards ? (
-        <CardsContainer paginatedArrayOfIWord={dataCards} paginatedArrayOfIAggregatedWord={null} />
+      {dataIWordAdvanced ? (
+        <div className="cards-container">
+          {dataIWordAdvanced && dataIWordAdvanced.map((word) => <Card wordAdvanced={word} key={word.word.id} />)}
+        </div>
       ) : (
         <Spinner />
       )}

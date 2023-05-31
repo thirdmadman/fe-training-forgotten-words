@@ -52,7 +52,7 @@ const menuData = [
 ];
 
 export default function Menu() {
-  const { isHidden } = useSelector((state: RootState) => state.menuReducer);
+  const { isHidden } = useSelector((state: RootState) => state.menu);
 
   const dispatch = useDispatch();
 
