@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setRemainTime } from '../../redux/features/timer/timerSlice';
+import { setRemainTime } from '../../redux/features/mini-game/timer/timerSlice';
 import { RootState } from '../../store';
 
 interface SprintTimerProps {

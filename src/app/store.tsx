@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import timerReducer from './redux/features/timer/timerSlice';
+import timerReducer from './redux/features/mini-game/timer/timerSlice';
 import menuReducer from './redux/features/menu/menuSlice';
 import wordbookReducer from './redux/features/wordbook/wordbookSlice';
 import diaryReducer from './redux/features/diary/diarySlice';
