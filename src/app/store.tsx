@@ -6,6 +6,7 @@ import wordbookReducer from './redux/features/wordbook/wordbookSlice';
 import diaryReducer from './redux/features/diary/diarySlice';
 import authReducer from './redux/features/auth/authSlice';
 import audiocallReducer from './redux/features/audiocall/audiocallSlice';
+import sprintReducer from './redux/features/sprint/sprintSlice';
 
 export const store = configureStore({
   reducer: {
@@ -13,7 +14,7 @@ export const store = configureStore({
     menu: menuReducer,
     auth: authReducer,
     wordbook: wordbookReducer,
-    // sprint: sprintReducer,
+    sprint: sprintReducer,
     audiocall: audiocallReducer,
     // configs: configsReducer,
     diary: diaryReducer,
