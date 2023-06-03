@@ -1,5 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
-
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import timerReducer from './redux/features/mini-game/timer/timerSlice';
 import menuReducer from './redux/features/menu/menuSlice';
 import wordbookReducer from './redux/features/wordbook/wordbookSlice';
@@ -9,17 +8,19 @@ import audiocallReducer from './redux/features/audiocall/audiocallSlice';
 import sprintReducer from './redux/features/sprint/sprintSlice';
 import { loadState } from './services/local-storage-service';
 
+const appReducer = combineReducers({
+  timer: timerReducer,
+  menu: menuReducer,
+  auth: authReducer,
+  wordbook: wordbookReducer,
+  sprint: sprintReducer,
+  audiocall: audiocallReducer,
+  // configs: configsReducer,
+  diary: diaryReducer,
+});
+
 export const store = configureStore({
-  reducer: {
-    timer: timerReducer,
-    menu: menuReducer,
-    auth: authReducer,
-    wordbook: wordbookReducer,
-    sprint: sprintReducer,
-    audiocall: audiocallReducer,
-    // configs: configsReducer,
-    diary: diaryReducer,
-  },
+  reducer: appReducer,
   preloadedState: loadState(),
 });
 
