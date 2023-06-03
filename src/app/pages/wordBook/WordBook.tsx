@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { GlobalConstants } from '../../../GlobalConstants';
 import { Spinner } from '../../components/common/spinner/Spinner';
@@ -6,7 +6,7 @@ import { musicPlayer2 } from '../../services/SingleMusicPlayer2';
 import { Pagination } from '../../components/common/pagination/Pagination';
 import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 import { Card } from '../../components/common/card/Card';
-import { loadData } from '../../redux/features/wordbook/wordbookSlice';
+import { loadUserWordsDataThunk, loadWordsThunk } from '../../redux/features/wordbook/wordbookSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 
 import './WordBook.scss';
@@ -14,6 +14,7 @@ import '../../components/common/cardsContainer/CardsContainer.scss';
 
 export default function WordBook() {
   const { dataIWordAdvanced, lastNavigation } = useAppSelector((state) => state.wordbook);
+  const [isDataLoading, setIsDataLoading] = useState(false);
   const navigate = useNavigate();
   const params = useParams();
   const dispatch = useAppDispatch();
@@ -80,9 +81,13 @@ export default function WordBook() {
       musicPlayer2.setPlayList([`${MUSIC_PATH + WORDBOOK_MUSIC_NAME}`], true);
       musicPlayer2.play().catch(() => {});
     }
-
-    if (!dataIWordAdvanced || lastNavigation?.level !== currentLevel || lastNavigation?.page !== currentPage) {
-      dispatch(loadData({ level: currentLevel, page: currentPage })).catch(() => {});
+    if (!isDataLoading) {
+      if (!dataIWordAdvanced || lastNavigation?.level !== currentLevel || lastNavigation?.page !== currentPage) {
+        dispatch(loadWordsThunk({ level: currentLevel, page: currentPage })).catch(() => {});
+      } else if (dataIWordAdvanced && lastNavigation?.level === currentLevel && lastNavigation?.page === currentPage) {
+        dispatch(loadUserWordsDataThunk({ level: currentLevel, page: currentPage })).catch(() => {});
+      }
+      setIsDataLoading(true);
     }
   }, [
     MUSIC_PATH,
@@ -95,6 +100,7 @@ export default function WordBook() {
     params.level,
     params.page,
     dataIWordAdvanced,
+    isDataLoading,
   ]);
 
   return (
