@@ -46,7 +46,7 @@ interface SignInUserArgs {
 const getUserInfo = async (userId: string) => UserService.getUserById(userId);
 
 const signInAction = (signInArgs: SignInUserArgs) => {
-  SigninService.auth(signInArgs.email, signInArgs.password)
+  const isSignedIn = SigninService.auth(signInArgs.email, signInArgs.password)
     .then((auth) => {
       const { userId } = auth;
       UserSettingService.getUserSettingById(userId)
@@ -58,29 +58,25 @@ const signInAction = (signInArgs: SignInUserArgs) => {
           }
         })
         .catch((e) => console.error(e));
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-};
-
-const registerUser = async (registerArgs: RegisterUserArgs) => {
-  const result = await UserService.createUser(registerArgs.email, registerArgs.password, registerArgs.userName)
-    .then(() => {
-      signInAction({ email: registerArgs.email, password: registerArgs.password });
       return true;
     })
     .catch((error) => {
       console.error(error);
       return false;
     });
+  return isSignedIn;
+};
 
-  return result;
+const registerUser = async (registerArgs: RegisterUserArgs) => {
+  await UserService.createUser(registerArgs.email, registerArgs.password, registerArgs.userName);
+  const signInResult = await signInAction({ email: registerArgs.email, password: registerArgs.password });
+
+  return signInResult;
 };
 
 export const getUserInfoAction = createAsyncThunk<IUser, string>('auth/getUserInfo', getUserInfo);
 export const registerUserAction = createAsyncThunk<boolean, RegisterUserArgs>('auth/registerUser', registerUser);
-export const signInUserAction = createAsyncThunk<boolean, RegisterUserArgs>('auth/registerUser', registerUser);
+export const signInUserAction = createAsyncThunk<boolean, SignInUserArgs>('auth/registerUser', signInAction);
 
 export const authSlice = createSlice({
   name: 'diary',
