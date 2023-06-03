@@ -194,12 +194,12 @@ export function Card(props: CardProps) {
   imageStyles += isWordLearned ? 'word-card__image_learned' : '';
 
   useEffect(() => {
-    setState({
-      ...state,
+    setState((prevState: CardState) => ({
+      ...prevState,
       isWordLearned: Boolean(wordAdvanced.userData?.optional.isLearned),
       isWordDifficult: Boolean(wordAdvanced.userData?.difficulty !== 'normal'),
-    });
-  }, [wordAdvanced, state]);
+    }));
+  }, [wordAdvanced]);
 
   return (
     <div className="word-card">

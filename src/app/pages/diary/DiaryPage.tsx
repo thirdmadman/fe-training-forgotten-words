@@ -1,34 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { GlobalConstants } from '../../../GlobalConstants';
-import { CardsContainer } from '../../components/common/cardsContainer/CardsContainer';
+import { Card } from '../../components/common/card/Card';
 import { Pagination } from '../../components/common/pagination/Pagination';
 import { Spinner } from '../../components/common/spinner/Spinner';
-import { IAggregatedWord } from '../../interfaces/IAggregatedWord';
-import { IPaginatedArray } from '../../interfaces/IPaginatedArray';
-import { TokenProvider } from '../../services/TokenProvider';
-import { UsersAggregatedWordsService } from '../../services/UsersAggregatedWordsService';
 import './diaryPage.scss';
-
-interface DiaryPageState {
-  userDiaryWords: IPaginatedArray<IAggregatedWord> | null;
-}
+import '../../components/common/cardsContainer/CardsContainer.scss';
+import { loadData } from '../../redux/features/diary/diarySlice';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 
 export function DiaryPage() {
   const WORDS_PER_DIARY_PAGE = 50;
   const navigate = useNavigate();
   const params = useParams();
+  const dispatch = useAppDispatch();
 
-  const initialState = {
-    userDiaryWords: null,
-  };
+  const { userDiaryWords, currentPage, totalSize } = useAppSelector((state) => state.diary);
 
-  const [state, setState] = useState<DiaryPageState>(initialState);
-
-  const { userDiaryWords } = state;
-
-  const pageNumber = userDiaryWords ? userDiaryWords.currentPage : 0;
-  const totalPages = userDiaryWords ? Math.floor(userDiaryWords.size / WORDS_PER_DIARY_PAGE) : 0;
+  const pageNumber = currentPage || 0;
+  const totalPages = totalSize ? Math.floor(totalSize / WORDS_PER_DIARY_PAGE) : 0;
 
   const page = Number(params.page ? params.page : '1') - 1;
 
@@ -52,17 +42,8 @@ export function DiaryPage() {
       return;
     }
 
-    const isExpired = TokenProvider.checkIsExpired();
-    const userId = TokenProvider.getUserId();
-
-    if (isExpired || !userId) {
-      return;
-    }
-
-    UsersAggregatedWordsService.getAggregatedWordsWithResults(userId, page, WORDS_PER_DIARY_PAGE)
-      .then((userAggregatedWords) => setState({ userDiaryWords: userAggregatedWords }))
-      .catch((e) => console.error(e));
-  }, [setState, page, navigate, params]);
+    dispatch(loadData({ page, wordsPerPage: WORDS_PER_DIARY_PAGE })).catch(() => {});
+  }, [page, navigate, params, dispatch]);
 
   return (
     <div className="diary">
@@ -75,7 +56,9 @@ export function DiaryPage() {
         />
       </div>
       {userDiaryWords ? (
-        <CardsContainer paginatedArrayOfIWord={null} paginatedArrayOfIAggregatedWord={userDiaryWords} />
+        <div className="cards-container">
+          {userDiaryWords && userDiaryWords.map((word) => <Card wordAdvanced={word} key={word.word.id} />)}
+        </div>
       ) : (
         <Spinner />
       )}

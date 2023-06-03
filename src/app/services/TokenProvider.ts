@@ -62,7 +62,6 @@ export class TokenProvider {
 
   static setAuthData(data: IAuth) {
     const configs = DataLocalStorageProvider.getData();
-    console.error(configs);
     if (configs) {
       const authData = {
         authResponse: { ...data },

@@ -1,27 +1,28 @@
 /* eslint-disable class-methods-use-this */
-import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GlobalConstants } from '../../../GlobalConstants';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { resetAudiocall } from '../../redux/features/audiocall/audiocallSlice';
+import {
+  getUserInfoAction,
+  hideRegister,
+  registerUserAction,
+  resetStateAuth,
+  setEmailRegister,
+  setEmailSignIn,
+  setNameRegister,
+  setPasswordRegister,
+  setPasswordSignIn,
+  showRegister,
+  signInUserAction,
+  signOutAction,
+} from '../../redux/features/auth/authSlice';
+import { resetSprint } from '../../redux/features/sprint/sprintSlice';
+import { resetStateWordbook } from '../../redux/features/wordbook/wordbookSlice';
 import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
-import { SigninService } from '../../services/SigninService';
 import { musicPlayer2 } from '../../services/SingleMusicPlayer2';
 import { TokenProvider } from '../../services/TokenProvider';
-import { UserService } from '../../services/UserService';
-import { UserSettingService } from '../../services/UserSettingService';
 import './AuthorizationPage.scss';
-
-interface AuthPageState {
-  emailSignin: string;
-  passwordSignin: string;
-  isShowRegister: boolean;
-
-  emailRegister: string;
-  passwordRegister: string;
-  nameRegister: string;
-
-  userShowName: string;
-  userShowEmail: string;
-}
 
 export function AuthorizationPage() {
   const [searchParams] = useSearchParams();
@@ -31,24 +32,9 @@ export function AuthorizationPage() {
   const isExpiredSate = searchParams.get('expired');
   const redirectPath = searchParams.get('path');
 
-  const initialState = {
-    emailSignin: '',
-    passwordSignin: '',
-    isShowRegister: false,
-
-    emailRegister: '',
-    passwordRegister: '',
-    nameRegister: '',
-
-    userShowName: '',
-    userShowEmail: '',
-  };
-
-  const [state, setState] = useState<AuthPageState>(initialState);
-
   const {
-    emailSignin,
-    passwordSignin,
+    emailSignIn,
+    passwordSignIn,
     isShowRegister,
 
     emailRegister,
@@ -57,7 +43,9 @@ export function AuthorizationPage() {
 
     userShowName,
     userShowEmail,
-  } = state;
+  } = useAppSelector((state) => state.auth);
+
+  const dispatch = useAppDispatch();
 
   const isUserAuth = !TokenProvider.checkIsExpired();
 
@@ -73,50 +61,34 @@ export function AuthorizationPage() {
     musicPlayer2.play().catch(() => {});
   }
 
-  const signIn = (email: string, password: string) => {
-    SigninService.auth(email, password)
-      .then((auth) => {
-        const { userId } = auth;
-        UserSettingService.getUserSettingById(userId)
-          .then((settings) => {
-            if (settings.optional) {
-              const configs = { ...DataLocalStorageProvider.getData() };
-              configs.userConfigs = settings.optional;
-              DataLocalStorageProvider.setData(configs);
-            }
-          })
-          .catch((e) => console.error(e));
+  const signOut = () => {
+    dispatch(resetStateWordbook());
+    dispatch(resetStateAuth());
+    dispatch(resetAudiocall());
+    dispatch(resetSprint());
+    dispatch(signOutAction());
+    navigate(GlobalConstants.ROUTE_MAIN);
+  };
 
+  const signIn = (email: string, password: string) => {
+    dispatch(signInUserAction({ email, password }))
+      .then(() => {
         if (isExpiredSate && redirectPath) {
           navigate(redirectPath);
           return;
         }
         navigate(GlobalConstants.ROUTE_MAIN);
       })
-      .catch((error) => {
-        console.error(error);
-        // this.rootNode.append(String(error));
-      });
+      .catch(() => {});
   };
 
-  const registerUser = (email: string, password: string, userName?: string) => {
-    UserService.createUser(email, password, userName)
-      .then(() => {
-        signIn(email, password);
-      })
-      .catch((error) => {
-        console.error(error);
-        // this.authContainer.append(this.errorMessage);
-      });
-  };
-
-  const signOut = () => {
-    TokenProvider.clearAuthData();
-    navigate(GlobalConstants.ROUTE_MAIN);
+  const registerUser = () => {
+    const signInData = { email: emailRegister, password: passwordRegister, userName: nameRegister };
+    dispatch(registerUserAction(signInData)).catch(() => {});
   };
 
   const getButtonSingnin = () => (
-    <button className="auth-form__button" type="button" onClick={() => signIn(emailSignin, passwordSignin)}>
+    <button className="auth-form__button" type="button" onClick={() => signIn(emailSignIn, passwordSignIn)}>
       Start sync
     </button>
   );
@@ -138,7 +110,7 @@ export function AuthorizationPage() {
             type="username"
             placeholder="any-name"
             value={nameRegister}
-            onChange={(e) => setState({ ...state, nameRegister: e.target.value })}
+            onChange={(e) => dispatch(setNameRegister(e.target.value))}
           />
         </div>
         <div className="auth-page__input-group">
@@ -148,7 +120,7 @@ export function AuthorizationPage() {
             type="email"
             placeholder="notfound@syntax.error"
             value={emailRegister}
-            onChange={(e) => setState({ ...state, emailRegister: e.target.value })}
+            onChange={(e) => dispatch(setEmailRegister(e.target.value))}
           />
         </div>
         <div className="auth-page__input-group auth-page__input-group__last">
@@ -158,22 +130,14 @@ export function AuthorizationPage() {
             type="password"
             placeholder="*****"
             value={passwordRegister}
-            onChange={(e) => setState({ ...state, passwordRegister: e.target.value })}
+            onChange={(e) => dispatch(setPasswordRegister(e.target.value))}
           />
         </div>
-        <button
-          className="auth-form__button"
-          type="button"
-          onClick={() => registerUser(emailRegister, passwordRegister, nameRegister)}
-        >
+        <button className="auth-form__button" type="button" onClick={registerUser}>
           Create new
         </button>
         <h3 className="auth-form__text">or</h3>
-        <button
-          className="auth-form__button"
-          type="button"
-          onClick={() => setState({ ...state, isShowRegister: false })}
-        >
+        <button className="auth-form__button" type="button" onClick={() => dispatch(hideRegister())}>
           Cancel
         </button>
       </div>
@@ -188,8 +152,8 @@ export function AuthorizationPage() {
           className="auth-page__input"
           type="email"
           placeholder="notfound@syntax.error"
-          value={emailSignin}
-          onChange={(e) => setState({ ...state, emailSignin: e.target.value })}
+          value={emailSignIn}
+          onChange={(e) => dispatch(setEmailSignIn(e.target.value))}
         />
       </div>
       <div className="auth-page__input-group auth-page__input-group_last">
@@ -198,8 +162,8 @@ export function AuthorizationPage() {
           className="auth-page__input"
           type="password"
           placeholder="*****"
-          value={passwordSignin}
-          onChange={(e) => setState({ ...state, passwordSignin: e.target.value })}
+          value={passwordSignIn}
+          onChange={(e) => dispatch(setPasswordSignIn(e.target.value))}
         />
       </div>
     </>
@@ -214,11 +178,7 @@ export function AuthorizationPage() {
         return '';
       }
 
-      UserService.getUserById(userId)
-        .then((user) => {
-          setState({ ...state, userShowName: user.name, userShowEmail: user.email });
-        })
-        .catch((e) => console.error(e));
+      dispatch(getUserInfoAction(userId)).catch(() => {});
     }
 
     return (
@@ -243,11 +203,7 @@ export function AuthorizationPage() {
         {isUserAuth ? showUserInformation() : ''}
         {isUserAuth ? getButtonExit() : getButtonSingnin()}
         <h3 className="auth-form__text">or</h3>
-        <button
-          className="auth-form__button"
-          type="button"
-          onClick={() => setState({ ...state, isShowRegister: true })}
-        >
+        <button className="auth-form__button" type="button" onClick={() => dispatch(showRegister())}>
           CREATE NEW
         </button>
       </div>
