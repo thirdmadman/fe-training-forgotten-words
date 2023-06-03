@@ -77,6 +77,7 @@ export const audiocallSlice = createSlice({
   name: 'audiocall',
   initialState,
   reducers: {
+    resetAudiocall: () => initialState,
     setLevelAndPageAction: (state, action: PayloadAction<LevelAndPageArgs>) => {
       state.level = action.payload.level;
       state.page = action.payload.page;
@@ -102,6 +103,6 @@ export const audiocallSlice = createSlice({
   },
 });
 
-export const { setLevelAndPageAction, setResultsAction, setQuestionsAction } = audiocallSlice.actions;
+export const { setLevelAndPageAction, setResultsAction, setQuestionsAction, resetAudiocall } = audiocallSlice.actions;
 
 export default audiocallSlice.reducer;

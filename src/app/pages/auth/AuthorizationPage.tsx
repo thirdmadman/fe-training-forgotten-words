@@ -2,6 +2,7 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GlobalConstants } from '../../../GlobalConstants';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { resetAudiocall } from '../../redux/features/audiocall/audiocallSlice';
 import {
   getUserInfoAction,
   hideRegister,
@@ -16,6 +17,7 @@ import {
   signInUserAction,
   signOutAction,
 } from '../../redux/features/auth/authSlice';
+import { resetSprint } from '../../redux/features/sprint/sprintSlice';
 import { resetStateWordbook } from '../../redux/features/wordbook/wordbookSlice';
 import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 import { musicPlayer2 } from '../../services/SingleMusicPlayer2';
@@ -62,8 +64,10 @@ export function AuthorizationPage() {
   const signOut = () => {
     dispatch(resetStateWordbook());
     dispatch(resetStateAuth());
+    dispatch(resetAudiocall());
+    dispatch(resetSprint());
     dispatch(signOutAction());
-    // navigate(GlobalConstants.ROUTE_MAIN);
+    navigate(GlobalConstants.ROUTE_MAIN);
   };
 
   const signIn = (email: string, password: string) => {
