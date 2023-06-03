@@ -30,3 +30,15 @@ export function loadState<T = object>(): T | undefined {
     throw new Error('store deserialization failed');
   }
 }
+
+export function clearStorageState() {
+  if (!localStorage) {
+    return;
+  }
+
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (error) {
+    throw new Error('store deserialization failed');
+  }
+}
