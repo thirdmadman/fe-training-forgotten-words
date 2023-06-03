@@ -6,6 +6,7 @@ import {
   getUserInfoAction,
   hideRegister,
   registerUserAction,
+  resetStateAuth,
   setEmailRegister,
   setEmailSignIn,
   setNameRegister,
@@ -15,6 +16,7 @@ import {
   signInUserAction,
   signOutAction,
 } from '../../redux/features/auth/authSlice';
+import { resetStateWordbook } from '../../redux/features/wordbook/wordbookSlice';
 import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
 import { musicPlayer2 } from '../../services/SingleMusicPlayer2';
 import { TokenProvider } from '../../services/TokenProvider';
@@ -58,8 +60,10 @@ export function AuthorizationPage() {
   }
 
   const signOut = () => {
+    dispatch(resetStateWordbook());
+    dispatch(resetStateAuth());
     dispatch(signOutAction());
-    navigate(GlobalConstants.ROUTE_MAIN);
+    // navigate(GlobalConstants.ROUTE_MAIN);
   };
 
   const signIn = (email: string, password: string) => {

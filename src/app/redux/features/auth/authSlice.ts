@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from '../../../interfaces/IUser';
 import DataLocalStorageProvider from '../../../services/DataLocalStorageProvider';
+import { clearStorageState } from '../../../services/local-storage-service';
 import { SigninService } from '../../../services/SigninService';
 import { TokenProvider } from '../../../services/TokenProvider';
 import { UserService } from '../../../services/UserService';
@@ -82,7 +83,9 @@ export const authSlice = createSlice({
   name: 'diary',
   initialState,
   reducers: {
+    resetStateAuth: () => initialState,
     signOutAction: () => {
+      clearStorageState();
       TokenProvider.clearAuthData();
     },
     showRegister: (state) => {
@@ -126,6 +129,7 @@ export const {
   setEmailRegister,
   setNameRegister,
   setPasswordRegister,
+  resetStateAuth,
 } = authSlice.actions;
 
 export default authSlice.reducer;
