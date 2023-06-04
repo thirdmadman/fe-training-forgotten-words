@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IAuth } from '../../../interfaces/IAuth';
 import { IUser } from '../../../interfaces/IUser';
 import DataLocalStorageProvider from '../../../services/DataLocalStorageProvider';
 import { clearStorageState } from '../../../services/local-storage-service';
@@ -44,10 +45,15 @@ interface SignInUserArgs {
   password: string;
 }
 
+interface SignInResult {
+  isSignedIn: boolean;
+  info?: IAuth;
+}
+
 const getUserInfo = async (userId: string) => UserService.getUserById(userId);
 
-const signInAction = (signInArgs: SignInUserArgs) => {
-  const isSignedIn = SigninService.auth(signInArgs.email, signInArgs.password)
+const signInAction = async (signInArgs: SignInUserArgs) => {
+  const isSignedIn = await SigninService.auth(signInArgs.email, signInArgs.password)
     .then((auth) => {
       const { userId } = auth;
       UserSettingService.getUserSettingById(userId)
@@ -59,13 +65,13 @@ const signInAction = (signInArgs: SignInUserArgs) => {
           }
         })
         .catch((e) => console.error(e));
-      return true;
+      return { isSignedIn: true, info: auth };
     })
     .catch((error) => {
       console.error(error);
-      return false;
+      return { isSignedIn: false };
     });
-  return isSignedIn;
+  return isSignedIn as SignInResult;
 };
 
 const registerUser = async (registerArgs: RegisterUserArgs) => {
@@ -76,8 +82,8 @@ const registerUser = async (registerArgs: RegisterUserArgs) => {
 };
 
 export const getUserInfoAction = createAsyncThunk<IUser, string>('auth/getUserInfo', getUserInfo);
-export const registerUserAction = createAsyncThunk<boolean, RegisterUserArgs>('auth/registerUser', registerUser);
-export const signInUserAction = createAsyncThunk<boolean, SignInUserArgs>('auth/registerUser', signInAction);
+export const registerUserAction = createAsyncThunk<SignInResult, RegisterUserArgs>('auth/registerUser', registerUser);
+export const signInUserAction = createAsyncThunk<SignInResult, SignInUserArgs>('auth/signInUserUser', signInAction);
 
 export const authSlice = createSlice({
   name: 'diary',
@@ -116,6 +122,18 @@ export const authSlice = createSlice({
         state.userShowName = action.payload.name;
         state.userShowEmail = action.payload.email;
       }
+    });
+    builder.addCase(signInUserAction.fulfilled, (state, action) => {
+      if (action.payload && action.payload.isSignedIn) {
+        return initialState;
+      }
+      return state;
+    });
+    builder.addCase(registerUserAction.fulfilled, (state, action) => {
+      if (action.payload && action.payload.isSignedIn) {
+        return initialState;
+      }
+      return state;
     });
   },
 });

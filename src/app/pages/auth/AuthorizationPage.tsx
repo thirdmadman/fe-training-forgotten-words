@@ -58,6 +58,19 @@ export function AuthorizationPage() {
     musicPlayer2.play().catch(() => {});
   }
 
+  const getUserInformation = () => {
+    if (userShowName === '' && userShowEmail === '') {
+      const isExpired = TokenProvider.checkIsExpired();
+      const userId = TokenProvider.getUserId();
+
+      if (isExpired || !userId) {
+        return;
+      }
+
+      dispatch(getUserInfoAction(userId)).catch(() => {});
+    }
+  };
+
   const signOut = () => {
     dispatch(resetStateAuth());
     dispatch(signOutAction());
@@ -67,6 +80,7 @@ export function AuthorizationPage() {
   const signIn = (email: string, password: string) => {
     dispatch(signInUserAction({ email, password }))
       .then(() => {
+        getUserInformation();
         if (isExpiredSate && redirectPath) {
           navigate(redirectPath);
           return;
@@ -78,7 +92,11 @@ export function AuthorizationPage() {
 
   const registerUser = () => {
     const signInData = { email: emailRegister, password: passwordRegister, userName: nameRegister };
-    dispatch(registerUserAction(signInData)).catch(() => {});
+    dispatch(registerUserAction(signInData))
+      .then(() => {
+        getUserInformation();
+      })
+      .catch(() => {});
   };
 
   const getButtonSingnin = () => (
@@ -163,38 +181,25 @@ export function AuthorizationPage() {
     </>
   );
 
-  const showUserInformation = () => {
-    if (userShowName === '' && userShowEmail === '') {
-      const isExpired = TokenProvider.checkIsExpired();
-      const userId = TokenProvider.getUserId();
-
-      if (isExpired || !userId) {
-        return '';
-      }
-
-      dispatch(getUserInfoAction(userId)).catch(() => {});
-    }
-
-    return (
-      <div className="user-information">
-        <div className="user-information__group">
-          <div className="user-information__title">You</div>
-          <div className="user-information__text user-information__text_username">{userShowName}</div>
-        </div>
-        <div className="user-information__group">
-          <div className="user-information__title">Yor email</div>
-          <div className="user-information__text user-information__text_email">{userShowEmail}</div>
-        </div>
+  const showUserInformation = (
+    <div className="user-information">
+      <div className="user-information__group">
+        <div className="user-information__title">You</div>
+        <div className="user-information__text user-information__text_username">{userShowName}</div>
       </div>
-    );
-  };
+      <div className="user-information__group">
+        <div className="user-information__title">Yor email</div>
+        <div className="user-information__text user-information__text_email">{userShowEmail}</div>
+      </div>
+    </div>
+  );
 
   const showAuthPage = () => (
     <div className="auth-page">
       <div className="auth-page__container">
         <div className="auth-page__title">{isUserAuth ? 'SYNCHRONIZED' : 'Identity recognizing'}</div>
         {isUserAuth ? '' : showInputAuth()}
-        {isUserAuth ? showUserInformation() : ''}
+        {isUserAuth ? showUserInformation : ''}
         {isUserAuth ? getButtonExit() : getButtonSingnin()}
         <h3 className="auth-form__text">or</h3>
         <button className="auth-form__button" type="button" onClick={() => dispatch(showRegister())}>
