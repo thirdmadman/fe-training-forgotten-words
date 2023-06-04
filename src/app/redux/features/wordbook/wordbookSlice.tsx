@@ -5,6 +5,7 @@ import { IWordAdvanced } from '../../../interfaces/IWordAdvanced';
 import { TokenProvider } from '../../../services/TokenProvider';
 import { UserWordService } from '../../../services/UserWordService';
 import { WordService } from '../../../services/WordService';
+import { resetStateAuth } from '../auth/authSlice';
 
 interface NavigateState {
   level: number;
@@ -71,9 +72,7 @@ export const loadUserWordsDataThunk = createAsyncThunk<LoadDataResultType<IUserW
 export const wordbookSlice = createSlice({
   name: 'wordbook',
   initialState,
-  reducers: {
-    resetStateWordbook: () => initialState,
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(loadWordsThunk.fulfilled, (state, action) => {
       state.dataIWordAdvanced = action.payload.result;
@@ -108,9 +107,10 @@ export const wordbookSlice = createSlice({
         }
       }
     });
+    builder.addCase(resetStateAuth, () => initialState);
   },
 });
 
-export const { resetStateWordbook } = wordbookSlice.actions;
+// export const { } = wordbookSlice.actions;
 
 export default wordbookSlice.reducer;

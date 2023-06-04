@@ -3,6 +3,7 @@ import { IWordAdvanced } from '../../../interfaces/IWordAdvanced';
 import { TokenProvider } from '../../../services/TokenProvider';
 import { UsersAggregatedWordsService } from '../../../services/UsersAggregatedWordsService';
 import { convertAggregatedWordToWordAdvanced } from '../../../utils/convertAggregatedWordToWordAdvanced';
+import { resetStateAuth } from '../auth/authSlice';
 
 interface DiaryPageState {
   userDiaryWords: Array<IWordAdvanced> | null;
@@ -68,6 +69,7 @@ export const diarySlice = createSlice({
         state.totalSize = action.payload.totalSize;
       }
     });
+    builder.addCase(resetStateAuth, () => initialState);
   },
 });
 

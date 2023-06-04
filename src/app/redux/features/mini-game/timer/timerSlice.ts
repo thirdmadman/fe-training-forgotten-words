@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { resetStateAuth } from '../../auth/authSlice';
 
 interface SprintTimerState {
   timerRemainTime: number;
@@ -15,6 +16,9 @@ export const timerSlice = createSlice({
     setRemainTime: (state, action: PayloadAction<number>) => {
       state.timerRemainTime = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(resetStateAuth, () => initialState);
   },
 });
 

@@ -6,6 +6,7 @@ import { IPaginatedArray } from '../../../interfaces/IPaginatedArray';
 import { IResultData } from '../../../interfaces/IResultData';
 import { IWord } from '../../../interfaces/IWord';
 import { WordService } from '../../../services/WordService';
+import { resetStateAuth } from '../auth/authSlice';
 
 interface AudiocallPageState {
   questions: IGameQuestionArray | undefined;
@@ -77,7 +78,6 @@ export const audiocallSlice = createSlice({
   name: 'audiocall',
   initialState,
   reducers: {
-    resetAudiocall: () => initialState,
     setLevelAndPageAction: (state, action: PayloadAction<LevelAndPageArgs>) => {
       state.level = action.payload.level;
       state.page = action.payload.page;
@@ -100,9 +100,10 @@ export const audiocallSlice = createSlice({
         state.questions = questionsData;
       }
     });
+    builder.addCase(resetStateAuth, () => initialState);
   },
 });
 
-export const { setLevelAndPageAction, setResultsAction, setQuestionsAction, resetAudiocall } = audiocallSlice.actions;
+export const { setLevelAndPageAction, setResultsAction, setQuestionsAction } = audiocallSlice.actions;
 
 export default audiocallSlice.reducer;
