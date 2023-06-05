@@ -1,8 +1,9 @@
 import './Spinner.scss';
 
-export function Spinner() {
+export function Spinner(props: { isFullHeight: boolean }) {
+  const { isFullHeight } = props;
   return (
-    <div className="loading-spinner">
+    <div className={isFullHeight ? 'loading-spinner loading-spinner_full-height' : 'loading-spinner'}>
       <div className="loading-spinner__spinner" />
     </div>
   );

@@ -1,9 +1,13 @@
 .loading-spinner {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &_full-height {
+    height: 100vh;
+  }
 
   .loading-spinner__spinner {
     border: 3px solid #f3f3f3; /* Light grey */

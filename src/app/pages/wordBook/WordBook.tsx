@@ -128,7 +128,7 @@ export default function WordBook() {
           {dataIWordAdvanced && dataIWordAdvanced.map((word) => <Card wordAdvanced={word} key={word.word.id} />)}
         </div>
       ) : (
-        <Spinner />
+        <Spinner isFullHeight />
       )}
     </div>
   );

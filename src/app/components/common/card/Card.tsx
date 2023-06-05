@@ -7,6 +7,7 @@ import './Card.scss';
 import { TokenProvider } from '../../../services/TokenProvider';
 import { UserWordService } from '../../../services/UserWordService';
 import DataLocalStorageProvider from '../../../services/DataLocalStorageProvider';
+import { Spinner } from '../spinner/Spinner';
 
 export interface CardProps {
   wordAdvanced: IWordAdvanced;
@@ -17,6 +18,7 @@ interface CardState {
   isRuDescriptionShown: boolean;
   isWordDifficult: boolean;
   isWordLearned: boolean;
+  isImageLoaded: boolean;
 }
 
 export function Card(props: CardProps) {
@@ -41,11 +43,12 @@ export function Card(props: CardProps) {
     isRuDescriptionShown: false,
     isWordDifficult: false,
     isWordLearned: false,
+    isImageLoaded: false,
   };
 
   const [state, setState] = useState<CardState>(initialState);
 
-  const { isEngDescriptionShown, isRuDescriptionShown, isWordDifficult, isWordLearned } = state;
+  const { isEngDescriptionShown, isRuDescriptionShown, isWordDifficult, isWordLearned, isImageLoaded } = state;
 
   const userConfigs = DataLocalStorageProvider.getData();
 
@@ -191,7 +194,8 @@ export function Card(props: CardProps) {
   const imagePath = `${GlobalConstants.API_URL}/${image}`;
 
   let imageStyles = isLearnStarted ? 'word-card__image word-card__image_started' : 'word-card__image';
-  imageStyles += isWordLearned ? 'word-card__image_learned' : '';
+  imageStyles += isWordLearned ? ' word-card__image_learned' : '';
+  imageStyles += isImageLoaded ? '' : ' word-card__image_is-loading';
 
   useEffect(() => {
     setState((prevState: CardState) => ({
@@ -204,7 +208,13 @@ export function Card(props: CardProps) {
   return (
     <div className="word-card">
       <div className="word-card__image-container">
-        <img className={imageStyles} src={imagePath} alt={word} />
+        <img
+          className={imageStyles}
+          src={imagePath}
+          alt={word}
+          onLoad={() => setState({ ...state, isImageLoaded: true })}
+        />
+        {!isImageLoaded && <Spinner isFullHeight={false} />}
         {showUserButtons()}
       </div>
       <div className="word-card__text-container">

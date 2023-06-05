@@ -33,6 +33,10 @@
     }
   }
 
+  .word-card__image_is-loading {
+    display: none;
+  }
+
   .word-card__button-difficulty {
     all: unset;
     position: absolute;

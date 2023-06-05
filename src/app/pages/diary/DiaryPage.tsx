@@ -60,7 +60,7 @@ export function DiaryPage() {
           {userDiaryWords && userDiaryWords.map((word) => <Card wordAdvanced={word} key={word.word.id} />)}
         </div>
       ) : (
-        <Spinner />
+        <Spinner isFullHeight />
       )}
     </div>
   );
