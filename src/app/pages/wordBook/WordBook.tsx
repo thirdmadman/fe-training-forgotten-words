@@ -81,11 +81,16 @@ export default function WordBook() {
       musicPlayer2.setPlayList([`${MUSIC_PATH + WORDBOOK_MUSIC_NAME}`], true);
       musicPlayer2.play().catch(() => {});
     }
+
     if (!isDataLoading) {
       if (!dataIWordAdvanced || lastNavigation?.level !== currentLevel || lastNavigation?.page !== currentPage) {
-        dispatch(loadWordsThunk({ level: currentLevel, page: currentPage })).catch(() => {});
+        dispatch(loadWordsThunk({ level: currentLevel, page: currentPage }))
+          .then(() => setIsDataLoading(false))
+          .catch(() => {});
       } else if (dataIWordAdvanced && lastNavigation?.level === currentLevel && lastNavigation?.page === currentPage) {
-        dispatch(loadUserWordsDataThunk({ level: currentLevel, page: currentPage })).catch(() => {});
+        dispatch(loadUserWordsDataThunk({ level: currentLevel, page: currentPage }))
+          .then(() => setIsDataLoading(false))
+          .catch(() => {});
       }
       setIsDataLoading(true);
     }
