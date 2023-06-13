@@ -6,9 +6,16 @@ import { MiniGameStatistic } from '../../components/common/statistic/MiniGameSta
 import { SprintGameField } from '../../components/sprint/SprintGameField';
 import { MiniGameStart } from '../../components/common/min-game/MiniGameStart';
 import DataLocalStorageProvider from '../../services/DataLocalStorageProvider';
-import { getQuestionsAction, setLevelAndPageAction, setResultsAction } from '../../redux/features/sprint/sprintSlice';
+import {
+  getQuestionsAction,
+  setLevelAndPageAction,
+  setResultsAction,
+  switchToNextPageAction,
+  switchToSelectionAction,
+} from '../../redux/features/sprint/sprintSlice';
 import { sendMiniGameStatisticsAction } from '../../redux/features/mini-game/sendMiniGameStatisticsThunk';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { resetAction } from '../../redux/features/mini-game/timer/timerSlice';
 
 export function SprintPage() {
   const { questions, results, answerChain, level, page } = useAppSelector((state) => state.sprint);
@@ -18,9 +25,11 @@ export function SprintPage() {
   const onGameFinish = (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => {
     dispatch(setResultsAction({ results: resultsOfGame, answerChain: answerChainOfGame }));
     dispatch(sendMiniGameStatisticsAction({ results: resultsOfGame, answerChain: answerChainOfGame })).catch(() => {});
+    dispatch(resetAction());
   };
 
   const onGameStart = (levelChosen: number, pageChosen: number) => {
+    dispatch(resetAction());
     dispatch(setLevelAndPageAction({ level: levelChosen, page: pageChosen }));
   };
 
@@ -34,9 +43,23 @@ export function SprintPage() {
   );
   const buttonText = 'START RESOLVING';
 
+  const handleOnBackToSelect = () => dispatch(switchToSelectionAction());
+  const handleOnNext = () => {
+    dispatch(resetAction());
+    dispatch(switchToNextPageAction());
+  };
+
   const getContent = () => {
     if (results) {
-      return <MiniGameStatistic title="Meaning Resolving" resultData={results} answerChain={answerChain} />;
+      return (
+        <MiniGameStatistic
+          title="Meaning Resolving"
+          resultData={results}
+          answerChain={answerChain}
+          handleOnBackToSelect={handleOnBackToSelect}
+          handleOnNext={handleOnNext}
+        />
+      );
     }
 
     if (level > -1 && page > -1 && questions) {
