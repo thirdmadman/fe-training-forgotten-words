@@ -68,7 +68,6 @@ export function AudiocallQuestion(props: AudiocallQuestionProps) {
 
   return (
     <div className="word-container">
-      <div className="word-container__title">In progress</div>
       <button type="button" className="audio-btn" aria-label="paly audio" onClick={playAudio} />
       <div className="word-container__question-text">Choose correct one</div>
       <div className="game-btn-container">{getVariants()}</div>

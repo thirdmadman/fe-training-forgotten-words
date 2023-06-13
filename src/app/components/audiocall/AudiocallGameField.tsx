@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useAppDispatch } from '../../hooks';
 import { IGameAnswer } from '../../interfaces/IGameAnswer';
 import { IGameQuestion } from '../../interfaces/IGameQuestion';
 import { IResultData } from '../../interfaces/IResultData';
 import { IWord } from '../../interfaces/IWord';
+import { switchToSelectionAction } from '../../redux/features/audiocall/audiocallSlice';
 import './AudiocallGameField.scss';
 import { AudiocallQuestion } from './AudiocallQuestion';
 
@@ -26,6 +28,8 @@ export function AudiocallGameField(props: AudiocallGameFieldProps) {
     maxAnswerChain: 1,
     result: undefined,
   };
+
+  const dispatch = useAppDispatch();
 
   const [state, setState] = useState<AudiocallGameFieldState>(initialState);
 
@@ -67,9 +71,17 @@ export function AudiocallGameField(props: AudiocallGameFieldProps) {
 
   const questionData = questions[questionNumber];
 
+  const exit = () => dispatch(switchToSelectionAction());
+
   return (
     <div className="gamefield-container">
       <h2 className="mini-game-page__title mini-game-page__title_in-game">Audio decoding</h2>
+      <div className="mini-game-page__sub-title">
+        <h3 className="mini-game-page__sub-title-text">In progress</h3>
+        <button type="button" className="mini-game-page__exit-button" onClick={exit}>
+          EXIT
+        </button>
+      </div>
       {questionData && <AudiocallQuestion questionData={questionData} onAnswer={onAnswer} />}
     </div>
   );
