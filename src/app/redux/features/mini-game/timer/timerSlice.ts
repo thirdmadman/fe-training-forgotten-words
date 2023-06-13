@@ -16,12 +16,13 @@ export const timerSlice = createSlice({
     setRemainTime: (state, action: PayloadAction<number>) => {
       state.timerRemainTime = action.payload;
     },
+    resetAction: () => initialState,
   },
   extraReducers: (builder) => {
     builder.addCase(resetStateAuth, () => initialState);
   },
 });
 
-export const { setRemainTime } = timerSlice.actions;
+export const { setRemainTime, resetAction } = timerSlice.actions;
 
 export default timerSlice.reducer;

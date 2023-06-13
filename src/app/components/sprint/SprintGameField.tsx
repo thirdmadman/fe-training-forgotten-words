@@ -5,6 +5,9 @@ import { GlobalConstants } from '../../../GlobalConstants';
 import { IResultData } from '../../interfaces/IResultData';
 import './SprintGameField.scss';
 import { SprintTimer } from './SprintTimer';
+import { useAppDispatch } from '../../hooks';
+import { switchToSelectionAction } from '../../redux/features/sprint/sprintSlice';
+import { resetAction } from '../../redux/features/mini-game/timer/timerSlice';
 
 interface SprintGameFieldProps {
   questions: Array<IGameQuestion>;
@@ -20,6 +23,8 @@ interface SprintGameFieldState {
 
 export function SprintGameField(props: SprintGameFieldProps) {
   const { questions, onFinish } = props;
+
+  const dispatch = useAppDispatch();
 
   const initialState = {
     questionNumber: 0,
@@ -75,22 +80,20 @@ export function SprintGameField(props: SprintGameFieldProps) {
 
   const questionData = questions[questionNumber];
 
-  // useEffect(() => {
-  //   if (timerRemainTime > 0 && questionNumber < questions.length) {
-  //     console.error('setTimeout');
-  //     window.setTimeout(() => {
-  //       console.error(state);
-  //       setState({ ...state, timerRemainTime: timerRemainTime - 1 });
-  //     }, 1000);
-  //   } else {
-  //     onGameEnd();
-  //   }
-  // });
+  const exit = () => {
+    dispatch(resetAction());
+    dispatch(switchToSelectionAction());
+  };
 
   return (
     <div className="gamefield-container">
       <h2 className="mini-game-page__title mini-game-page__title_in-game">MEANING RESOLVING</h2>
-      <h3 className="mini-game-page__sub-title">In progress</h3>
+      <div className="mini-game-page__sub-title">
+        <h3 className="mini-game-page__sub-title-text">In progress</h3>
+        <button type="button" className="mini-game-page__exit-button" onClick={exit}>
+          EXIT
+        </button>
+      </div>
       <SprintTimer timerTime={GlobalConstants.GAME_TIME} timerOnFinishAction={onGameEnd} />
       {questionData && <SprintQuestion questionData={questionData} onAnswer={handleAnswer} />}
     </div>

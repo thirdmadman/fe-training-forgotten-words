@@ -25,6 +25,13 @@
   ],
   "rules": {
     "react-hooks/rules-of-hooks": "error",
+    "react/require-default-props": [
+      "error", 
+      {
+        "forbidDefaultForRequired": true,        
+        "functions": "defaultArguments"
+      }
+    ],
     "react-hooks/exhaustive-deps": "warn",
     "comma-dangle": ["error", "only-multiline"],
     "object-curly-newline": ["error", { "consistent": true }],

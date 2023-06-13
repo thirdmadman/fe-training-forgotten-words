@@ -1,16 +1,19 @@
 import { GlobalConstants } from '../../../../GlobalConstants';
 import { IResultData } from '../../../interfaces/IResultData';
 import { musicPlayer } from '../../../services/SingleMusicPlayer';
+import { ButtonConfirm } from '../min-game/ButtonConfirm';
 import './MiniGameStatistic.scss';
 
 interface MiniGameStatisticProps {
   title: string;
   resultData: Array<IResultData>;
   answerChain: number;
+  handleOnBackToSelect: () => void;
+  handleOnNext: () => void;
 }
 
 export function MiniGameStatistic(props: MiniGameStatisticProps) {
-  const { title, resultData, answerChain } = props;
+  const { title, resultData, answerChain, handleOnBackToSelect, handleOnNext } = props;
 
   const correctAnswers = resultData.filter((answer) => answer.isCorrect);
   const inCorrectAnswers = resultData.filter((answer) => !answer.isCorrect);
@@ -55,6 +58,10 @@ export function MiniGameStatistic(props: MiniGameStatisticProps) {
         <div className="result-words__title count">{inCorrectAnswers.length}</div>
       </div>
       <div className="result-words-container">{inCorrectAnswers.map((answer) => creteResultCard(answer))}</div>
+      <div className="result-navigation">
+        <ButtonConfirm text="back to select" onClick={handleOnBackToSelect} />
+        <ButtonConfirm text="next" onClick={handleOnNext} />
+      </div>
     </div>
   );
 }

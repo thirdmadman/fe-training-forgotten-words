@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
 import { GlobalConstants } from '../../../../GlobalConstants';
+import { ButtonConfirm } from './ButtonConfirm';
 import './MiniGameStart.scss';
 
 interface MiniGameStartProps {
@@ -99,11 +100,7 @@ export function MiniGameStart(props: MiniGameStartProps) {
 
   const showButton = () => {
     if (level > -1 && page > -1) {
-      return (
-        <button type="button" className="mini-game-page__button" onClick={handleOnStart}>
-          {buttonText}
-        </button>
-      );
+      return <ButtonConfirm text={buttonText} onClick={handleOnStart} />;
     }
     return '';
   };

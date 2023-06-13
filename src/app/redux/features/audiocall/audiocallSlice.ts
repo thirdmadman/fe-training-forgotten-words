@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { GlobalConstants } from '../../../../GlobalConstants';
 import { IGameAnswer } from '../../../interfaces/IGameAnswer';
 import { IGameQuestion } from '../../../interfaces/IGameQuestion';
 import { IGameQuestionArray } from '../../../interfaces/IGameQuestionArray';
@@ -89,6 +90,17 @@ export const audiocallSlice = createSlice({
     setQuestionsAction: (state, action: PayloadAction<IGameQuestionArray>) => {
       state.questions = action.payload;
     },
+    switchToNextPageAction: (state) => {
+      state.results = undefined;
+      state.questions = undefined;
+      state.answerChain = 0;
+      if (state.page < GlobalConstants.NUMBER_OF_PAGES - 1) {
+        state.page += 1;
+      } else {
+        state.page = -1;
+      }
+    },
+    switchToSelectionAction: () => initialState,
   },
   extraReducers: (builder) => {
     builder.addCase(getQuestionsAction.fulfilled, (state, action) => {
@@ -105,5 +117,6 @@ export const audiocallSlice = createSlice({
 });
 
 export const { setLevelAndPageAction, setResultsAction, setQuestionsAction } = audiocallSlice.actions;
+export const { switchToNextPageAction, switchToSelectionAction } = audiocallSlice.actions;
 
 export default audiocallSlice.reducer;

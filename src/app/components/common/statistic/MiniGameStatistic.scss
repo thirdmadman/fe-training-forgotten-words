@@ -10,7 +10,7 @@ $color-light-m: #f6f6f6;
   align-items: center;
 
   .result-page__title {
-    margin-bottom: 15px;
+    margin-bottom: 25px;
     padding: 0 40px;
     width: fit-content;
     font-size: 60px;
@@ -54,7 +54,14 @@ $color-light-m: #f6f6f6;
   .result-page__chain-text {
     margin-bottom: 25px;
     font-size: 24px;
+    line-height: 25px;
     text-transform: uppercase;
+  }
+
+  .result-navigation {
+    display: grid;
+    grid-auto-flow: column;
+    gap: 50px;
   }
 }
 
@@ -95,7 +102,7 @@ $color-light-m: #f6f6f6;
 }
 
 .title-container {
-  margin-bottom: 15px;
+  margin-bottom: 25px;
   display: grid;
   grid-auto-flow: column;
   gap: 30px;

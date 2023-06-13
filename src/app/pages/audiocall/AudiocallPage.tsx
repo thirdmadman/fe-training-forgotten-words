@@ -10,6 +10,8 @@ import {
   getQuestionsAction,
   setLevelAndPageAction,
   setResultsAction,
+  switchToNextPageAction,
+  switchToSelectionAction,
 } from '../../redux/features/audiocall/audiocallSlice';
 import { sendMiniGameStatisticsAction } from '../../redux/features/mini-game/sendMiniGameStatisticsThunk';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -50,9 +52,20 @@ export function AudiocallPage() {
   );
   const buttonText = 'Start decoding';
 
+  const handleOnBackToSelect = () => dispatch(switchToSelectionAction());
+  const handleOnNext = () => dispatch(switchToNextPageAction());
+
   const getContent = () => {
     if (results) {
-      return <MiniGameStatistic title={title} resultData={results} answerChain={answerChain} />;
+      return (
+        <MiniGameStatistic
+          title={title}
+          resultData={results}
+          answerChain={answerChain}
+          handleOnBackToSelect={handleOnBackToSelect}
+          handleOnNext={handleOnNext}
+        />
+      );
     }
 
     if (level > -1 && page > -1 && questions) {

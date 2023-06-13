@@ -14,7 +14,7 @@ export function SprintTimer(props: SprintTimerProps) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (timerRemainTime === -1) {
+    if (timerRemainTime <= -1) {
       dispatch(setRemainTime(timerTime));
     } else if (timerRemainTime > 0 && isMenuHidden) {
       window.setTimeout(() => dispatch(setRemainTime(timerRemainTime - 1)), 1000);
