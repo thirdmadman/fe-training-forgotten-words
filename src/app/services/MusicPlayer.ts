@@ -49,6 +49,10 @@ export class MusicPlayer {
   }
 
   play() {
+    if (this.currentVolume <= 0) {
+      return new Promise(() => {});
+    }
+
     if (this.currentPlaylist.length <= 0) {
       return new Promise(() => {});
     }
