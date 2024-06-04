@@ -91,8 +91,9 @@ export default function WordBook() {
         dispatch(loadUserWordsDataThunk({ level: currentLevel, page: currentPage }))
           .then(() => setIsDataLoading(false))
           .catch((e) => console.error(e));
+      } else {
+        setIsDataLoading(true);
       }
-      setIsDataLoading(true);
     }
   }, [
     MUSIC_PATH,
