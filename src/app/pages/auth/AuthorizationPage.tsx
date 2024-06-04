@@ -55,7 +55,7 @@ export function AuthorizationPage() {
 
     musicPlayer2.setVolume(musicVolume);
     musicPlayer2.setPlayList([`${GlobalConstants.MUSIC_PATH + GlobalConstants.AUTH_MUSIC_NAME}`], true);
-    musicPlayer2.play().catch(() => {});
+    musicPlayer2.play().catch((e) => console.error(e));
   }
 
   const getUserInformation = () => {
@@ -67,7 +67,7 @@ export function AuthorizationPage() {
         return;
       }
 
-      dispatch(getUserInfoAction(userId)).catch(() => {});
+      dispatch(getUserInfoAction(userId)).catch((e) => console.error(e));
     }
   };
 
@@ -87,7 +87,7 @@ export function AuthorizationPage() {
         }
         navigate(GlobalConstants.ROUTE_MAIN);
       })
-      .catch(() => {});
+      .catch((e) => console.error(e));
   };
 
   const registerUser = () => {
@@ -96,7 +96,7 @@ export function AuthorizationPage() {
       .then(() => {
         getUserInformation();
       })
-      .catch(() => {});
+      .catch((e) => console.error(e));
   };
 
   const getButtonSingnin = () => (

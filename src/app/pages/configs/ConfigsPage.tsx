@@ -64,7 +64,7 @@ export function ConfigsPage() {
       .then((word) => {
         soundsLevelHandler(soundsLevel);
         musicPlayer.setPlayList([`${API_URL}/${word.audio}`]);
-        musicPlayer.play().catch(() => {});
+        musicPlayer.play().catch((e) => console.error(e));
       })
       .catch((e) => console.error(e));
   };
@@ -73,7 +73,7 @@ export function ConfigsPage() {
     musicPlayer2.stop();
     musicLevelHandler(musicLevel);
     musicPlayer2.setPlayList([`${MUSIC_PATH + WORDBOOK_MUSIC_NAME}`]);
-    musicPlayer2.play().catch(() => {});
+    musicPlayer2.play().catch((e) => console.error(e));
   };
 
   useEffect(() => {

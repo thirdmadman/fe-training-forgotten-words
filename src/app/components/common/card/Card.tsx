@@ -67,7 +67,7 @@ export function Card(props: CardProps) {
       `${GlobalConstants.API_URL}/${audioMeaning}`,
       `${GlobalConstants.API_URL}/${audioExample}`,
     ]);
-    musicPlayer.play().catch(() => {});
+    musicPlayer.play().catch((e) => console.error(e));
   };
 
   const isLearnStarted = Boolean(wordAdvanced.userData?.optional);
@@ -102,7 +102,7 @@ export function Card(props: CardProps) {
             });
           }
         })
-        .catch(() => {});
+        .catch((e) => console.error(e));
     } else {
       UserWordService.setWordNormalById(userId, wordAdvanced.word.id)
         .then((userWord) => {
@@ -113,7 +113,7 @@ export function Card(props: CardProps) {
             });
           }
         })
-        .catch(() => {});
+        .catch((e) => console.error(e));
     }
   };
 
@@ -135,7 +135,7 @@ export function Card(props: CardProps) {
             });
           }
         })
-        .catch(() => {});
+        .catch((e) => console.error(e));
     } else {
       UserWordService.removeWordFromLearnedById(userId, wordAdvanced.word.id)
         .then((userWord) => {
@@ -146,7 +146,7 @@ export function Card(props: CardProps) {
             });
           }
         })
-        .catch(() => {});
+        .catch((e) => console.error(e));
     }
   };
 

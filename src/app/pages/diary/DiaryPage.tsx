@@ -42,7 +42,7 @@ export function DiaryPage() {
       return;
     }
 
-    dispatch(loadData({ page, wordsPerPage: WORDS_PER_DIARY_PAGE })).catch(() => {});
+    dispatch(loadData({ page, wordsPerPage: WORDS_PER_DIARY_PAGE })).catch((e) => console.error(e));
   }, [page, navigate, params, dispatch]);
 
   return (

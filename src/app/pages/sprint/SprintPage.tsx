@@ -24,7 +24,9 @@ export function SprintPage() {
 
   const onGameFinish = (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => {
     dispatch(setResultsAction({ results: resultsOfGame, answerChain: answerChainOfGame }));
-    dispatch(sendMiniGameStatisticsAction({ results: resultsOfGame, answerChain: answerChainOfGame })).catch(() => {});
+    dispatch(sendMiniGameStatisticsAction({ results: resultsOfGame, answerChain: answerChainOfGame })).catch((e) => {
+      console.error(e);
+    });
     dispatch(resetAction());
   };
 
@@ -79,11 +81,11 @@ export function SprintPage() {
 
       musicPlayer2.setVolume(musicVolume);
       musicPlayer2.setPlayList([`${GlobalConstants.MUSIC_PATH + GlobalConstants.SPRINT_MUSIC_NAME}`], true);
-      musicPlayer2.play().catch(() => {});
+      musicPlayer2.play().catch((e) => console.error(e));
     }
 
     if (level > -1 && page > -1 && questions === undefined) {
-      dispatch(getQuestionsAction({ page, level })).catch(() => {});
+      dispatch(getQuestionsAction({ page, level })).catch((e) => console.error(e));
     }
   });
 

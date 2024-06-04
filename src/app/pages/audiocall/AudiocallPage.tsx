@@ -30,12 +30,14 @@ export function AudiocallPage() {
 
     musicPlayer2.setVolume(musicVolume);
     musicPlayer2.setPlayList([`${GlobalConstants.MUSIC_PATH + GlobalConstants.AUDIOCALL_MUSIC_NAME}`], true);
-    musicPlayer2.play().catch(() => {});
+    musicPlayer2.play().catch((e) => console.error(e));
   }
 
   const onGameFinish = (resultsOfGame: Array<IResultData>, answerChainOfGame: number) => {
     dispatch(setResultsAction({ results: resultsOfGame, answerChain: answerChainOfGame }));
-    dispatch(sendMiniGameStatisticsAction({ results: resultsOfGame, answerChain: answerChainOfGame })).catch(() => {});
+    dispatch(sendMiniGameStatisticsAction({ results: resultsOfGame, answerChain: answerChainOfGame })).catch((e) => {
+      console.error(e);
+    });
   };
 
   const onGameStart = (levelChosen: number, pageChosen: number) => {
@@ -77,7 +79,7 @@ export function AudiocallPage() {
 
   useEffect(() => {
     if (level > -1 && page > -1 && questions === undefined) {
-      dispatch(getQuestionsAction({ page, level })).catch(() => {});
+      dispatch(getQuestionsAction({ page, level })).catch((e) => console.error(e));
     }
   });
 
