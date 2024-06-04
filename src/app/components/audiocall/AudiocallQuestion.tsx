@@ -17,7 +17,7 @@ export function AudiocallQuestion(props: AudiocallQuestionProps) {
   const { wordData, variants } = questionData;
 
   const playAudio = () => {
-    musicPlayer.setPlayList([`${GlobalConstants.DEFAULT_API_URL}/${wordData.audio}`]);
+    musicPlayer.setPlayList([`${GlobalConstants.API_URL}/${wordData.audio}`]);
     musicPlayer.play().catch((e) => console.error(e));
   };
 

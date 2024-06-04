@@ -25,7 +25,7 @@ export function MiniGameStatistic(props: MiniGameStatisticProps) {
 
   const creteResultCard = (result: IResultData) => {
     const { questionData } = result;
-    const audioWordData = `${GlobalConstants.DEFAULT_API_URL}/${questionData.audio}`;
+    const audioWordData = `${GlobalConstants.API_URL}/${questionData.audio}`;
 
     return (
       <div className="button-word" key={questionData.id}>
