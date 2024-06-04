@@ -1,7 +1,7 @@
 export class GlobalConstants {
   public static APP_NAME = 'Forgotten Words';
 
-  public static DEFAULT_API_URL = 'https://unusual-cummerbund-slug.cyclic.app';
+  public static DEFAULT_API_URL = 'https://react-rslang-be-eugx.onrender.com';
 
   public static API_URL = process.env.API_URL || GlobalConstants.DEFAULT_API_URL;
 
