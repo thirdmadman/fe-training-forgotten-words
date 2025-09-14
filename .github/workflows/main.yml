@@ -19,6 +19,8 @@ jobs:
   build:
     concurrency: ci-${{ github.ref }}
     runs-on: ubuntu-latest
+    env:
+        API_URL: ${{ vars.API_URL }}
 
     steps:
       - name: Checkout 🛎️
